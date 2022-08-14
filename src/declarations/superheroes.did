@@ -1,0 +1,23 @@
+type UserInfoExt = 
+ record {
+   allowedBy: vec principal;
+   allowedTokens: vec nat;
+   dateOfBirth: text;
+   firstName: text;
+   lastName: text;
+   liveIn: text;
+   operators: vec principal;
+   phone: text;
+   sex: nat;
+   tokens: vec nat;
+ };
+type NFTSale = 
+ service {
+   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
+   deleteAccount: (principal) -> (bool);
+   getUserInfo: (principal) -> (opt UserInfoExt) query;
+   readAccount: () -> (vec UserInfoExt) query;
+   updateAccount: (principal, text, text, nat, text, text, text) ->
+    (UserInfoExt);
+ };
+service : (principal) -> NFTSale

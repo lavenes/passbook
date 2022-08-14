@@ -1,0 +1,13 @@
+@import "../../styles/lavenes.scss";
+
+.view {
+    padding: $view-padding;
+    padding-bottom: 60pt;
+    box-sizing: border-box;
+    background-color: white;
+    overflow: auto;
+
+    &.header-padding {
+        padding-top: calc($appbar-height - 12pt);
+    }
+}
