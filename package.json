@@ -25,6 +25,7 @@
     "@dfinity/agent": "0.10.2",
     "@dfinity/candid": "0.10.2",
     "@dfinity/principal": "0.10.2",
+    "@types/crypto-js": "^4.0.1",
     "antd": "4.8.3",
     "assert": "2.0.0",
     "buffer": "6.0.3",
@@ -53,13 +54,12 @@
     "last 2 edge version"
   ],
   "dependencies": {
-    "@connect2ic/core": "^0.1.6",
-    "@connect2ic/react": "^0.1.4",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@mui/icons-material": "^5.6.2",
     "@mui/material": "^5.6.2",
     "axios": "^0.27.2",
+    "crypto-js": "^4.0.0",
     "framer-motion": "^7.0.0",
     "node-sass": "^7.0.1",
     "react": "^18.2.0",
@@ -74,10 +74,6 @@
     "styled-components": "^5.3.5",
     "sweetalert2": "^11.4.17",
     "url-loader": "^4.1.1",
-    "web-vitals": "^2.1.4",
-    "@psychedelic/cap-js": "0.0.7",
-    "@psychedelic/dab-js": "1.4.5",
-    "@Psychedelic/plug-controller": "0.19.6",
-    "crypto-js": "^4.0.0"
+    "web-vitals": "^2.1.4"
   }
 }

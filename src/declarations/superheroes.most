@@ -18,6 +18,7 @@ type UserInfo =
     var liveIn : Text;
     var operators : Set<Principal>;
     var phone : Text;
+    var principalId : Text;
     var sex : Nat;
     var tokens : Set<Nat>
   };

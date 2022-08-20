@@ -79,3 +79,6 @@ dfx canister install superheroes --argument="(principal \"$(dfx identity get-pri
    ```
 
 1. Open the aforementioned URL in your web browser.
+
+1. UPGRADE
+dfx build superheroes && dfx canister install superheroes --argument="(principal \"$(dfx identity get-principal)\")" --all --mode=upgrade

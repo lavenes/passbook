@@ -20,6 +20,7 @@ module {
         var dateOfBirth: Text;
         var phone: Text;
         var liveIn: Text;
+        var principalId: Text;
     };
 
     public type UserInfoExt = {
@@ -33,5 +34,6 @@ module {
         dateOfBirth: Text;
         phone: Text;
         liveIn: Text;
+        principalId: Text;
     };
 };

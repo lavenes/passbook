@@ -8,6 +8,7 @@ type UserInfoExt =
    liveIn: text;
    operators: vec principal;
    phone: text;
+   principalId: text;
    sex: nat;
    tokens: vec nat;
  };

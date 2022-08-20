@@ -45,7 +45,7 @@ shared(msg) actor class NFTSale(
       case (?x_) { x_ };
     };
 
-    private func _newUser() : UserInfo {
+    private func _newUser(principalId: Principal) : UserInfo {
         {
             var operators = TrieSet.empty<Principal>();
             var allowedBy = TrieSet.empty<Principal>();
@@ -57,6 +57,7 @@ shared(msg) actor class NFTSale(
             var dateOfBirth = "";
             var liveIn = "";
             var phone = "";
+            var principalId = Principal.toText(principalId);
         }
     };
 
@@ -72,6 +73,7 @@ shared(msg) actor class NFTSale(
             dateOfBirth = info.dateOfBirth;
             liveIn = info.liveIn;
             phone = info.phone;
+            principalId = info.principalId;
         };
     };
 
@@ -89,6 +91,7 @@ shared(msg) actor class NFTSale(
                     dateOfBirth = info.dateOfBirth;
                     liveIn = info.liveIn;
                     phone = info.phone;
+                    principalId = info.principalId;
                 };
             };
             case _ {
@@ -104,7 +107,7 @@ shared(msg) actor class NFTSale(
 
     //*CREATE ACCOUNT
     public shared({caller}) func createAccount(firstName : Text, lastName: Text, sex : Nat, dateOfBirth : Text, phone: Text, liveIn: Text) : async UserInfoExt {
-        let user = _newUser();
+        let user = _newUser(caller);
 
         user.firstName := firstName;
         user.lastName := lastName;
@@ -120,7 +123,7 @@ shared(msg) actor class NFTSale(
 
     //*UPDATE ACCOUNT
     public func updateAccount(principalId : Principal, firstName : Text, lastName: Text, sex : Nat, dateOfBirth : Text, phone: Text, liveIn: Text) : async UserInfoExt {
-        let user = _newUser();
+        let user = _newUser(principalId);
 
         user.firstName := firstName;
         user.lastName := lastName;

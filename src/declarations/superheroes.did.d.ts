@@ -23,6 +23,7 @@ export interface UserInfoExt {
   'phone' : string,
   'allowedBy' : Array<Principal>,
   'lastName' : string,
+  'principalId' : string,
   'liveIn' : string,
   'firstName' : string,
 }

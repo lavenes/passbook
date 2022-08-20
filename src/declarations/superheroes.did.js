@@ -8,6 +8,7 @@ export const idlFactory = ({ IDL }) => {
     'phone' : IDL.Text,
     'allowedBy' : IDL.Vec(IDL.Principal),
     'lastName' : IDL.Text,
+    'principalId' : IDL.Text,
     'liveIn' : IDL.Text,
     'firstName' : IDL.Text,
   });

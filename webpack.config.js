@@ -72,6 +72,7 @@ module.exports = env => {
               '@config': path.resolve(__dirname, './src/www/config'),
               '@assets': path.resolve(__dirname, './src/www/assets'),
               '@api': path.resolve(__dirname, './src/www/api'),
+              '@declarations': path.resolve(__dirname, './src/declarations'),
             },
             extensions: [".js", ".ts", ".jsx", ".tsx"],
             fallback: {

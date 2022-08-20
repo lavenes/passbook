@@ -8,13 +8,14 @@ type UserInfoExt =
    liveIn: text;
    operators: vec principal;
    phone: text;
+   principalId: principal;
    sex: nat;
    tokens: vec nat;
  };
 service : {
   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
   deleteAccount: (principal) -> (bool);
-  getUserInfo: (principal) -> (UserInfoExt) query;
+  getUserInfo: (principal) -> (opt UserInfoExt) query;
   readAccount: () -> (vec UserInfoExt) query;
   updateAccount: (principal, text, text, nat, text, text, text) ->
    (UserInfoExt);

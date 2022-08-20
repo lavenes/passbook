@@ -1,19 +1,8 @@
 import React, { useEffect } from 'react';
 import { View } from '@components';
-import { ConnectButton, ConnectDialog, Connect2ICProvider, useConnect } from "@connect2ic/react"
-import { useCanister } from '@connect2ic/react';
+import { superheroes, canisterId, idlFactory, createActor } from '@declarations';
 
 export const SettingsScreen = () => {
-	  const [superheroes, { loading, error }] = useCanister('superheroes');
-
-    const { isConnected, principal, activeProvider } = useConnect({
-        onConnect: () => {
-          // Signed in
-        },
-        onDisconnect: () => {
-          // Signed out
-        }
-    })
 
     useEffect(() => {
       fetch();
@@ -25,20 +14,38 @@ export const SettingsScreen = () => {
       console.log(a);
     }
 
-    const handleConnect = () => {
+    const handleConnect = async () => {
+      const whitelist = [canisterId];
+      const host = 'http://localhost:8080';
+
       try {
-        window.ic.plug.requestConnect();
-      }catch(e) {
+        const publicKey = await window.ic.plug.requestConnect({
+          whitelist,
+          host,
+          timeout: 50000
+        });
+
+        console.log(`The connected user's public key is:`, publicKey);
+      } catch (e) {
         alert(e);
       }
+    }
+
+    const addUser = async() => {
+      const NNSUiActor = await window.ic.plug.createActor({
+        canisterId: canisterId,
+        interfaceFactory: idlFactory,
+      });
+
+      const a = await NNSUiActor.createAccount("David", "Tran", 0, "20-01-2003", "123451231", "Ben Nghe");
+
+      console.log(a);
     }
 
     return(
         <View>
             <button onClick={handleConnect}>Connect Handle</button>
-            <br/>
-            <ConnectButton />
-            <ConnectDialog/>
+            <button onClick={addUser}>Add User</button>
         </View>
     )
 }
