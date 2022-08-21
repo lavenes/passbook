@@ -2,6 +2,7 @@ export const routes = {
     HOME: '/',
     SETTINGS: '/settings',
     PRODUCT: {
+        CREATE: '/product/create',
         MARKET: '/products',
         INFORMATION: {
             TICKET: '/tickets/:ticketId',

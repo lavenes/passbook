@@ -8,14 +8,43 @@ type UserInfoExt =
    liveIn: text;
    operators: vec principal;
    phone: text;
-   principalId: principal;
+   principalId: text;
    sex: nat;
    tokens: vec nat;
  };
+type TokenMetaData__1 = record {tokenUri: text;};
+type TokenMetaData = record {tokenUri: text;};
+type TokenInfoExt = 
+ record {
+   index: nat;
+   metadata: opt TokenMetaData__1;
+   operator: opt principal;
+   owner: principal;
+   timestamp: Time;
+ };
+type Time = int;
+type MintResult = 
+ variant {
+   Err: Errors;
+   Ok: record {
+         nat;
+         nat;
+       };
+ };
+type Errors = 
+ variant {
+   InvalidOperator;
+   TokenNotExist;
+   Unauthorized;
+ };
 service : {
+  clearNFT: () -> () oneway;
   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
   deleteAccount: (principal) -> (bool);
+  getAllTokens: () -> (vec TokenInfoExt) query;
+  getTokenInfo: (nat) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
+  mintNFT: (opt TokenMetaData) -> (MintResult);
   readAccount: () -> (vec UserInfoExt) query;
   updateAccount: (principal, text, text, nat, text, text, text) ->
    (UserInfoExt);

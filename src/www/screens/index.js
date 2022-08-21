@@ -5,6 +5,7 @@ import { ProductMarket } from './Product';
 import { TicketInformation } from './Product/Information/Ticket';
 import { ItemInformation } from './Product/Information/Item';
 import { ProductCategoryList } from './Product/Category/List';
+import { NFTCreateScreen } from './Product/Create';
 
 const Screens =  {
     Home: HomeScreen,
@@ -17,6 +18,9 @@ const Screens =  {
         },
         Category: {
             List: ProductCategoryList
+        },
+        NFT: {
+            Create: NFTCreateScreen
         }
     }
 }

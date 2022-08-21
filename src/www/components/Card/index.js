@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom';
 
 import "./styles.scss";
 
-export const FeatureCard = ({ style, onClick, id, to="#" }) => {
+export const FeatureCard = ({ style, onClick, id, to="#", image }) => {
     return (
-        <motion.div className="card--feature" style={ style } onClick={onClick} layoutId={`card-container-${id}`}>
+        <motion.div className="card--feature" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
             <Link to={to}>
-                <motion.div className="card--feature-image" layoutId={`card-image-container-${id}`}></motion.div>
+                <motion.div className="card--feature-image" layoutId={id && `card-image-container-${id}`} style={{ backgroundImage: `url(${ image })` }}></motion.div>
             </Link>
         </motion.div>
     )
@@ -16,9 +16,9 @@ export const FeatureCard = ({ style, onClick, id, to="#" }) => {
 
 export const SquareCard = ({ style, onClick, id, to="#", title, overlay }) => {
     return (
-        <motion.div className="card--square" style={ style } onClick={onClick} layoutId={`card-container-${id}`}>
+        <motion.div className="card--square" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
             <Link to={to}>
-                <motion.div className={`card--square-image ${ overlay ? "overlay" : "" }`} layoutId={`card-image-container-${id}`}>
+                <motion.div className={`card--square-image ${ overlay ? "overlay" : "" }`} layoutId={id && `card-image-container-${id}`}>
                     <motion.span className="card--square__title">{ title }</motion.span>
                 </motion.div>
             </Link>
@@ -26,15 +26,15 @@ export const SquareCard = ({ style, onClick, id, to="#", title, overlay }) => {
     )
 }
 
-export const ProductCard = ({ style, onClick, id, to="#", title, owner, price }) => {
+export const ProductCard = ({ style, onClick, id, to="#", title, owner, price, image }) => {
     return (
-        <motion.div className="card--product" style={ style } onClick={onClick} layoutId={`card-container-${id}`}>
+        <motion.div className="card--product" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
             <Link to={to}>
-                <motion.div className="card--product__image" layoutId={`card-image-container-${id}`}></motion.div>
+                <motion.div className="card--product__image" layoutId={id && `card-image-container-${id}`} style={{ backgroundImage: `url(${image})` }}></motion.div>
                 <div className="card--product__content">
-                    <motion.span className="card--product__content__owner" layoutId={`card-content-owner-${id}`}>{ owner }</motion.span>
-                    <motion.span className="card--product__content__title" layoutId={`card-content-title-${id}`}>{ title }</motion.span>
-                    <motion.span className="card--product__content__price" layoutId={`card-content-price-${id}`}>{ price }</motion.span>
+                    <motion.span className="card--product__content__owner" layoutId={id && `card-content-owner-${id}`}>{ owner }</motion.span>
+                    <motion.span className="card--product__content__title" layoutId={id && `card-content-title-${id}`}>{ title }</motion.span>
+                    <motion.span className="card--product__content__price" layoutId={id && `card-content-price-${id}`}>{ price } ICP</motion.span>
                 </div>
             </Link>
         </motion.div>
@@ -43,17 +43,17 @@ export const ProductCard = ({ style, onClick, id, to="#", title, owner, price })
 
 export const CollectionCard = ({ style, onClick, id, to="#", title, owner }) => {
     return (
-        <motion.div className="card--collection" style={ style } onClick={onClick} layoutId={`card-container-${id}`}>
+        <motion.div className="card--collection" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
             <Link to={to}>
-                <motion.div className="card--collection__image" layoutId={`card-image-container-${id}`}>
+                <motion.div className="card--collection__image" layoutId={id && `card-image-container-${id}`}>
                     <div className="card--collection__image__front"></div>
                     <div className="card--collection__image__back"></div>
                     <div className="card--collection__image__back"></div>
                 </motion.div>
 
                 <div className="card--collection__content">
-                    <motion.span className="card--collection__content__owner" layoutId={`card-content-owner-${id}`}>{ owner }</motion.span>
-                    <motion.span className="card--collection__content__title" layoutId={`card-content-title-${id}`}>{ title }</motion.span>
+                    <motion.span className="card--collection__content__owner" layoutId={id && `card-content-owner-${id}`}>{ owner }</motion.span>
+                    <motion.span className="card--collection__content__title" layoutId={id && `card-content-title-${id}`}>{ title }</motion.span>
                 </div>
             </Link>
         </motion.div>
@@ -68,7 +68,7 @@ export const BalanceCard = ({ style, onClick, to="#", balance }) => {
                     <span className="card--balance__content__title">Total Balance</span>
                     
                     <div className="card--balance__content__balance-container">
-                        <span className="card--balance__content__balance-container__balance">{ balance } €</span>
+                        <span className="card--balance__content__balance-container__balance">{ balance } ICP</span>
                     </div>
                 </div>
             </Link>

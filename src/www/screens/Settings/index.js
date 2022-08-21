@@ -1,50 +1,34 @@
 import React, { useEffect } from 'react';
 import { View } from '@components';
-import { superheroes, canisterId, idlFactory, createActor } from '@declarations';
+import { usePlug } from '@hooks';
 
 export const SettingsScreen = () => {
+    const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
 
     useEffect(() => {
       fetch();
     }, []);
 
     const fetch = async() => {
-      let a = await superheroes.readAccount();
+      let b = await actor;
+      let a = await b.readAccount();
+      let balance = await getBalance();
 
       console.log(a);
-    }
-
-    const handleConnect = async () => {
-      const whitelist = [canisterId];
-      const host = 'http://localhost:8080';
-
-      try {
-        const publicKey = await window.ic.plug.requestConnect({
-          whitelist,
-          host,
-          timeout: 50000
-        });
-
-        console.log(`The connected user's public key is:`, publicKey);
-      } catch (e) {
-        alert(e);
-      }
+      console.log(balance);
     }
 
     const addUser = async() => {
-      const NNSUiActor = await window.ic.plug.createActor({
-        canisterId: canisterId,
-        interfaceFactory: idlFactory,
-      });
-
-      const a = await NNSUiActor.createAccount("David", "Tran", 0, "20-01-2003", "123451231", "Ben Nghe");
+      let b = await actor;
+      const a = await b.createAccount("David", "Tran", 0, "20-01-2003", "123451231", "Ben Nghe");
 
       console.log(a);
     }
 
     return(
         <View>
-            <button onClick={handleConnect}>Connect Handle</button>
+            <button onClick={connect}>Connect Handle</button>
+            <br/>
             <button onClick={addUser}>Add User</button>
         </View>
     )

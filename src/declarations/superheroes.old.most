@@ -6,8 +6,43 @@ type Hash = Nat32;
 type Key<K> = {hash : Hash; key : K};
 type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
 type List<T> = ?(T, List<T>);
+type Operation =
+  {
+    #approve;
+    #approveAll;
+    #burn;
+    #createOrder;
+    #mint : ?TokenMetaData;
+    #revokeAll;
+    #setMetadata;
+    #transfer;
+    #transferFrom
+  };
+type Record = {#metadata : ?TokenMetaData; #user : Principal};
 type Set<T> = Trie<T, ()>;
+type Time = Int;
+type TokenInfo =
+  {
+    index : Nat;
+    var metadata : ?TokenMetaData;
+    var operator : ?Principal;
+    var owner : Principal;
+    timestamp : Time
+  };
+type TokenInfo__1 = TokenInfo;
+type TokenMetaData = {tokenUri : Text};
 type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
+type TxRecord =
+  {
+    caller : Principal;
+    from : Record;
+    index : Nat;
+    op : Operation;
+    timestamp : Time;
+    to : Record;
+    tokenIndex : ?Nat
+  };
+type TxRecord__1 = TxRecord;
 type UserInfo =
   {
     var allowedBy : Set<Principal>;
@@ -18,11 +53,17 @@ type UserInfo =
     var liveIn : Text;
     var operators : Set<Principal>;
     var phone : Text;
-    var principalId : Principal;
+    var principalId : Text;
     var sex : Nat;
     var tokens : Set<Nat>
   };
 type UserInfo__1 = UserInfo;
 actor {
+  stable var blackhole : Principal;
+  stable var owner_ : Principal;
+  stable var tokensEntries : [(Nat, TokenInfo__1)];
+  stable var totalSupply_ : Nat;
+  stable var txIndex : Nat;
+  stable var txs : [TxRecord__1];
   stable var usersEntries : [(Principal, UserInfo__1)]
 };

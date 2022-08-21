@@ -12,6 +12,10 @@
     box-sizing: border-box;
     padding-inline: 16px;
     margin-top: $section-gap-small;
+    border: none;
+    font-family: $font-family;
+    font-weight: 500;
+    outline: none;
 
     &__icon {
         display: flex;

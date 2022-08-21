@@ -25,6 +25,10 @@
         margin-inline: -$view-padding-horizontal;
         margin-top: -$view-padding-vertical;
         border-radius: 0;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: gray;
 
         &::after {
             padding-top: 50%;

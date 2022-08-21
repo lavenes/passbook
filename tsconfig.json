@@ -9,6 +9,7 @@
       "DOM"
     ],
     //"module": "commonjs",
+    "moduleResolution": "node",  
     "strict": true,
     "target": "es2018"
   }

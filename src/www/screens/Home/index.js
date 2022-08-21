@@ -4,9 +4,23 @@ import { useNavigationType, useParams } from 'react-router-dom';
 import { IoScan } from 'react-icons/io5';
 import { AppBar, View, Title, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, ListView, BalanceCard } from '@components';
 import Screens from '@screens';
+import { usePlug } from '@hooks';
+import API from '@api';
 
 export const HomeScreen = ({ match, navigation }) => {
     let { ticketId } = useParams();
+    const [ balance, setBalance ] = useState(0);
+    const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        //*Fetch balance
+        let balance = await getBalance();
+        setBalance(balance);
+    }
 
     return (
         <>
@@ -25,7 +39,7 @@ export const HomeScreen = ({ match, navigation }) => {
                         <AppBar.AvatarImage />
                     }
                 />
-                <BalanceCard balance={1000}/>
+                <BalanceCard balance={balance}/>
 
                 <Title
                     subtitle="Xin chào Quang Nhat"

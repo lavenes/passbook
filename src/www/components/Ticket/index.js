@@ -3,7 +3,7 @@ import * as Icon from 'react-icons/io5';
 
 import "./styles.scss";
 
-export const Ticket = () => {
+export const Ticket = ({ title, description, place, date, time, section, seat, price, order }) => {
     return (
         <div className="ticket">
             <div className="ticket__head">
@@ -20,8 +20,8 @@ export const Ticket = () => {
                 </div> */}
             </div>
 
-            <h1 className="ticket__title">Tyler The Creator</h1>
-            <p className="ticket__description">Lorem ip sum lorem ipsum lam nb knsjd m 🎻</p>
+            <h1 className="ticket__title">{ title }</h1>
+            <p className="ticket__description">{ description }</p>
             
             <div className="ticket__divide--line"></div>
 
@@ -29,40 +29,40 @@ export const Ticket = () => {
                 <div className="ticket__content__row">
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Place</span>
-                        <span className="ticket__content__value">New York, Madison Square Garden</span>
+                        <span className="ticket__content__value">{ place }</span>
                     </div>
                 </div>
 
                 <div className="ticket__content__row">
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Date</span>
-                        <span className="ticket__content__value">08.09.2022</span>
+                        <span className="ticket__content__value">{ date }</span>
                     </div>
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Time</span>
-                        <span className="ticket__content__value__feature">9:11 AM</span>
+                        <span className="ticket__content__value__feature">{ time }</span>
                     </div>
                 </div>
                 
                 <div className="ticket__content__row">
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Section</span>
-                        <span className="ticket__content__value">101</span>
+                        <span className="ticket__content__value">{ section }</span>
                     </div>
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Seat</span>
-                        <span className="ticket__content__value">31</span>
+                        <span className="ticket__content__value">{ seat }</span>
                     </div>
                 </div>
                 
                 <div className="ticket__content__row">
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Costs</span>
-                        <span className="ticket__content__value">$300</span>
+                        <span className="ticket__content__value">{ price }</span>
                     </div>
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">Order</span>
-                        <span className="ticket__content__value">12345</span>
+                        <span className="ticket__content__value">{ order }</span>
                     </div>
                 </div>
             </div>

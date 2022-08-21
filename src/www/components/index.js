@@ -7,9 +7,10 @@ import { ScrollView } from './Scroll';
 import * as ListView from './List';
 import { Ticket } from './Ticket';
 import * as ActionsGroup from './ActionsGroup';
-import { TextInput } from './TextInput';
+import { TextInput, TextArea } from './TextInput';
 import { SectionDivider } from './Section';
 import { Button } from './Button';
+import { LoadingOverlay } from './Loading';
 
 export {
     AppBar,
@@ -34,10 +35,13 @@ export {
     Ticket,
     ActionsGroup,
     TextInput,
+    TextArea,
 
     SectionDivider,
 
     Button,
 
-    InformationGroup
+    InformationGroup,
+
+    LoadingOverlay
 }
