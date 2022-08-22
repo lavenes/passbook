@@ -29,10 +29,12 @@
         &-image {
             width: 100%;
             height: 100%;
-            background: gray;
+            background-color: gray;
             border-radius: 11px;
             position: relative;
             overflow: hidden;
+            background-size: cover;
+            background-position: center;
 
             &::after {
                 content: "";
@@ -124,6 +126,8 @@
             position: relative;
             display: flex;
             justify-content: center;
+            background-size: cover;
+            background-position: center;
 
             &::after {
                 content: "";
@@ -136,14 +140,18 @@
                 height: 100%;
                 border-radius: 11px;
                 position: absolute;
-                background: gray;
+                background-color: gray;
+                background-size: cover;
+                background-position: center;
                 z-index: 3;
             }
 
             &__back {
                 width: 90%;
                 height: 100%;
-                background: gray;
+                background-color: gray;
+                background-size: cover;
+                background-position: center;
                 border-radius: 11px;
                 position: absolute;
                 margin-top: 5px;
@@ -225,9 +233,11 @@
             &__avatar {
                 width: 46px;
                 height: 46px;
-                background: gray;
+                background-color: gray;
                 border-radius: 50%;
                 flex-shrink: 0;
+                background-size: cover;
+                background-position: center;
             }
     
             &__content {

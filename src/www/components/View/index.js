@@ -6,12 +6,12 @@ import "./styles.scss";
 
 const transition = { ease: 'easeInOut', duration: 0.3 }
 
-export const View = ({ children, className, style, overlay, layoutId, cupertinoTrans, headerPadding }) => {
+export const View = ({ children, className, style, overlay, layoutId, cupertinoTrans, headerPadding, backdropImage}) => {
     const navigateType = useNavigationType();
 
     const variants = {
       enter() {
-        const isPush = navigateType === 'PUSH'
+        const isPush = navigateType === 'PUSH' 
   
         return {
           x: 0,
@@ -89,8 +89,14 @@ export const View = ({ children, className, style, overlay, layoutId, cupertinoT
                         top: 0,
                         left: 0
                     }
+                ),
+                ...(
+                  backdropImage && {
+                    backgroundColor: 'transparent'
+                  }
                 )
         }}>
+            { backdropImage && <div className="view__backdrop-image" style={{ backgroundImage: `url(${ backdropImage })` }}></div> }
             { children }
         </motion.div>
     )

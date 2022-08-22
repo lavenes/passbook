@@ -1,35 +1,37 @@
 export const idlFactory = ({ IDL }) => {
   const UserInfoExt = IDL.Record({
+    'id' : IDL.Principal,
     'sex' : IDL.Nat,
     'dateOfBirth' : IDL.Text,
-    'allowedTokens' : IDL.Vec(IDL.Nat),
-    'tokens' : IDL.Vec(IDL.Nat),
-    'operators' : IDL.Vec(IDL.Principal),
     'phone' : IDL.Text,
-    'allowedBy' : IDL.Vec(IDL.Principal),
     'lastName' : IDL.Text,
-    'principalId' : IDL.Text,
     'liveIn' : IDL.Text,
     'firstName' : IDL.Text,
   });
-  const TokenMetaData__1 = IDL.Record({ 'tokenUri' : IDL.Text });
-  const Time = IDL.Int;
+  const TokenGiftInfo = IDL.Record({
+    'id' : IDL.Text,
+    'createBy' : IDL.Opt(IDL.Principal),
+    'name' : IDL.Text,
+    'description' : IDL.Opt(IDL.Text),
+    'image' : IDL.Vec(IDL.Nat8),
+    'price' : IDL.Nat,
+  });
   const TokenInfoExt = IDL.Record({
+    'id' : IDL.Text,
+    'dateCreated' : IDL.Text,
     'owner' : IDL.Principal,
-    'metadata' : IDL.Opt(TokenMetaData__1),
-    'operator' : IDL.Opt(IDL.Principal),
-    'timestamp' : Time,
-    'index' : IDL.Nat,
-  });
-  const TokenMetaData = IDL.Record({ 'tokenUri' : IDL.Text });
-  const Errors = IDL.Variant({
-    'Unauthorized' : IDL.Null,
-    'TokenNotExist' : IDL.Null,
-    'InvalidOperator' : IDL.Null,
-  });
-  const MintResult = IDL.Variant({
-    'Ok' : IDL.Tuple(IDL.Nat, IDL.Nat),
-    'Err' : Errors,
+    'date' : IDL.Text,
+    'name' : IDL.Text,
+    'createdBy' : IDL.Principal,
+    'time' : IDL.Text,
+    'description' : IDL.Text,
+    'gifts' : IDL.Vec(TokenGiftInfo),
+    'nftType' : IDL.Text,
+    'details' : IDL.Text,
+    'category' : IDL.Text,
+    'image' : IDL.Vec(IDL.Nat8),
+    'place' : IDL.Text,
+    'price' : IDL.Nat,
   });
   const NFTSale = IDL.Service({
     'clearAllTokens' : IDL.Func([], [], ['oneway']),
@@ -40,13 +42,14 @@ export const idlFactory = ({ IDL }) => {
       ),
     'deleteAccount' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllTokens' : IDL.Func([], [IDL.Vec(TokenInfoExt)], ['query']),
-    'getTokenInfo' : IDL.Func([IDL.Nat], [TokenInfoExt], ['query']),
+    'getTokenInfo' : IDL.Func([IDL.Text], [TokenInfoExt], ['query']),
     'getUserInfo' : IDL.Func(
         [IDL.Principal],
         [IDL.Opt(UserInfoExt)],
         ['query'],
       ),
-    'mintNFT' : IDL.Func([IDL.Opt(TokenMetaData)], [MintResult], []),
+    'mintCloneNFT' : IDL.Func([IDL.Text], [TokenInfoExt], []),
+    'mintNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
     'updateAccount' : IDL.Func(
         [

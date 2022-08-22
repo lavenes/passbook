@@ -14,11 +14,11 @@ export const FeatureCard = ({ style, onClick, id, to="#", image }) => {
     )
 }
 
-export const SquareCard = ({ style, onClick, id, to="#", title, overlay }) => {
+export const SquareCard = ({ style, onClick, id, to="#", title, overlay, image }) => {
     return (
         <motion.div className="card--square" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
             <Link to={to}>
-                <motion.div className={`card--square-image ${ overlay ? "overlay" : "" }`} layoutId={id && `card-image-container-${id}`}>
+                <motion.div style={{ backgroundImage: `url(${image})` }} className={`card--square-image ${ overlay ? "overlay" : "" }`} layoutId={id && `card-image-container-${id}`}>
                     <motion.span className="card--square__title">{ title }</motion.span>
                 </motion.div>
             </Link>

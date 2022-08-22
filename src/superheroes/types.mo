@@ -1,68 +1,72 @@
-/**
- * Module     : types.mo
- * Copyright  : 2021 Rocklabs Team
- * License    : Apache 2.0 with LLVM Exception
- * Stability  : Experimental
+/*
+ * COPYRIGHT (c) 2022 Lavenes.
+ * COPYRIGHT (c) 2022 Nhats Devil.
+ *
+ * This document is the property of Lavenes.
+ * It is considered confidential and proprietary.
+ *
+ * This document may not be reproduced or transmitted in any form,
+ * in whole or in part, without the express written permission of
+ * Lavenes.
  */
+
 
 import Time "mo:base/Time";
 import TrieSet "mo:base/TrieSet";
 
 module {
-    
-    //*=======================================*//
-    //*           OPERATIONS TYPE             *//
-    //*=======================================*//
-
-    /// Update call operations
-    public type Operation = {
-        #mint: ?TokenMetaData;  
-        #burn;
-        #transfer;
-        #transferFrom;
-        #approve;
-        #approveAll;
-        #revokeAll; // revoke approvals
-        #setMetadata;
-        #createOrder
-    };
-    /// Update call operation record fields
-    public type Record = {
-        #user: Principal;
-        #metadata: ?TokenMetaData; // op == #setMetadata
-    };
-    public type TxRecord = {
-        caller: Principal;
-        op: Operation;
-        index: Nat;
-        tokenIndex: ?Nat;
-        from: Record;
-        to: Record;
-        timestamp: Time.Time;
-    };
-
     //*=======================================*//
     //*                NFT TYPE               *//
     //*=======================================*//
-    
-    public type TokenMetaData = {
-        tokenUri: Text;
+    public type TokenCategory = {
+        id: Text;
+        name: Text;
+        owner: Principal;
+    };
+
+    public type TokenGiftInfo = {
+        id: Text;
+        name: Text;
+        description: ?Text;
+        price: Nat;
+        createBy: ?Principal;
+        image: [Nat8];
     };
 
     public type TokenInfo = {
-        index: Nat;
+        var id: Text;
+        var createdBy: Principal;
+        var date: Text;
+        var description: Text;
+        var details: Text;
+        var gifts: [TokenGiftInfo];
+        var image: [Nat8];
+        var name: Text;
         var owner: Principal;
-        var metadata: ?TokenMetaData;
-        var operator: ?Principal;
-        timestamp: Time.Time;
+        var place: Text;
+        var price: Nat;
+        var time: Text;
+        var nftType: Text; //item | ticket
+        var category: Text; //TokenCategory.id
+        var dateCreated: Text;
     };
 
     public type TokenInfoExt = {
-        index: Nat;
+        id: Text;
+        createdBy: Principal;
+        date: Text;
+        description: Text;
+        details: Text;
+        gifts: [TokenGiftInfo];
+        image: [Nat8];
+        name: Text;
         owner: Principal;
-        metadata: ?TokenMetaData;
-        operator: ?Principal;
-        timestamp: Time.Time;
+        place: Text;
+        price: Nat;
+        time: Text;
+        nftType: Text; //item | ticket
+        category: Text; //TokenCategory.id
+        dateCreated: Text;
     };
     
     //*=======================================*//
@@ -70,30 +74,22 @@ module {
     //*=======================================*//
 
     public type UserInfo = {
-        var operators: TrieSet.Set<Principal>;     // principals allowed to operate on the user's behalf
-        var allowedBy: TrieSet.Set<Principal>;     // principals approved user to operate their's tokens
-        var allowedTokens: TrieSet.Set<Nat>;       // tokens the user can operate
-        var tokens: TrieSet.Set<Nat>;              // user's tokens
         var firstName: Text;
         var lastName: Text;
         var sex: Nat;
         var dateOfBirth: Text;
         var phone: Text;
         var liveIn: Text;
-        var principalId: Text;
+        var id: Principal;
     };
 
     public type UserInfoExt = {
-        operators: [Principal];
-        allowedBy: [Principal];
-        allowedTokens: [Nat];
-        tokens: [Nat];             // user's tokens
         firstName: Text;
         lastName: Text;
         sex: Nat;
         dateOfBirth: Text;
         phone: Text;
         liveIn: Text;
-        principalId: Text;
+        id: Principal;
     };
 };

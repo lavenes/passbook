@@ -1,9 +1,15 @@
-/**
- * Module     : main.mo
- * Copyright  : 2022 Rocklabs Team
- * License    : Apache 2.0 with LLVM Exception
- * Stability  : Experimental
+/*
+ * COPYRIGHT (c) 2022 Lavenes.
+ * COPYRIGHT (c) 2022 Nhats Devil.
+ *
+ * This document is the property of Lavenes.
+ * It is considered confidential and proprietary.
+ *
+ * This document may not be reproduced or transmitted in any form,
+ * in whole or in part, without the express written permission of
+ * Lavenes.
  */
+
 
 import HashMap "mo:base/HashMap";
 import Cycles "mo:base/ExperimentalCycles";
@@ -22,100 +28,108 @@ import Prelude "mo:base/Prelude";
 import Buffer "mo:base/Buffer";
 import Types "./types";
 import Option "mo:base/Option";
+import List "mo:base/List";
+
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
     ) = this {
-    type Operation = Types.Operation;
-    type Record = Types.Record;
-    type TxRecord = Types.TxRecord;
     private stable var blackhole: Principal = Principal.fromText("aaaaa-aa");
 
     //*=======================================*//
     //*                NFT API                *//
     //*=======================================*//
-    type TokenMetaData = Types.TokenMetaData;
+    //#region
     type TokenInfo = Types.TokenInfo;
     type TokenInfoExt = Types.TokenInfoExt;
+    type TokenCategory = Types.TokenCategory;
+    type TokenGiftInfo = Types.TokenGiftInfo;
 
-    public type MintResult = {
-        #Ok: (Nat, Nat);
-        #Err: Errors;
-    };
-
-    private stable var txIndex: Nat = 0;
-    private stable var txs: [TxRecord] = [];
     private stable var owner_: Principal = _owner;
-    private stable var totalSupply_: Nat = 0;
-    private stable var tokensEntries : [(Nat, TokenInfo)] = [];
-    private var tokens = HashMap.HashMap<Nat, TokenInfo>(1, Nat.equal, Hash.hash);
-
-    //*Add NFT Record
-    private func addNFTRecord(
-        caller: Principal, op: Operation, tokenIndex: ?Nat,
-        from: Record, to: Record, timestamp: Time.Time
-    ): Nat {
-        let record: TxRecord = {
-            caller = caller;
-            op = op;
-            index = txIndex;
-            tokenIndex = tokenIndex;
-            from = from;
-            to = to;
-            timestamp = timestamp;
-        };
-        txs := Array.append(txs, [record]);
-        txIndex += 1;
-        return txIndex - 1;
-    };
-
-    //*Add Token to UID
-    private func _addTokenTo(to: Principal, tokenId: Nat) {
-        switch(users.get(to)) {
-            case (?user) {
-                user.tokens := TrieSet.put(user.tokens, tokenId, Hash.hash(tokenId), Nat.equal);
-                users.put(to, user);
-            };
-            case _ {
-                let user = _newUser(to);
-                user.tokens := TrieSet.put(user.tokens, tokenId, Hash.hash(tokenId), Nat.equal);
-                users.put(to, user);
-            };
-        }
-    }; 
+    private stable var tokensEntries : [(Text, TokenInfo)] = [];
+    private var tokens = HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
 
     //*Priv Info to Ext
     private func _tokenInfotoExt(info: TokenInfo) : TokenInfoExt {
         return {
-            index = info.index;
+            id = info.id;
+            createdBy = info.createdBy;
+            date = info.date;
+            description = info.description;
+            details = info.details;
+            gifts = info.gifts;
+            image = info.image;
+            name = info.name;
             owner = info.owner;
-            metadata = info.metadata;
-            timestamp = info.timestamp;
-            operator = info.operator;
+            place = info.place;
+            price = info.price;
+            time = info.time;
+            nftType = info.nftType; //item | ticket
+            category = info.category; //TokenCategory.id
+            dateCreated = info.dateCreated;
         };
     };
 
+    //*Create default token
+    private func _newToken(caller: Principal) : TokenInfo {
+        {
+            var id = "";
+            var date = "";
+            var description = "";
+            var details = "";
+            var gifts = [];
+            var image = [];
+            var name = "";
+            var price = 0;
+            var place = "";
+            var time = "";
+            var category = "";
+            var nftType = "";
+            var createdBy = caller;
+            var owner = caller;
+            var dateCreated = "";
+        }
+    };
+
     //*Mintning
-    public shared({ caller }) func mintNFT(metadata: ?TokenMetaData): async MintResult {
+    public shared({ caller }) func mintNFT(metadata: TokenInfoExt): async TokenInfoExt {
         // if(msg.caller != owner_) {
         //     return #Err(#Unauthorized);
         // };
-        let token: TokenInfo = {
-            index = totalSupply_;
-            var owner = caller;
-            var metadata = metadata;
-            var operator = null;
-            timestamp = Time.now();
-        };
 
-        tokens.put(totalSupply_, token);
+        let token = _newToken(caller);
+        
+        token.id := metadata.id;
+        token.date := metadata.date;
+        token.description := metadata.description;
+        token.details := metadata.details;
+        token.gifts := metadata.gifts;
+        token.image := metadata.image;
+        token.name := metadata.name;
+        token.price := metadata.price;
+        token.place := metadata.place;
+        token.time := metadata.time;
+        token.category := metadata.category;
+        token.nftType := metadata.nftType;
+        token.createdBy := metadata.createdBy;
 
-        _addTokenTo(caller, totalSupply_);
+        tokens.put(token.id, token);
 
-        totalSupply_ += 1;
+        return _tokenInfotoExt(token);
+    };
 
-        let txid = addNFTRecord(msg.caller, #mint(metadata), ?token.index, #user(blackhole), #user(caller), Time.now());
-        return #Ok((token.index, txid));
+    //*Mint Clone
+    public shared({ caller }) func mintCloneNFT(id: Text) : async TokenInfoExt {
+        switch(tokens.get(id)) {
+            case(?token) {
+                token.owner := caller;
+
+                return _tokenInfotoExt(token);
+            };
+            case(_) {
+                throw Error.reject("token not exist");
+            }
+        }
     };
 
     //*Clear all NFT
@@ -123,12 +137,11 @@ shared(msg) actor class NFTSale(
         if(msg.caller != owner_) {
             return;
         };
-        tokens := HashMap.HashMap<Nat, TokenInfo>(1, Nat.equal, Hash.hash);
-        totalSupply_ := 0;
+        tokens := HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
     };
 
     //*Get single tokens
-    public query func getTokenInfo(tokenId: Nat) : async TokenInfoExt {
+    public query func getTokenInfo(tokenId: Text) : async TokenInfoExt {
         switch(tokens.get(tokenId)){
             case(?tokeninfo) {
                 return _tokenInfotoExt(tokeninfo);
@@ -141,12 +154,15 @@ shared(msg) actor class NFTSale(
 
     //* Get all tokens
     public query func getAllTokens() : async [TokenInfoExt] {
-        Iter.toArray(Iter.map(tokens.entries(), func (i: (Nat, TokenInfo)): TokenInfoExt {_tokenInfotoExt(i.1)}))
+        Iter.toArray(Iter.map(tokens.entries(), func (i: (Text, TokenInfo)): TokenInfoExt {_tokenInfotoExt(i.1)}))
     };
     
+    //#endregion
+
     //*=======================================*//
     //*               USER API                *//
     //*=======================================*//
+    //#region
     type UserInfo = Types.UserInfo;
     type UserInfoExt = Types.UserInfoExt;
 
@@ -167,33 +183,25 @@ shared(msg) actor class NFTSale(
 
     private func _newUser(principalId: Principal) : UserInfo {
         {
-            var operators = TrieSet.empty<Principal>();
-            var allowedBy = TrieSet.empty<Principal>();
-            var allowedTokens = TrieSet.empty<Nat>();
-            var tokens = TrieSet.empty<Nat>();
             var firstName = "";
             var lastName = "";
             var sex = 0;
             var dateOfBirth = "";
             var liveIn = "";
             var phone = "";
-            var principalId = Principal.toText(principalId);
+            var id = principalId;
         }
     };
 
     private func _userInfotoExt(info: UserInfo) : UserInfoExt {
         return {
-            operators = TrieSet.toArray(info.operators);
-            allowedBy = TrieSet.toArray(info.allowedBy);
-            allowedTokens = TrieSet.toArray(info.allowedTokens);
-            tokens = TrieSet.toArray(info.tokens);
             firstName = info.firstName;
             lastName = info.lastName;
             sex = info.sex;
             dateOfBirth = info.dateOfBirth;
             liveIn = info.liveIn;
             phone = info.phone;
-            principalId = info.principalId;
+            id = info.id;
         };
     };
 
@@ -201,17 +209,13 @@ shared(msg) actor class NFTSale(
         switch info {
             case(?info) {
                 return ?{
-                    operators = TrieSet.toArray(info.operators);
-                    allowedBy = TrieSet.toArray(info.allowedBy);
-                    allowedTokens = TrieSet.toArray(info.allowedTokens);
-                    tokens = TrieSet.toArray(info.tokens);
                     firstName = info.firstName;
                     lastName = info.lastName;
                     sex = info.sex;
                     dateOfBirth = info.dateOfBirth;
                     liveIn = info.liveIn;
                     phone = info.phone;
-                    principalId = info.principalId;
+                    id = info.id;
                 };
             };
             case _ {
@@ -291,7 +295,9 @@ shared(msg) actor class NFTSale(
         users := HashMap.fromIter<Principal, UserInfo>(usersEntries.vals(), 1, Principal.equal, Principal.hash);
         usersEntries := [];
 
-        tokens := HashMap.fromIter<Nat, TokenInfo>(tokensEntries.vals(), 1, Nat.equal, Hash.hash);
+        tokens := HashMap.fromIter<Text, TokenInfo>(tokensEntries.vals(), 1, Text.equal, Text.hash);
         tokensEntries := [];
     };
+
+    //#enregion
 };

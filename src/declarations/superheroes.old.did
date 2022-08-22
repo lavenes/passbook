@@ -1,50 +1,48 @@
 type UserInfoExt = 
  record {
-   allowedBy: vec principal;
-   allowedTokens: vec nat;
    dateOfBirth: text;
    firstName: text;
+   id: principal;
    lastName: text;
    liveIn: text;
-   operators: vec principal;
    phone: text;
-   principalId: text;
    sex: nat;
-   tokens: vec nat;
  };
-type TokenMetaData__1 = record {tokenUri: text;};
-type TokenMetaData = record {tokenUri: text;};
 type TokenInfoExt = 
  record {
-   index: nat;
-   metadata: opt TokenMetaData__1;
-   operator: opt principal;
+   category: text;
+   createdBy: principal;
+   date: text;
+   dateCreated: text;
+   description: text;
+   details: text;
+   gifts: vec TokenGiftInfo;
+   id: text;
+   image: vec nat8;
+   name: text;
+   nftType: text;
    owner: principal;
-   timestamp: Time;
+   place: text;
+   price: nat;
+   time: text;
  };
-type Time = int;
-type MintResult = 
- variant {
-   Err: Errors;
-   Ok: record {
-         nat;
-         nat;
-       };
- };
-type Errors = 
- variant {
-   InvalidOperator;
-   TokenNotExist;
-   Unauthorized;
+type TokenGiftInfo = 
+ record {
+   createBy: opt principal;
+   description: opt text;
+   id: text;
+   image: vec nat8;
+   name: text;
+   price: nat;
  };
 service : {
-  clearNFT: () -> () oneway;
+  clearAllTokens: () -> () oneway;
   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
   deleteAccount: (principal) -> (bool);
   getAllTokens: () -> (vec TokenInfoExt) query;
-  getTokenInfo: (nat) -> (TokenInfoExt) query;
+  getTokenInfo: (text) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
-  mintNFT: (opt TokenMetaData) -> (MintResult);
+  mintNFT: (TokenInfoExt) -> (TokenInfoExt);
   readAccount: () -> (vec UserInfoExt) query;
   updateAccount: (principal, text, text, nat, text, text, text) ->
    (UserInfoExt);

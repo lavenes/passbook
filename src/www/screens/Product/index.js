@@ -63,7 +63,7 @@ export const ProductMarket = () => {
                     title="Chương trình nổi bật"
                 />
 
-                <FeatureCard to="/items/as" image={tickets[0]?.data?.image}/>
+                <FeatureCard to={`/items/${tickets[0]?.id}`} image={tickets[0]?.image}/>
 
                 <SectionTitle
                     title="Hot Events"
@@ -73,17 +73,19 @@ export const ProductMarket = () => {
                 >
                     <GridView
                         horizontal
-                        items={tickets.map((item, index) => {
-                            let nft = item.data;
+                        items={
+                            tickets.map((item, index) => {
+                                let nft = item;
 
-                            return <ProductCard 
-                                title={ nft?.name } 
-                                owner={ nft?.owner } 
-                                price={ nft?.price } 
-                                image={ nft?.image } 
-                                to={`/items/${item.index}`}
-                            />
-                        })}
+                                return <ProductCard 
+                                    title={ nft?.name } 
+                                    owner={ "OWNER" } 
+                                    price={ nft?.price } 
+                                    image={ nft?.image } 
+                                    to={`/items/${item.id}`}
+                                />
+                            }
+                        )}
                     />
                 </ScrollView>
 
@@ -95,17 +97,19 @@ export const ProductMarket = () => {
                 >
                     <GridView
                         horizontal
-                        items={tickets.map((item, index) => {
-                            let nft = item.data;
+                        items={
+                            tickets.map((item, index) => {
+                                let nft = item;
 
-                            return <ProductCard 
-                                title={ nft?.name } 
-                                owner={ nft?.owner } 
-                                price={ nft?.price } 
-                                image={ nft?.image } 
-                                to={`/items/${item.index}`}
-                            />
-                        })}
+                                return <ProductCard 
+                                    title={ nft?.name } 
+                                    owner={ "OWNER" } 
+                                    price={ nft?.price } 
+                                    image={ nft?.image } 
+                                    to={`/items/${item.id}`}
+                                />
+                            }
+                        )}
                     />
                 </ScrollView>
 

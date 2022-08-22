@@ -8,6 +8,7 @@ export default function usePlug() {
         const host = 'http://localhost:8080';
   
         try {
+            console.log(window.ic.plug);
             const connected = await window.ic.plug.isConnected();
             if(!connected) await window.ic.plug.requestConnect({
                 whitelist,

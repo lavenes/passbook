@@ -27,7 +27,7 @@ const RootStack = () => {
           <Route exact path={routes.PRODUCT.INFORMATION.ITEM} element={<Screens.Product.Market />}/>
           <Route exact path={routes.PRODUCT.MARKET} element={<Screens.Product.Market />}/>
 
-          <Route exact path={routes.PRODUCT.INFORMATION.TICKET} element={<Screens.Home />}/>
+          <Route exact path={routes.PRODUCT.INFORMATION.ITEM} element={<Screens.Home />}/>
           <Route exact path={routes.HOME} element={<Screens.Home />}/>
         </Routes>
       </>

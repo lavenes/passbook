@@ -10,6 +10,7 @@ import API from '@api';
 export const HomeScreen = ({ match, navigation }) => {
     let { ticketId } = useParams();
     const [ balance, setBalance ] = useState(0);
+    const [ ownedTickets, setOwnedTickets ] = useState([]);
     const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
 
     useEffect(() => {
@@ -20,6 +21,10 @@ export const HomeScreen = ({ match, navigation }) => {
         //*Fetch balance
         let balance = await getBalance();
         setBalance(balance);
+
+        let ownedNFT = await API.NFT.getOwned();
+
+        setOwnedTickets(ownedNFT);
     }
 
     return (
@@ -46,7 +51,7 @@ export const HomeScreen = ({ match, navigation }) => {
                     title="Sự kiện nổi bật"
                 />
 
-                <FeatureCard to="/tickets/a" id={"a"}/>
+                <FeatureCard to={`/items/${ownedTickets[0]?.id}`} id={`${ownedTickets[0]?.id}`} image={ ownedTickets[0]?.image }/>
 
                 <SectionTitle
                     title="Sự kiện sắp diễn ra"
@@ -59,11 +64,19 @@ export const HomeScreen = ({ match, navigation }) => {
                 >
                     <GridView
                         horizontal
-                        items={[
-                            <SquareCard to="/tickets/b" id={"b"} style={{ marginTop: 0, width: 160 }} key={"p-b"}/>,
-                            <SquareCard to="/tickets/c" id={"c"} style={{ marginTop: 0, width: 160 }} key={"p-c"}/>,
-                            <SquareCard to="/tickets/d" id={"d"} style={{ marginTop: 0, width: 160 }} key={"p-d"}/>
-                        ]}
+                        items={
+                            ownedTickets.map((item, index) => {
+                                let nft = item;
+
+                                return <SquareCard 
+                                    title={ nft?.name } 
+                                    owner={ "OWNER" } 
+                                    price={ nft?.price } 
+                                    image={ nft?.image } 
+                                    to={`/items/${item.id}`}
+                                />
+                            }
+                        )}
                     />
                 </ScrollView>
 
@@ -74,38 +87,21 @@ export const HomeScreen = ({ match, navigation }) => {
                 />
 
                 <ListView.List
-                    items={[
-                        <ListView.ListTile
-                            leading={
-                                <ListView.ListTileImage id="f" />
-                            }
-                            title="NFT 1 Title" 
-                            subtitle="NFT 1"
-                            to="/tickets/f"
-                            id="f"
-                            key={"p-f"}
-                        />,
-                        <ListView.ListTile
-                            leading={
-                                <ListView.ListTileImage id="g" />
-                            }
-                            title="NFT 1"
-                            subtitle="NFT 1"
-                            to="/tickets/g"
-                            id="g"
-                            key={"p-g"}
-                        />,
-                        <ListView.ListTile
-                            leading={
-                                <ListView.ListTileImage id="h" />
-                            }
-                            title="NFT 1"
-                            subtitle="NFT 1"
-                            to="/tickets/h"
-                            id="h"
-                            key={"p-h"}
-                        />,
-                    ]}
+                    items={
+                        ownedTickets.map((item, index) => {
+                            let nft = item;
+
+                            return <ListView.ListTile
+                                leading={
+                                    <ListView.ListTileImage id={`${nft?.id}`} src={ nft?.image }/>
+                                }
+                                title={ nft?.name }
+                                subtitle={ nft?.description }
+                                to={`/items/${nft?.id}`}
+                                id={`${nft?.id}`}
+                            />
+                        })
+                    }
                 />
             </View>
         </>

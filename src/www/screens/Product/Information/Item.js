@@ -18,15 +18,13 @@ export const ItemInformation = ({ title, id }) => {
         //*Fetch NFTs
         let nft = await API.NFT.get(id);
 
-        console.log(nft)
-
         setItemData(nft);
     }
 
-    const ticketMeta = itemData?.data;
+    const ticketMeta = itemData;
 
     return (
-        <View className="item-information-screen" overlay layoutId={`card-container-${id}`} style={{backgroundColor: '#f5f5f5'}}>
+        <View className="item-information-screen" overlay layoutId={`card-container-${id}`} backdropImage={ ticketMeta?.image } style={{backgroundColor: '#f5f5f5'}}>
             <motion.div className="card-content" style={{width: '100%'}} animate>
                 <motion.div
                     className="card-image-container"
@@ -46,7 +44,7 @@ export const ItemInformation = ({ title, id }) => {
                 <motion.div className="content-container" animate>
                     <motion.span className="title">{ ticketMeta?.name }</motion.span>
                     <PriceTitle price={ ticketMeta?.price } currency="ICP" />
-                    <CreatorCard name={ ticketMeta?.owner }/>
+                    <CreatorCard name={ "OWNER" }/>
                     <ActionsGroup.Group>
                         <ActionsGroup.Button name="Send" icon={<Icon.IoSendOutline/>}/>
                         <ActionsGroup.Button name="Save" icon={<Icon.IoBookmarkOutline/>}/>
@@ -55,13 +53,17 @@ export const ItemInformation = ({ title, id }) => {
                     </ActionsGroup.Group>
                     <SectionDivider/>
 
-                    <Button>Place a order</Button>
+                    <Button onClick={() => API.NFT.purchase(id)}>Place a order</Button>
 
                     <SectionTitle title="Description" style={{ marginTop: 40 }}/>
 
+                    <p style={{ margin: 0, marginTop: 16, fontSize: 14}}>{ ticketMeta?.description }</p>
+
+                    <SectionTitle title="Details" style={{ marginTop: 40 }}/>
+
                     <InformationGroup.Group>
                         {
-                            ticketMeta?.description?.split("\n").map((item, index) => {
+                            ticketMeta?.details?.split("\n").map((item, index) => {
                                 let title = item.split(":")[0];
                                 let value = item.split(":")[1];
 

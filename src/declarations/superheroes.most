@@ -1,69 +1,46 @@
 // Version: 1.0.0
-type AssocList<K, V> = List<(K, V)>;
-type AssocList__1<K, V> = AssocList<K, V>;
-type Branch<K, V> = {left : Trie<K, V>; right : Trie<K, V>; size : Nat};
-type Hash = Nat32;
-type Key<K> = {hash : Hash; key : K};
-type Leaf<K, V> = {keyvals : AssocList__1<Key<K>, V>; size : Nat};
-type List<T> = ?(T, List<T>);
-type Operation =
+type TokenGiftInfo =
   {
-    #approve;
-    #approveAll;
-    #burn;
-    #createOrder;
-    #mint : ?TokenMetaData;
-    #revokeAll;
-    #setMetadata;
-    #transfer;
-    #transferFrom
+    createBy : ?Principal;
+    description : ?Text;
+    id : Text;
+    image : [Nat8];
+    name : Text;
+    price : Nat
   };
-type Record = {#metadata : ?TokenMetaData; #user : Principal};
-type Set<T> = Trie<T, ()>;
-type Time = Int;
 type TokenInfo =
   {
-    index : Nat;
-    var metadata : ?TokenMetaData;
-    var operator : ?Principal;
+    var category : Text;
+    var createdBy : Principal;
+    var date : Text;
+    var dateCreated : Text;
+    var description : Text;
+    var details : Text;
+    var gifts : [TokenGiftInfo];
+    var id : Text;
+    var image : [Nat8];
+    var name : Text;
+    var nftType : Text;
     var owner : Principal;
-    timestamp : Time
+    var place : Text;
+    var price : Nat;
+    var time : Text
   };
 type TokenInfo__1 = TokenInfo;
-type TokenMetaData = {tokenUri : Text};
-type Trie<K, V> = {#branch : Branch<K, V>; #empty; #leaf : Leaf<K, V>};
-type TxRecord =
-  {
-    caller : Principal;
-    from : Record;
-    index : Nat;
-    op : Operation;
-    timestamp : Time;
-    to : Record;
-    tokenIndex : ?Nat
-  };
-type TxRecord__1 = TxRecord;
 type UserInfo =
   {
-    var allowedBy : Set<Principal>;
-    var allowedTokens : Set<Nat>;
     var dateOfBirth : Text;
     var firstName : Text;
+    var id : Principal;
     var lastName : Text;
     var liveIn : Text;
-    var operators : Set<Principal>;
     var phone : Text;
-    var principalId : Text;
-    var sex : Nat;
-    var tokens : Set<Nat>
+    var sex : Nat
   };
 type UserInfo__1 = UserInfo;
 actor {
   stable var blackhole : Principal;
   stable var owner_ : Principal;
-  stable var tokensEntries : [(Nat, TokenInfo__1)];
-  stable var totalSupply_ : Nat;
-  stable var txIndex : Nat;
-  stable var txs : [TxRecord__1];
+  stable var tokensEntries : [(Text, TokenInfo__1)];
   stable var usersEntries : [(Principal, UserInfo__1)]
 };
