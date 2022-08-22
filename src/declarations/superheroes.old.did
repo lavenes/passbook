@@ -28,7 +28,7 @@ type TokenInfoExt =
  };
 type TokenGiftInfo = 
  record {
-   createBy: opt principal;
+   createdBy: opt principal;
    description: opt text;
    id: text;
    image: vec nat8;
@@ -42,6 +42,7 @@ service : {
   getAllTokens: () -> (vec TokenInfoExt) query;
   getTokenInfo: (text) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
+  mintCloneNFT: (text) -> (TokenInfoExt);
   mintNFT: (TokenInfoExt) -> (TokenInfoExt);
   readAccount: () -> (vec UserInfoExt) query;
   updateAccount: (principal, text, text, nat, text, text, text) ->

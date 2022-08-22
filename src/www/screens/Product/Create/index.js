@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Title, Button, TextArea } from '@components';
+import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components';
 import { Config } from '@config';
 import { usePlug } from '@hooks';
-import { Principal } from '@dfinity/principal';
 import API from '@api';
 
 import "./styles.scss";
@@ -20,9 +19,20 @@ export const NFTCreateScreen = () => {
     const [price, setPrice] = useState(0);
     const [description, setDescription] = useState("");
     const [gifts, setGifts] = useState([]);
-    const [type, setType] = useState("");
-    const [category, setCategory] = useState("");
+    const [type, setType] = useState(Config.VARIABLES.TICKET_TYPES[0].value);
+    const [category, setCategory] = useState(Config.VARIABLES.TICKET_CATEGORIES[0].value);
     const [details, setDetails] = useState("");
+    const [NFTs, setNFTs] = useState([]);
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async() => {
+        const NFTs = await API.NFT.getCreatedNFTs();
+        
+        setNFTs(NFTs);
+    }
 
     const handleUploadImage = async (e) => {
         //*Image Upload
@@ -37,7 +47,6 @@ export const NFTCreateScreen = () => {
     const handleSubmit = async () => {
         await API.NFT.mint(
             name,
-            Principal.anonymous(),
             imageBuffer,
             place,
             date,
@@ -53,6 +62,21 @@ export const NFTCreateScreen = () => {
         alert("DONE !!!");
     }
 
+    const handleSelectGift = async(id) => {
+        let giftData = NFTs.find(item => item.id == id);
+
+        giftData = {
+            id: giftData.id,
+            name: giftData.name,
+            description: giftData.description,
+            price: giftData.price,
+            createdBy: giftData.createdBy,
+            image: giftData.imageBuffer
+        }
+
+        setGifts([giftData]);
+    }
+
     return(
         <View>
             <Title
@@ -63,22 +87,27 @@ export const NFTCreateScreen = () => {
                 <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={ handleUploadImage }/>
                 <label className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">Upload image</label>
             </div>
+            
+            <SelectBox onChange={e => setType(e.target.value)} options={Config.VARIABLES.TICKET_TYPES}/>
+
+            <SelectBox onChange={e => setCategory(e.target.value)} options={Config.VARIABLES.TICKET_CATEGORIES}/>
 
             <TextInput onChange={e => setName(e.target.value)} placeholder="Name"/>
 
-            <TextInput onChange={e => setPlace(e.target.value)} placeholder="Place"/>
+            { type == "ticket" && <TextInput onChange={e => setPlace(e.target.value)} placeholder="Place"/> }
 
-            <TextInput onChange={e => setDate(e.target.value)} placeholder="Date" type="date"/>
+            { type == "ticket" && <TextInput onChange={e => setDate(e.target.value)} placeholder="Date" type="date"/> }
 
-            <TextInput onChange={e => setTime(e.target.value)} placeholder="Time" type="time"/>
+            { type == "ticket" && <TextInput onChange={e => setTime(e.target.value)} placeholder="Time" type="time"/> }
 
             <TextInput onChange={e => setPrice(e.target.value)} placeholder="Price" type="number"/>
 
-            <TextInput placeholder="Gifts"/>
-
-            <TextInput onChange={e => setType(e.target.value)} placeholder="Type"/>
-
-            <TextInput onChange={e => setCategory(e.target.value)} placeholder="Category"/>
+            <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {
+                return {
+                    label: item.name,
+                    value: item.id
+                }
+            })}/>
 
             <TextArea  onChange={e => setDescription(e.target.value)} placeholder="Description"/>
 

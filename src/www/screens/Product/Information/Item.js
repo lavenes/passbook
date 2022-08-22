@@ -67,7 +67,21 @@ export const ItemInformation = ({ title, id }) => {
                                 let title = item.split(":")[0];
                                 let value = item.split(":")[1];
 
-                                return <InformationGroup.Item title={ title } value={ value } key={`information-group-item-${index}`}/>
+                                return <InformationGroup.Item 
+                                    title={ title } 
+                                    value={ value } 
+                                    key={`information-group-item-${index}`}
+                                />
+                            })
+                        }
+                        {
+                            ticketMeta?.gifts?.map((item, index) => {
+                                return <InformationGroup.Item 
+                                    title= { item.name } 
+                                    subtitle={ item.description } 
+                                    image={ item.image }
+                                    key={`information-group-gift-item-${index}`}
+                                />
                             })
                         }
                     </InformationGroup.Group>

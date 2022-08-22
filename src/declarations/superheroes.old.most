@@ -1,7 +1,7 @@
 // Version: 1.0.0
 type TokenGiftInfo =
   {
-    createBy : ?Principal;
+    createdBy : ?Principal;
     description : ?Text;
     id : Text;
     image : [Nat8];
@@ -11,7 +11,7 @@ type TokenGiftInfo =
 type TokenInfo =
   {
     var category : Text;
-    createdBy : Principal;
+    var createdBy : Principal;
     var date : Text;
     var dateCreated : Text;
     var description : Text;
@@ -21,7 +21,7 @@ type TokenInfo =
     var image : [Nat8];
     var name : Text;
     var nftType : Text;
-    owner : Principal;
+    var owner : Principal;
     var place : Text;
     var price : Nat;
     var time : Text

@@ -27,9 +27,9 @@ module {
     public type TokenGiftInfo = {
         id: Text;
         name: Text;
-        description: ?Text;
+        description: Text;
         price: Nat;
-        createBy: ?Principal;
+        createdBy: Principal;
         image: [Nat8];
     };
 

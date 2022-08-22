@@ -28,8 +28,8 @@ type TokenInfoExt =
  };
 type TokenGiftInfo = 
  record {
-   createBy: opt principal;
-   description: opt text;
+   createdBy: principal;
+   description: text;
    id: text;
    image: vec nat8;
    name: text;

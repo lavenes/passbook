@@ -21,9 +21,9 @@ export interface NFTSale {
 }
 export interface TokenGiftInfo {
   'id' : string,
-  'createBy' : [] | [Principal],
   'name' : string,
-  'description' : [] | [string],
+  'createdBy' : Principal,
+  'description' : string,
   'image' : Array<number>,
   'price' : bigint,
 }

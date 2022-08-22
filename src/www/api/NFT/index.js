@@ -8,7 +8,7 @@ import { Principal } from '@dfinity/principal';
 const { actor } = usePlug();
 
 export const NFT = {
-    mint: async (name, createdBy, imageBuffer, place, date, time, price, description, gifts, details, type, category) => {
+    mint: async (name, imageBuffer, place, date, time, price, description, gifts, details, type, category) => {
         //*Upload metadata
         let metadata = {
             id: stringToSlug(name + '-' + randomStr(5)),
@@ -24,7 +24,7 @@ export const NFT = {
             nftType: type,
             category,
             owner: Principal.anonymous(),
-            createdBy: createdBy,
+            createdBy: Principal.fromText(window.ic?.plug?.sessionManager?.sessionData?.principalId),
             dateCreated: new Date().toISOString()
         }
 
@@ -50,6 +50,44 @@ export const NFT = {
 
         return res.reverse();
     },
+    getAllTickets: async() => {
+        let hero = await actor;
+
+		let res = await hero.getAllTokens();
+
+        res = res.filter(item => {
+            if(item.type === "ticket") {
+                item.image = new Uint8Array(item.image);
+                item.image = URL.createObjectURL(new Blob([item.image],{type:"image/png"}));
+                item.price = Number(item.price);
+
+                return item;
+            }
+
+            return false;
+        })
+
+        return res.reverse();
+    },
+    getAllNFTs: async() => {
+        let hero = await actor;
+
+		let res = await hero.getAllTokens();
+
+        res = res.filter(item => {
+            if(item.type === "nft") {
+                item.image = new Uint8Array(item.image);
+                item.image = URL.createObjectURL(new Blob([item.image],{type:"image/png"}));
+                item.price = Number(item.price);
+
+                return item;
+            }
+
+            return false;
+        })
+
+        return res.reverse();
+    },
     getOwned: async() => {
         let hero = await actor;
 
@@ -57,9 +95,10 @@ export const NFT = {
 
         res = res.filter(item => {
             let itemOwner = item.owner.toString();
+            let itemCreated = item.createdBy.toString();
             let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
 
-            if(itemOwner == principal) {
+            if(itemOwner == principal || itemCreated == principal) {
                 item.image = new Uint8Array(item.image);
                 item.image = URL.createObjectURL(new Blob([item.image],{type:"image/png"}));
                 item.price = Number(item.price);
@@ -68,6 +107,31 @@ export const NFT = {
             }else{
                 return false;
             }
+        })
+
+        console.log(res);
+
+        return res.reverse();
+    },
+    getCreatedNFTs: async() => {
+        let hero = await actor;
+
+		let res = await hero.getAllTokens();
+
+        res = res.filter(item => {
+            let itemCreated = item.createdBy.toString();
+            let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
+
+            if(item.nftType === "nft" && itemCreated == principal) {
+                item.imageBuffer = item.image;
+                item.image = new Uint8Array(item.image);
+                item.image = URL.createObjectURL(new Blob([item.image],{type:"image/png"}));
+                item.price = Number(item.price);
+
+                return item;
+            }
+
+            return false;
         })
 
         return res.reverse();
@@ -81,6 +145,13 @@ export const NFT = {
         res.image = URL.createObjectURL(new Blob([res.image],{type:"image/png"}));
         res.price = Number(res.price);
 
+        res.gifts = res.gifts.map(item => {
+            item.image = new Uint8Array(item.image);
+            item.image = URL.createObjectURL(new Blob([item.image],{type:"image/png"}));
+
+            return item;
+        })
+
         return res;
     },
     clearAll: async() => {
@@ -92,12 +163,25 @@ export const NFT = {
     },
     purchase: async(tokenId) => {
         console.log("PURCHASING...");
+        const { requestTransfer } = usePlug();
         let hero = await actor;
 
-        const res = await hero.mintCloneNFT(tokenId);
+        let tokenData = await hero.getTokenInfo(tokenId);
 
-        alert("PURCHASED !!!");
+        try {
+            console.log(tokenData.createdBy.toString());
+            console.log(window.ic.plug.sessionManager.sessionData.principalId);
 
-        return res;
+            //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * 10000);
+            //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * Config.MOTOKO.PRICE_E8S);
+            
+            const res = await hero.mintCloneNFT(tokenId);
+    
+            alert("PURCHASED !!!");
+
+            return res;
+        }catch(e) {
+            alert(e);
+        }
     }
 }

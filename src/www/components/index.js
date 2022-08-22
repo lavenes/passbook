@@ -11,6 +11,7 @@ import { TextInput, TextArea } from './TextInput';
 import { SectionDivider } from './Section';
 import { Button } from './Button';
 import { LoadingOverlay } from './Loading';
+import { SelectBox } from './Select';
 
 export {
     AppBar,
@@ -43,5 +44,7 @@ export {
 
     InformationGroup,
 
-    LoadingOverlay
+    LoadingOverlay,
+    
+    SelectBox
 }

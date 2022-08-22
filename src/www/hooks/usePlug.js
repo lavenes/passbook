@@ -46,6 +46,15 @@ export default function usePlug() {
 
     const agent = window.ic.plug.sessionManager.sessionData?.agent;
 
+    const requestTransfer = async (to, amount) => {
+        return await window.ic.plug.requestTransfer({
+            to,
+            amount,
+            fee: 0,
+            memo: '123451231231',
+        })
+    }
+
     return {
         connect,
         isConnected,
@@ -53,6 +62,7 @@ export default function usePlug() {
         accountId,
         getBalance,
         actor,
-        agent
+        agent,
+        requestTransfer
     }
 }

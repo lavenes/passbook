@@ -38,10 +38,10 @@ const InformationItem = ({ style, title, value, image, subtitle, to="#" }) => {
                 image ?
                 (
                     <>
-                        <div className="information-group__information-item__image"></div>
+                        <div className="information-group__information-item__image" style={{ backgroundImage: `url(${image})` }}></div>
                         <div className="information-group__information-item__information">
-                            <span className="information-group__information-item__information__subtitle">{ subtitle }</span>
                             <span className="information-group__information-item__information__title">{ title }</span>
+                            <span className="information-group__information-item__information__subtitle">{ subtitle }</span>
                         </div>
                         <IoChevronForward className="information-group__information-item__action-icon"/>
                     </>

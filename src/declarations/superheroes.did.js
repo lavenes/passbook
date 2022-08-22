@@ -10,9 +10,9 @@ export const idlFactory = ({ IDL }) => {
   });
   const TokenGiftInfo = IDL.Record({
     'id' : IDL.Text,
-    'createBy' : IDL.Opt(IDL.Principal),
     'name' : IDL.Text,
-    'description' : IDL.Opt(IDL.Text),
+    'createdBy' : IDL.Principal,
+    'description' : IDL.Text,
     'image' : IDL.Vec(IDL.Nat8),
     'price' : IDL.Nat,
   });
