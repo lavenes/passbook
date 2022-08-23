@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBack } from 'react-icons/io5';
+import { Link } from 'react-router-dom';
 
 import "./styles.scss";
 
@@ -22,11 +23,11 @@ export const AppBar = ({ title, actions, leading, fixed }) => {
     )
 }
 
-export const ActionButton = ({ icon, onClick }) => {
+export const ActionButton = ({ icon, onClick, to="#" }) => {
     return (
-        <button className="appbar__action-btn" onClick={onClick}>
+        <Link to={ to } className="appbar__action-btn" onClick={onClick}>
             { icon }
-        </button>
+        </Link>
     )
 };
 

@@ -1,71 +1,110 @@
-import React from 'react';
-import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from 'react';
+import { AnimatePresence } from "framer-motion";
 import { useNavigationType, useParams } from 'react-router-dom';
-import { AppBar, View, Title, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, ListView } from '@components';
+import { Config } from '@config';
+import { AppBar, View, Title, ProductCard, ScrollView, GridView } from '@components';
+import API from '@api';
 import Screens from '@screens';
 
 import "./styles.scss";
 
 export const ProductCategoryList = ({ title, id }) => {
-    let { productId } = useParams();
+    let { categoryId } = useParams();
+    const [ NFTs, setNFTs ] = useState([]);
+    const [ categoryTitle, setCategoryTitle ] = useState("");
+    const [ categorySubtitle, setCategorySubtitle ] = useState("");
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const fetchData = async () => {
+        switch(categoryId) {
+            case 'coming' : {
+                //*Fetch NFTs
+                let nfts = await API.NFT.getOwned();
+
+                nfts = nfts.filter(item => {
+                    let nftDate = new Date(item.date);
+                    let dateNow = new Date();
+
+                    return (
+                        nftDate.getDate() == dateNow.getDate() &&
+                        nftDate.getMonth() == dateNow.getMonth() &&
+                        nftDate.getFullYear() == dateNow.getFullYear()
+                    )
+                })
+
+                setNFTs(nfts);
+                setCategoryTitle("Sự kiện");
+                setCategorySubtitle("Sự kiện sắp diễn ra");
+            } break;
+            case 'all' : {
+                //*Fetch NFTs
+                let nfts = await API.NFT.getOwned();
+
+                setNFTs(nfts);
+                setCategoryTitle("NFTs");
+                setCategorySubtitle("NFTs và Vé của bạn");
+            } break;
+            default : {
+                //*Fetch NFTs
+                let nfts = await API.NFT.getAll();
+
+                //*Filter by category 
+                nfts = nfts.filter(item => item.category == categoryId && item.createdBy.toString() == item.owner.toString());
+        
+                setNFTs(nfts);
+        
+                //*Set titles
+                let categoryTitle = Config.VARIABLES.TICKET_CATEGORIES.find(item => item.value === categoryId).label;
+        
+                setCategoryTitle(categoryTitle);
+                setCategorySubtitle("Category");
+            } break;
+        }
+    }
 
     return (
         <>
             {/* PRODUCT INFORMATION */}
-            <AnimatePresence>
-                {productId && <Screens.Product.Information id={productId}/>}
-            </AnimatePresence>
+            {/* <AnimatePresence>
+                {categoryId && <Screens.Product.Information id={categoryId}/>}
+            </AnimatePresence> */}
 
             <View headerPadding>
                 <AppBar.AppBar 
                     leading={
                         <AppBar.ActionBack />
                     }
-                    title={"NFT Moi Nhat"}
+                    title={ categoryTitle }
                     fixed
                 />
 
                 <Title
-                    subtitle="Bạn tìm sản phẩm mới?"
-                    title="NFT Mới Nhất"
+                    subtitle={ categorySubtitle }
+                    title={ categoryTitle }
                 />
 
-                <FeatureCard to="/products/categories/a/a" id={"a"}/>
+                <ScrollView
+                    horizontal
+                >
+                    <GridView
+                        items={
+                            NFTs.map((item, index) => {
+                                let nft = item;
 
-                <ListView.List
-                    items={[
-                        <ListView.ListTile
-                            leading={
-                                <ListView.ListTileImage id="f" />
+                                return <ProductCard 
+                                    title={ nft?.name } 
+                                    owner={ "OWNER" } 
+                                    price={ nft?.price } 
+                                    image={ nft?.image } 
+                                    to={`/items/${item.id}`}
+                                />
                             }
-                            title="NFT 1 Title" 
-                            subtitle="NFT 1"
-                            to="/products/categories/a/f"
-                            id="f"
-                            key={"p-f"}
-                        />,
-                        <ListView.ListTile
-                            leading={
-                                <ListView.ListTileImage id="g" />
-                            }
-                            title="NFT 1"
-                            subtitle="NFT 1"
-                            to="/products/categories/a/g"
-                            id="g"
-                            key={"p-g"}
-                        />,
-                        <ListView.ListTile
-                            leading={
-                                <ListView.ListTileImage id="h" />
-                            }
-                            title="NFT 1"
-                            subtitle="NFT 1"
-                            to="/products/categories/a/h"
-                            id="h"
-                            key={"p-h"}
-                        />,
-                    ]}
-                />
+                        )}
+                    />
+                </ScrollView>
             </View>
         </>
     )

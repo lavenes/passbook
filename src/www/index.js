@@ -5,6 +5,20 @@ import { HashRouter } from 'react-router-dom';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+//*DEFINED
+Object.defineProperty(Array.prototype, 'groupBy', {
+  value: function (property) {
+      return this.reduce(function (accumulator, obj) {
+        let key = obj[property]
+        if (!accumulator[key]) {
+          accumulator[key] = []
+        }
+        accumulator[key].push(obj)
+        return accumulator
+      }, {})
+  }
+});
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <HashRouter basename='/'>

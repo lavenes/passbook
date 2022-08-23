@@ -1,8 +1,8 @@
 // Version: 1.0.0
 type TokenGiftInfo =
   {
-    createdBy : ?Principal;
-    description : ?Text;
+    createdBy : Principal;
+    description : Text;
     id : Text;
     image : [Nat8];
     name : Text;

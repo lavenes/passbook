@@ -7,6 +7,8 @@ import { ItemInformation } from './Product/Information/Item';
 import { ProductCategoryList } from './Product/Category/List';
 import { NFTCreateScreen } from './Product/Create';
 
+import { QRScanScreen } from './QRScan';
+
 const Screens =  {
     Home: HomeScreen,
     Settings: SettingsScreen,
@@ -22,7 +24,8 @@ const Screens =  {
         NFT: {
             Create: NFTCreateScreen
         }
-    }
+    },
+    QRScan: QRScanScreen,
 }
 
 export default Screens;

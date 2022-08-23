@@ -9,6 +9,9 @@ import "./styles.scss";
 
 export const ItemInformation = ({ title, id }) => {
     const [itemData, setItemData] = useState({});
+    const [isOwned, setIsOwned] = useState(false);
+    const [isTicket, setIsTicket] = useState(false);
+    const [qrValue, setQRValue] = useState(null);
 
     useEffect(() => {
         fetchData();
@@ -19,6 +22,11 @@ export const ItemInformation = ({ title, id }) => {
         let nft = await API.NFT.get(id);
 
         setItemData(nft);
+        setIsOwned(nft.owned);
+        setIsTicket(nft.nftType === "ticket");
+
+        //*Generate QR Ticket
+        if(nft.nftType === "ticket" && nft.owned && ( nft.owner.toString() != nft.createdBy.toString() )) setQRValue(`${nft.id}#${nft.owner}`)
     }
 
     const ticketMeta = itemData;
@@ -53,7 +61,7 @@ export const ItemInformation = ({ title, id }) => {
                     </ActionsGroup.Group>
                     <SectionDivider/>
 
-                    <Button onClick={() => API.NFT.purchase(id)}>Place a order</Button>
+                    { !isOwned && <Button onClick={() => API.NFT.purchase(id)}>Place a order</Button> }
 
                     <SectionTitle title="Description" style={{ marginTop: 40 }}/>
 
@@ -86,7 +94,26 @@ export const ItemInformation = ({ title, id }) => {
                         }
                     </InformationGroup.Group>
 
-                    <Ticket
+                    {
+                        !isTicket && (
+                            <>
+                                <SectionTitle title="Information" style={{ marginTop: 40 }}/>
+
+                                <InformationGroup.Group>
+                                    <InformationGroup.Item 
+                                        title = "Created At"
+                                        value = { ticketMeta?.dateCreated }
+                                    />
+                                    <InformationGroup.Item 
+                                        title = "Token ID"
+                                        value = { ticketMeta?.id }
+                                    />
+                                </InformationGroup.Group>
+                            </>
+                        )
+                    }
+
+                    { isTicket && <Ticket
                         title={ ticketMeta?.name }
                         description={ ticketMeta?.description }
                         place={ ticketMeta?.place }
@@ -96,7 +123,8 @@ export const ItemInformation = ({ title, id }) => {
                         section={ ticketMeta?.section }
                         seat={ ticketMeta?.seat }
                         order={ ticketMeta?.order }
-                    />
+                        qrValue={ qrValue }
+                    /> } 
                 </motion.div>
             </motion.div>
         </View>

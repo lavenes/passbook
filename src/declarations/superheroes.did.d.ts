@@ -11,13 +11,14 @@ export interface NFTSale {
   'getAllTokens' : ActorMethod<[], Array<TokenInfoExt>>,
   'getTokenInfo' : ActorMethod<[string], TokenInfoExt>,
   'getUserInfo' : ActorMethod<[Principal], [] | [UserInfoExt]>,
-  'mintCloneNFT' : ActorMethod<[string], TokenInfoExt>,
+  'mintCloneNFT' : ActorMethod<[string, string], TokenInfoExt>,
   'mintNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
   'updateAccount' : ActorMethod<
     [Principal, string, string, bigint, string, string, string],
     UserInfoExt,
   >,
+  'verifyTicket' : ActorMethod<[string, Principal], string>,
 }
 export interface TokenGiftInfo {
   'id' : string,

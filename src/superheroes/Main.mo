@@ -30,7 +30,6 @@ import Types "./types";
 import Option "mo:base/Option";
 import List "mo:base/List";
 
-
 shared(msg) actor class NFTSale(
     _owner: Principal,
     ) = this {
@@ -112,6 +111,7 @@ shared(msg) actor class NFTSale(
         token.category := metadata.category;
         token.nftType := metadata.nftType;
         token.createdBy := metadata.createdBy;
+        token.dateCreated := metadata.dateCreated;
 
         tokens.put(token.id, token);
 
@@ -119,10 +119,27 @@ shared(msg) actor class NFTSale(
     };
 
     //*Mint Clone
-    public shared({ caller }) func mintCloneNFT(id: Text) : async TokenInfoExt {
+    public shared({ caller }) func mintCloneNFT(id: Text, randomId: Text) : async TokenInfoExt {
         switch(tokens.get(id)) {
             case(?token) {
-                token.owner := caller;
+                var newNFT = _newToken(caller);
+        
+                newNFT.id := token.id # "-" # randomId;
+                newNFT.date := token.date;
+                newNFT.description := token.description;
+                newNFT.details := token.details;
+                newNFT.gifts := token.gifts;
+                newNFT.image := token.image;
+                newNFT.name := token.name;
+                newNFT.price := token.price;
+                newNFT.place := token.place;
+                newNFT.time := token.time;
+                newNFT.category := token.category;
+                newNFT.nftType := token.nftType;
+                newNFT.createdBy := token.createdBy;
+                newNFT.dateCreated := token.dateCreated;
+
+                tokens.put(newNFT.id, newNFT);
 
                 return _tokenInfotoExt(token);
             };
@@ -155,6 +172,20 @@ shared(msg) actor class NFTSale(
     //* Get all tokens
     public query func getAllTokens() : async [TokenInfoExt] {
         Iter.toArray(Iter.map(tokens.entries(), func (i: (Text, TokenInfo)): TokenInfoExt {_tokenInfotoExt(i.1)}))
+    };
+
+    //*Verify Ticket
+    public func verifyTicket(ticketId: Text, principalId: Principal) : async Text {
+        switch(tokens.get(ticketId)) {
+            case(?ticketInfo) {
+                if(ticketInfo.owner == principalId) return "TICKET_VALID";
+
+                throw Error.reject("TICKET_INVALID");
+            };
+            case(_) {
+                throw Error.reject("TICKET_INVALID");
+            }
+        }
     };
     
     //#endregion

@@ -48,7 +48,7 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserInfoExt)],
         ['query'],
       ),
-    'mintCloneNFT' : IDL.Func([IDL.Text], [TokenInfoExt], []),
+    'mintCloneNFT' : IDL.Func([IDL.Text, IDL.Text], [TokenInfoExt], []),
     'mintNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
     'updateAccount' : IDL.Func(
@@ -64,6 +64,7 @@ export const idlFactory = ({ IDL }) => {
         [UserInfoExt],
         [],
       ),
+    'verifyTicket' : IDL.Func([IDL.Text, IDL.Principal], [IDL.Text], []),
   });
   return NFTSale;
 };

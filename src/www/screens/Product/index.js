@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
-import { TextInput, View, Title, Button, FeatureCard, LoadingOverlay, SectionTitle, SquareCard, GridView, ScrollView, ListView, ProductCard, CollectionCard } from '@components';
+import { TextInput, View, Title, Button, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, ProductCard, CollectionCard } from '@components';
 import Screens from '@screens';
 import { IoSearch } from 'react-icons/io5';
 import { useParams } from 'react-router-dom';
+import { Config } from '@config';
 import API from '@api';
 
 export const ProductMarket = () => {
     let { itemId } = useParams();
 
     const [tickets, setTickets] = useState([]);
+    const [categories, setCategories] = useState({});
 
     useEffect(() => {
         fetchData();
@@ -19,7 +21,15 @@ export const ProductMarket = () => {
         //*Fetch NFTs
         let nfts = await API.NFT.getAll();
 
+        //Filter owned
+        nfts = nfts.filter(item => item.createdBy.toString() == item.owner.toString());
+
         setTickets(nfts);
+
+        //*Group by category
+        let categories = nfts.groupBy('category')
+
+        setCategories(categories);
     }
     
     return (
@@ -121,13 +131,19 @@ export const ProductMarket = () => {
                 >
                     <GridView
                         horizontal
-                        items={[
-                            <CollectionCard title="CryptoPunks" owner="Moodie #1753"/>,
-                            <CollectionCard title="CryptoPunks" owner="Moodie #1753"/>,
-                            <CollectionCard title="CryptoPunks" owner="Moodie #1753"/>,
-                            <CollectionCard title="CryptoPunks" owner="Moodie #1753"/>,
-                            <CollectionCard title="CryptoPunks" owner="Moodie #1753"/>
-                        ]}
+                        items={
+                            Object.values(categories).map((item, index) => {
+                                let category = Config.VARIABLES.TICKET_CATEGORIES.find(category => {
+                                    let itemCategory = item[0]?.category;
+
+                                    return category.value === itemCategory;
+                                });
+
+                                let itemImages = item.map(nft => nft.image);
+                                
+                                return <CollectionCard title={ category.label } subtitle="Moodie #1753" images={ itemImages } to={`/products/categories/${ category.value }`}/>
+                            })
+                        }
                     />
                 </ScrollView>
             </View>

@@ -41,18 +41,18 @@ export const ProductCard = ({ style, onClick, id, to="#", title, owner, price, i
     )
 }
 
-export const CollectionCard = ({ style, onClick, id, to="#", title, owner }) => {
+export const CollectionCard = ({ style, onClick, id, to="#", title, subtitle, images }) => {
     return (
         <motion.div className="card--collection" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
             <Link to={to}>
                 <motion.div className="card--collection__image" layoutId={id && `card-image-container-${id}`}>
-                    <div className="card--collection__image__front"></div>
-                    <div className="card--collection__image__back"></div>
-                    <div className="card--collection__image__back"></div>
+                    <div className="card--collection__image__front" style={{ backgroundImage: `url(${ images[0] })` }}></div>
+                    <div className="card--collection__image__back"  style={{ backgroundImage: `url(${ images[1] })` }}></div>
+                    <div className="card--collection__image__back"  style={{ backgroundImage: `url(${ images[2] })` }}></div>
                 </motion.div>
 
                 <div className="card--collection__content">
-                    <motion.span className="card--collection__content__owner" layoutId={id && `card-content-owner-${id}`}>{ owner }</motion.span>
+                    <motion.span className="card--collection__content__owner" layoutId={id && `card-content-owner-${id}`}>{ subtitle }</motion.span>
                     <motion.span className="card--collection__content__title" layoutId={id && `card-content-title-${id}`}>{ title }</motion.span>
                 </div>
             </Link>

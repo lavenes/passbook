@@ -1,9 +1,9 @@
 import React from 'react';
-import * as Icon from 'react-icons/io5';
+import QRCode from "react-qr-code";
 
 import "./styles.scss";
 
-export const Ticket = ({ title, description, place, date, time, section, seat, price, order }) => {
+export const Ticket = ({ title, description, place, date, time, section, seat, price, order, qrValue }) => {
     return (
         <div className="ticket">
             <div className="ticket__head">
@@ -67,18 +67,18 @@ export const Ticket = ({ title, description, place, date, time, section, seat, p
                 </div>
             </div>
 
-            <div className="ticket__divide"></div>
+            { qrValue && <div className="ticket__divide"></div> }
 
-            <div className="ticket__content">
+            { qrValue && <div className="ticket__content">
                 <div className="ticket__content__row">
                     <div className="ticket__content__row__col">
                         <span className="ticket__content__title">QR Code</span>
                         <div className="ticket__content__qr-code">
-
+                            <QRCode value={ qrValue } level='L'/>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> }
         </div>
     )
 }

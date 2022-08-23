@@ -43,10 +43,11 @@ type NFTSale =
    getAllTokens: () -> (vec TokenInfoExt) query;
    getTokenInfo: (text) -> (TokenInfoExt) query;
    getUserInfo: (principal) -> (opt UserInfoExt) query;
-   mintCloneNFT: (text) -> (TokenInfoExt);
+   mintCloneNFT: (text, text) -> (TokenInfoExt);
    mintNFT: (TokenInfoExt) -> (TokenInfoExt);
    readAccount: () -> (vec UserInfoExt) query;
    updateAccount: (principal, text, text, nat, text, text, text) ->
     (UserInfoExt);
+   verifyTicket: (text, principal) -> (text);
  };
 service : (principal) -> NFTSale

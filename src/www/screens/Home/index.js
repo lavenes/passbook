@@ -38,7 +38,7 @@ export const HomeScreen = ({ match, navigation }) => {
             <View>
                 <AppBar.AppBar 
                     leading={
-                        <AppBar.ActionButton icon={<IoScan/>} />
+                        <AppBar.ActionButton icon={<IoScan/>} to="/qr_scan"/>
                     }
                     actions={
                         <AppBar.AvatarImage />
@@ -55,7 +55,7 @@ export const HomeScreen = ({ match, navigation }) => {
 
                 <SectionTitle
                     title="Sự kiện sắp diễn ra"
-                    readMoreUrl="/products/categories/A"
+                    readMoreUrl="/products/categories/owned/coming"
                     readMoreTitle="Xem thêm"
                 />
 
@@ -82,7 +82,7 @@ export const HomeScreen = ({ match, navigation }) => {
 
                 <SectionTitle
                     title="NFTs"
-                    readMoreUrl="/products/categories/A"
+                    readMoreUrl="/products/categories/owned/all"
                     readMoreTitle="Xem thêm" 
                 />
 

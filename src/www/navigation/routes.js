@@ -1,5 +1,6 @@
 export const routes = {
     HOME: '/',
+    QR_SCAN: '/qr_scan',
     SETTINGS: '/settings',
     PRODUCT: {
         CREATE: '/product/create',
@@ -9,8 +10,8 @@ export const routes = {
             ITEM: '/items/:itemId',
         },
         CATEGORY: {
+            OWNED: '/products/categories/owned/:categoryId',
             LIST: '/products/categories/:categoryId',
-            PRODUCT_INFORMATION: '/products/categories/:categoryId/:productId',
         }
     }
 };

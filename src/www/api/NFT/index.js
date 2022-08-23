@@ -46,7 +46,7 @@ export const NFT = {
             item.price = Number(item.price);
 
             return item;
-        })
+        });
 
         return res.reverse();
     },
@@ -108,9 +108,7 @@ export const NFT = {
                 return false;
             }
         })
-
-        console.log(res);
-
+        
         return res.reverse();
     },
     getCreatedNFTs: async() => {
@@ -138,6 +136,7 @@ export const NFT = {
     },
     get: async(id) => {
         let hero = await actor;
+        let { principal } = usePlug();
 
         let res = await hero.getTokenInfo(id);
 
@@ -150,7 +149,9 @@ export const NFT = {
             item.image = URL.createObjectURL(new Blob([item.image],{type:"image/png"}));
 
             return item;
-        })
+        });
+
+        res.owned = (res.owner.toString() === principal);
 
         return res;
     },
@@ -175,7 +176,7 @@ export const NFT = {
             //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * 10000);
             //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * Config.MOTOKO.PRICE_E8S);
             
-            const res = await hero.mintCloneNFT(tokenId);
+            const res = await hero.mintCloneNFT(tokenId, randomStr(5));
     
             alert("PURCHASED !!!");
 
@@ -183,5 +184,14 @@ export const NFT = {
         }catch(e) {
             alert(e);
         }
+    },
+    verifyTicket: async(ticketCode) => {
+        console.log("VERIFYING...");
+        let hero = await actor;
+
+        let ticketId = ticketCode.split("#")[0];
+        let principalId = Principal.fromText(ticketCode.split("#")[1]);
+
+        return await hero.verifyTicket(ticketId, principalId);
     }
 }
