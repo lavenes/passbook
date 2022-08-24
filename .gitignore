@@ -1,6 +1,0 @@
-node_modules/
-.dfx/
-dist
-yarn-error.log
-yarn.lock
-.vessel
