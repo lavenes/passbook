@@ -82,3 +82,14 @@ dfx canister install superheroes --argument="(principal \"$(dfx identity get-pri
 
 1. UPGRADE
 dfx build superheroes && dfx canister install superheroes --argument="(principal \"$(dfx identity get-principal)\")" --all --mode=upgrade
+
+OLD: fij5p-siaaa-aaaai-acata-cai
+etbto-7qaaa-aaaal-qbb7a-cai
+
+ADD CYCLES TO WALLET
+dfx ledger --network ic top-up gastn-uqaaa-aaaae-aaafq-cai --amount 1.005
+
+dfx deploy --network ic --argument="(principal \"e7k4g-pydoy-kkrq3-5xboe-eynw7-aha72-do6ai-qai43-q7fkr-ekgv3-aqe\")"
+
+dfx canister --network ic install superheroes --argument="(principal \"$(dfx identity get-principal)\")" --mode=reinstall
+
