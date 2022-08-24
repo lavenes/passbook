@@ -1,0 +1,47 @@
+// Version: 1.0.0
+type TokenGiftInfo =
+  {
+    createdBy : Principal;
+    description : Text;
+    id : Text;
+    image : [Nat8];
+    name : Text;
+    price : Nat
+  };
+type TokenInfo =
+  {
+    var category : Text;
+    var checkin : Bool;
+    var createdBy : Principal;
+    var date : Text;
+    var dateCreated : Text;
+    var description : Text;
+    var details : Text;
+    var gifts : [TokenGiftInfo];
+    var id : Text;
+    var image : [Nat8];
+    var name : Text;
+    var nftType : Text;
+    var owner : Principal;
+    var place : Text;
+    var price : Nat;
+    var time : Text
+  };
+type TokenInfo__1 = TokenInfo;
+type UserInfo =
+  {
+    var dateOfBirth : Text;
+    var firstName : Text;
+    var id : Principal;
+    var lastName : Text;
+    var liveIn : Text;
+    var phone : Text;
+    var sex : Nat
+  };
+type UserInfo__1 = UserInfo;
+actor {
+  stable var blackhole : Principal;
+  stable var owner_ : Principal;
+  stable var tokensEntries : [(Text, TokenInfo__1)];
+  stable var usersEntries : [(Principal, UserInfo__1)]
+};
