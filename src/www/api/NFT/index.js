@@ -156,9 +156,12 @@ export const NFT = {
         return res;
     },
     clearAll: async() => {
+        console.log("CLEARING...")
         let hero = await actor;
 
         const res = await hero.clearAllTokens();
+
+        console.log(res);
 
         return res;
     },

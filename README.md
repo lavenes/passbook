@@ -85,11 +85,14 @@ dfx build superheroes && dfx canister install superheroes --argument="(principal
 
 OLD: fij5p-siaaa-aaaai-acata-cai
 etbto-7qaaa-aaaal-qbb7a-cai
+a5byq-6yaaa-aaaag-aasfa-cai
+
+nlkge-xljmr-ka24r-mqpos-26zmt-npzuv-al5l5-sdstv-bddyd-ohaut-nae
 
 ADD CYCLES TO WALLET
 dfx ledger --network ic top-up gastn-uqaaa-aaaae-aaafq-cai --amount 1.005
 
-dfx deploy --network ic --argument="(principal \"e7k4g-pydoy-kkrq3-5xboe-eynw7-aha72-do6ai-qai43-q7fkr-ekgv3-aqe\")"
+dfx deploy --network ic --argument="(principal \"$(dfx identity get-principal)\")" 
 
 dfx canister --network ic install superheroes --argument="(principal \"$(dfx identity get-principal)\")" --mode=reinstall
 
