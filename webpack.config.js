@@ -130,7 +130,7 @@ module.exports = env => {
         devServer: {
             proxy: {
                 "/api": {
-                    target: env.devM == "mo" ? "http://0.0.0.0:8000" : "https://ic0.app",
+                    target: env.devM == "mo" ? "http://localhost:8000" : "https://ic0.app",
                     changeOrigin: true,
                     pathRewrite: {
                         "^/api": "/api",
