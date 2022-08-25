@@ -3,11 +3,14 @@ import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components
 import { Config } from '@config';
 import { usePlug } from '@hooks';
 import API from '@api';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 import "./styles.scss";
 
 export const NFTCreateScreen = () => {
     const { principal } = usePlug();
+    const navigate = useNavigate();
 
     const [imagePreview, setImagePreview] = useState(null);
     const [imageBuffer, setImageBuffer] = useState([]);
@@ -59,8 +62,14 @@ export const NFTCreateScreen = () => {
             type,
             category,
         );
-
-        alert("DONE !!!");
+        
+        Swal.fire(
+            'Tạo thành công!',
+            '',
+            'success'
+        ).then(e => {
+            navigate(-1);
+        });
     }
 
     const handleSelectGift = async(id) => {
