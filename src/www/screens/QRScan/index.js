@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import QrReader from 'react-qr-scanner'
 import { AppBar, View, Title, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, ListView, BalanceCard } from '@components';
 import API from '@api';
+import Swal from 'sweetalert2';
 
 import "./styles.scss";
 
 export const QRScanScreen = () => {
     const [scanSuccess, setScanSuccess] = useState(false);
-    const [scanMsg, setScanMsg] = useState(null);
 
     const handleScan = async (data) => {
         if(data?.text) {
@@ -18,9 +18,17 @@ export const QRScanScreen = () => {
 
                 console.log(ticketVerify);
 
-                setScanMsg("Vé hợp lệ");
+                Swal.fire(
+                    'Vé hợp lệ!',
+                    '',
+                    'success'
+                ).then(e => setScanSuccess(false));
             }catch(e) {
-                setScanMsg("Vé không hợp lệ");
+                Swal.fire(
+                    'Vé không hợp lệ!',
+                    '',
+                    'error'
+                ).then(e => setScanSuccess(false));
             }
         };
     }
@@ -43,14 +51,6 @@ export const QRScanScreen = () => {
                         onError={ handleErr }
                         onScan={ handleScan }
                     />
-                )
-            }
-
-            {
-                scanMsg && (
-                    <div>
-                        <span>{ scanMsg }</span>
-                    </div>
                 )
             }
         </View>

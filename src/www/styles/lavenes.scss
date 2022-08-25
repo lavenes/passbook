@@ -17,6 +17,10 @@
     background: transparent;
 }
 
+.swal2-container {
+    z-index: 99999999!important;
+}
+
 body {
     font-family: $font-family;
     -webkit-tap-highlight-color: transparent;

@@ -24,6 +24,8 @@ export const HomeScreen = ({ match, navigation }) => {
 
         let ownedNFT = await API.NFT.getOwned();
 
+        console.log(ownedNFT);
+
         setOwnedTickets(ownedNFT);
     }
 

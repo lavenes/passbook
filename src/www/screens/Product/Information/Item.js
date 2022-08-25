@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import * as Icon from 'react-icons/io5';
 import API from '@api';
+import Swal from 'sweetalert2';
 
 import "./styles.scss";
 
@@ -27,6 +28,19 @@ export const ItemInformation = ({ title, id }) => {
 
         //*Generate QR Ticket
         if(nft.nftType === "ticket" && nft.owned && ( nft.owner.toString() != nft.createdBy.toString() )) setQRValue(`${nft.id}#${nft.owner}`)
+    }
+
+    const handlePurchase = async () => {
+        console.log("PURCHASING...");
+        await API.NFT.purchase(id).then(e => {
+            Swal.fire(
+                'Đã mua thành công!',
+                'Vé đã nằm trong ví của bạn',
+                'success'
+            );
+        });
+
+        console.log("DONE");
     }
 
     const ticketMeta = itemData;
@@ -61,7 +75,7 @@ export const ItemInformation = ({ title, id }) => {
                     </ActionsGroup.Group>
                     <SectionDivider/>
 
-                    { !isOwned && <Button onClick={() => API.NFT.purchase(id)}>Place a order</Button> }
+                    { !isOwned && <Button onClick={handlePurchase}>Buy</Button> }
 
                     <SectionTitle title="Description" style={{ marginTop: 40 }}/>
 

@@ -95,10 +95,9 @@ export const NFT = {
 
         res = res.filter(item => {
             let itemOwner = item.owner.toString();
-            let itemCreated = item.createdBy.toString();
             let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
 
-            if(itemOwner == principal || itemCreated == principal) {
+            if(itemOwner == principal) {
                 item.image = new Uint8Array(item.image);
                 item.image = URL.createObjectURL(new Blob([item.image]));
                 item.price = Number(item.price);
@@ -166,27 +165,20 @@ export const NFT = {
         return res;
     },
     purchase: async(tokenId) => {
-        console.log("PURCHASING...");
         const { requestTransfer } = usePlug();
         let hero = await actor;
 
         let tokenData = await hero.getTokenInfo(tokenId);
 
-        try {
-            console.log(tokenData.createdBy.toString());
-            console.log(window.ic.plug.sessionManager.sessionData.principalId);
+        // console.log(tokenData.createdBy.toString());
+        // console.log(window.ic.plug.sessionManager.sessionData.principalId);
 
-            //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * 10000);
-            //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * Config.MOTOKO.PRICE_E8S);
-            
-            const res = await hero.mintCloneNFT(tokenId, randomStr(5));
-    
-            alert("PURCHASED !!!");
+        //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * 10000);
+        //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * Config.MOTOKO.PRICE_E8S);
+        
+        const res = await hero.mintCloneNFT(tokenId, randomStr(5));
 
-            return res;
-        }catch(e) {
-            alert(e);
-        }
+        return res;
     },
     checkinTicket: async(ticketCode) => {
         console.log("VERIFYING...");
