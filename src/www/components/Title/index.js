@@ -4,10 +4,10 @@ import { IoChevronForward } from 'react-icons/io5';
 
 import './styles.scss';
 
-export const Title = ({ title, subtitle }) => {
+export const Title = ({ title, subtitle, style }) => {
     return (
-        <div className="title title-header">
-            <span className="title-header__sub">{ subtitle }</span>
+        <div  style={style} className="title title-header">
+            <span  className="title-header__sub">{ subtitle }</span>
             <h1 className="title-header__big">{ title }</h1>
         </div>
     )

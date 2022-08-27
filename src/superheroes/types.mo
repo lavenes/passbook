@@ -91,6 +91,7 @@ module {
         var owner: Principal;
         var nftId: Text;
         var supplies: Nat;
+        var available: Bool;
     };
 
     public type TokenPreorderListExt = {
@@ -98,6 +99,7 @@ module {
         owner: Principal;
         nftId: Text;
         supplies: Nat;
+        available: Bool;
     };
 
     public type TokenInfo = {
@@ -146,6 +148,10 @@ module {
     //*=======================================*//
     //*               USER TYPE               *//
     //*=======================================*//
+    public type UserCashback = {
+        uid: Principal;
+        amount: Float;
+    };
 
     public type UserInfo = {
         var firstName: Text;

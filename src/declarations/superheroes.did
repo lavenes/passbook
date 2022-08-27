@@ -11,6 +11,7 @@ type UserInfoExt =
  };
 type TokenPreorderListExt = 
  record {
+   available: bool;
    id: text;
    nftId: text;
    owner: principal;

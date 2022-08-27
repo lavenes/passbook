@@ -180,16 +180,6 @@ export const NFT = {
         const { requestTransfer } = usePlug();
         let hero = await actor;
 
-        //let tokenData = await hero.getTokenInfo(tokenId);
-
-        // console.log(tokenData.createdBy.toString());
-        // console.log(window.ic.plug.sessionManager.sessionData.principalId);
-
-        //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * 10000);
-        //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * Config.MOTOKO.PRICE_E8S);
-        
-        // const res = await hero.mintCloneNFT(tokenId, randomStr(5));
-
         const res = await hero.purchaseNFT(tokenId, supplies, randomStr(5));
 
         return res;
@@ -211,32 +201,19 @@ export const NFT = {
         let orders = await hero.getAllTokenPreorders();
 
         orders = orders.filter(item => {
-            return item.owner.toString() === principal;
+            return item.owner.toString() === principal && item.available;
         });
 
-        let dateNow = `${new Date().toISOString().split("T")[0]}`;
-        let hourNow = new Date().getHours();
-        let minuteNow = new Date().getMinutes();
+        let dateNow = new Date();
 
         //Fetch token info
-        console.log("===== CHECK PRE ORDERS =====");
-        console.log(orders);
-
         for(var item of orders) {
             try {
                 let token = await hero.getTokenInfo(item.nftId);
-                console.log(token);
                 let preorder = token.preorder;
-                let endHour = Number(preorder.time.split(":")[0]);
-                let endMinute = Number(preorder.time.split(":")[1]);
+                let endTime = new Date(`${preorder.end} ${preorder.endTime}`);
 
-                console.log(preorder);
-                console.log(dateNow);
-                console.log(minuteNow);
-                console.log(endHour);
-                console.log(endMinute);
-
-                if(preorder.end == dateNow && endHour <= hourNow && endMinute <= minuteNow) {
+                if(dateNow >= endTime) {
                     for(var i = 1; i <= item.supplies; i++) {
                         await hero.mintCloneNFT(item.nftId, randomStr(5), Principal.fromText(principal));
                     }

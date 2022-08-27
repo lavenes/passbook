@@ -8,6 +8,8 @@ import { Back } from "@components";
 export const SwapNFT = () => {
     const { pricipalId } = useParams();
 
+    const [data, setData] = useState([])
+
     const [user, setUser] = useState({});
     const [other, setOther] = useState({});
     const [ticketOfUser, setTicketOfUser] = useState([]);
@@ -48,20 +50,44 @@ export const SwapNFT = () => {
         setImageUrl(uploadRes);
     }
 
-    const toggleModal = () => {
+
+    const toggleModal = (value) => {
         setShowModal(!showModal);
+
+        if (value === 0) {
+            setData(ticketOfUser);
+        } else {
+            setData(ticketOfOther);
+        }
+    }
+
+    const handleClick = (ticket) => {
+        console.log(ticket);
     }
 
     return (
         <View style={{ position: "relative", margin: 0 }}>
             {showModal && 
             <Modal>
-                <div style={{ width: "80%", minHeight: 300, backgroundColor: "#FFF", borderRadius: 6 }}>
-                    {ticketOfUser.map((ticket, index) => {
-                        return (
-                            <div style={{ width: "90%", height: 70, borderRadius: 6, borderStyle: "solid" }}></div>
-                        )
-                    })}
+                <div style={{ width: "80%", height: 300, backgroundColor: "#FFF", borderRadius: 6, padding: 20, overflow: "hidden" }}>
+                    <Title title="Danh sách vé" style={{ display: "flex", alignItems: "center", justifyContent: "center" }}/>
+                    <ScrollView>
+                        {data.map((ticket, index) => {
+                            return (
+                                // <div style={{ marginLeft: "auto", marginTop: 4, marginRight: "auto", width: "90%", height: 40, borderRadius: 6, borderStyle: "solid", borderWidth: 0.3, borderColor: "#CCC" }}>
+                                // </div>
+                                <SquareCard 
+                                    onClick={() => handleClick(ticket)}
+                                    style={{ marginLeft: "auto", marginRight: "auto", marginTop: 12 }}
+                                    title={ ticket?.name } 
+                                    owner={ "OWNER" } 
+                                    price={ ticket?.price } 
+                                    image={ ticket?.image } 
+                                    to="#"
+                                />
+                            )
+                        })}
+                    </ScrollView>
                 </div>
             </Modal>}
             <Back to={`/users/${pricipalId}`}/>
@@ -73,7 +99,7 @@ export const SwapNFT = () => {
                         className="nft-create-screen__image-upload__image-upload-input" 
                         onClick={(e) => {
                             e.preventDefault(); 
-                            toggleModal();
+                            toggleModal(0);
                         }} />
                     <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{!imagePreview && 'Upload ảnh'}</label>
                 </div>
@@ -86,7 +112,7 @@ export const SwapNFT = () => {
                         onClick={(e) => {
                             e.preventDefault(); 
                             console.log("Chose");
-                            toggleModal();
+                            toggleModal(1);
                         }} />
                     <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{!imagePreview && 'Upload ảnh'}</label>
                 </div>

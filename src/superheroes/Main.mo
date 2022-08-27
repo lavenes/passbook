@@ -31,6 +31,7 @@ import Option "mo:base/Option";
 import List "mo:base/List";
 import Nat64 "mo:base/Nat64";
 import Float "mo:base/Float";
+import Debug "mo:base/Debug";
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
@@ -230,6 +231,7 @@ shared(msg) actor class NFTSale(
     type TokenPreorder = Types.TokenPreorder;
     type TokenPreorderList = Types.TokenPreorderList;
     type TokenPreorderListExt = Types.TokenPreorderListExt;
+    type UserCashback = Types.UserCashback;
 
     private stable var owner_: Principal = _owner;
 
@@ -241,6 +243,8 @@ shared(msg) actor class NFTSale(
 
     private var transactionFeePercent = 1.1;
 
+    private stable var cashbacks : [UserCashback] = [];
+
     //*Preorder to ext
     private func _preorderListToExt(info: TokenPreorderList) : TokenPreorderListExt {
       return {
@@ -248,6 +252,7 @@ shared(msg) actor class NFTSale(
         owner = info.owner;
         nftId = info.nftId;
         supplies = info.supplies;
+        available = info.available;
       }
     };
 
@@ -418,7 +423,17 @@ shared(msg) actor class NFTSale(
           var owner = caller;
           var nftId = nft.id;
           var supplies = supplies;
+          var available = true;
         };
+
+        let cashbacksBuffer : Buffer.Buffer<UserCashback> = Buffer.Buffer(cashbacks.size());
+
+        cashbacksBuffer.add({
+          uid = caller;
+          amount = nft.preorder.cashback
+        });
+
+        cashbacks := cashbacksBuffer.toArray();
 
         tokenPreorders.put(preorder.id, preorder);
 
@@ -438,7 +453,8 @@ shared(msg) actor class NFTSale(
     public query func removeTokenPreorder(orderId: Text) : async Text {
       switch(tokenPreorders.get(orderId)) {
         case(?order) {
-          let res = tokenPreorders.remove(orderId);
+          order.available := false;
+          tokenPreorders.put(orderId, order);
 
           return "OK";
         };
@@ -720,6 +736,34 @@ shared(msg) actor class NFTSale(
     //* GET ALL USERS
     public query func readAccount() : async [UserInfoExt] {
         Iter.toArray(Iter.map(users.entries(), func (i: (Principal, UserInfo)): UserInfoExt {_userInfotoExt(i.1)}));
+    };
+
+    let n = 5;
+    var count = 0;
+
+    public shared({ caller }) func sendCashbacks() : async () {
+      Debug.print("========== SEND CASHBACKS TO USER ========");
+
+      for(item in cashbacks.vals()) {
+        switch(pbcTokens.get(item.uid)) {
+          case(?balance) {
+            balance.balance := balance.balance + item.amount;
+
+            pbcTokens.put(item.uid, balance);
+          };
+          case _ {
+
+          }
+        }
+      }
+    };
+
+    system func heartbeat() : async () {
+      if (count >= 75) {
+        await sendCashbacks();
+        count := 0;
+      };
+      count += 1;
     };
 
     // upgrade functions

@@ -83,6 +83,7 @@ export interface TokenPreorderListExt {
   'id' : string,
   'owner' : Principal,
   'supplies' : bigint,
+  'available' : boolean,
   'nftId' : string,
 }
 export interface UserInfoExt {

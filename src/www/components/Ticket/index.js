@@ -65,6 +65,23 @@ export const Ticket = ({ title, description, place, date, time, section, seat, p
                         <span className="ticket__content__value">{ order }</span>
                     </div>
                 </div>
+
+                <div className="ticket__content__row">
+                    <div className="ticket__content__row__col">
+                        <span className="ticket__content__title">Preorder</span>
+                    </div>
+                </div>
+
+                <div className="ticket__content__row">
+                    <div className="ticket__content__row__col">
+                        <span className="ticket__content__title">Date</span>
+                        <span className="ticket__content__value">{ price }</span>
+                    </div>
+                    <div className="ticket__content__row__col">
+                        <span className="ticket__content__title">Time</span>
+                        <span className="ticket__content__value">{ order }</span>
+                    </div>
+                </div>
             </div>
 
             { qrValue && <div className="ticket__divide"></div> }

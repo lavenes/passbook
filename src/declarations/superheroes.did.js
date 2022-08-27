@@ -22,6 +22,7 @@ export const idlFactory = ({ IDL }) => {
     'id' : IDL.Text,
     'owner' : IDL.Principal,
     'supplies' : IDL.Nat,
+    'available' : IDL.Bool,
     'nftId' : IDL.Text,
   });
   const TokenGiftInfo = IDL.Record({

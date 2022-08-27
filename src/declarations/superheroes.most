@@ -54,6 +54,7 @@ type TokenPreorder =
   };
 type TokenPreorderList =
   {
+    var available : Bool;
     var id : Text;
     var nftId : Text;
     var owner : Principal;

@@ -110,10 +110,9 @@ export const ItemInformation = ({ title, id }) => {
                         <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Star" icon={<Icon.IoStarOutline/>}/>
                         <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Share" icon={<Icon.IoShareOutline/>}/> */}
                     </ActionsGroup.Group>
-                    <SectionDivider/>
                     <h4>Amount</h4>
-                    <input defaultValue={1} onChange={e => setAmount(Number(e.target.value))} type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px", marginBottom: "20px"}}/>
-
+                    <input defaultValue={1} onChange={e => setAmount(Number(e.target.value))} type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px"}}/>
+                    <SectionDivider/>
                     { !isOwned && 
                         <Button onClick={handlePurchase}>Buy</Button> }
 
@@ -173,6 +172,8 @@ export const ItemInformation = ({ title, id }) => {
                         place={ ticketMeta?.place }
                         date={ ticketMeta?.date }
                         time={ ticketMeta?.time }
+                        datePre={ ticketMeta?.date }
+                        timePre={ ticketMeta?.time }
                         price={ ticketMeta?.price }
                         section={ ticketMeta?.section }
                         seat={ ticketMeta?.seat }

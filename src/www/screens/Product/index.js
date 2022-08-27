@@ -53,7 +53,7 @@ export const ProductMarket = () => {
 
                 <Button style={{marginTop: 32}} to="/product/sale">Create sale events</Button>
 
-                <Button style={{marginTop: 32}} onClick={API.NFT.clearAll}>Clear All NFT</Button>
+                {/* <Button style={{marginTop: 32}} onClick={API.NFT.clearAll}>Clear All NFT</Button> */}
 
                 <SectionTitle
                     title="Categories nổi bật"
