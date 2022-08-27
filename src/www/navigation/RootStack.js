@@ -20,6 +20,8 @@ const RootStack = () => {
             <Route exact path='/articles/:categoryId/add' element={<ArticleEditScreen/>}/>
           </Route> */}
 
+          <Route exact path={routes.PROFILE} element={<Screens.Profile/>}/>
+
           <Route exact path={routes.QR_SCAN} element={<Screens.QRScan />}/>
 
           <Route exact path={routes.SETTINGS} element={<Screens.Settings />}/>

@@ -10,8 +10,8 @@ import * as ActionsGroup from './ActionsGroup';
 import { TextInput, TextArea } from './TextInput';
 import { SectionDivider } from './Section';
 import { Button } from './Button';
-import { LoadingOverlay } from './Loading';
 import { SelectBox } from './Select';
+import * as TabBadge from './TabBadge';
 
 export {
     AppBar,
@@ -43,8 +43,8 @@ export {
     Button,
 
     InformationGroup,
-
-    LoadingOverlay,
     
-    SelectBox
+    SelectBox,
+
+    TabBadge
 }

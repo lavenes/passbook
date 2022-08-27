@@ -8,12 +8,12 @@ import { Principal } from '@dfinity/principal';
 const { actor } = usePlug();
 
 export const NFT = {
-    mint: async (name, imageBuffer, place, date, time, price, description, gifts, details, type, category) => {
+    mint: async (name, imageUrl, place, date, time, price, description, gifts, details, type, category) => {
         //*Upload metadata
         let metadata = {
             id: stringToSlug(name + '-' + randomStr(5)),
             name,
-            image: imageBuffer,
+            image: imageUrl,
             place,
             date: date.toString(),
             time: time.toString(),
@@ -41,12 +41,27 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.image = new Uint8Array(item.image);
-            item.image = URL.createObjectURL(new Blob([item.image]));
             item.price = Number(item.price);
 
             return item;
         });
+
+        return res.reverse();
+    },
+    getAllOfUser: async( principalId ) => {
+        let hero = await actor;
+
+		let res = await hero.getAllTokens();
+
+        res = res.filter(item => {
+            if(item.createdBy.toString() == principalId && item.owner.toString() == principalId) {
+                item.price = Number(item.price);
+
+                return item;
+            }
+
+            return false;
+        })
 
         return res.reverse();
     },
@@ -57,8 +72,6 @@ export const NFT = {
 
         res = res.filter(item => {
             if(item.type === "ticket") {
-                item.image = new Uint8Array(item.image);
-                item.image = URL.createObjectURL(new Blob([item.image]));
                 item.price = Number(item.price);
 
                 return item;
@@ -76,8 +89,6 @@ export const NFT = {
 
         res = res.filter(item => {
             if(item.type === "nft") {
-                item.image = new Uint8Array(item.image);
-                item.image = URL.createObjectURL(new Blob([item.image]));
                 item.price = Number(item.price);
 
                 return item;
@@ -98,8 +109,6 @@ export const NFT = {
             let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
 
             if(itemOwner == principal) {
-                item.image = new Uint8Array(item.image);
-                item.image = URL.createObjectURL(new Blob([item.image]));
                 item.price = Number(item.price);
 
                 return item;
@@ -120,9 +129,6 @@ export const NFT = {
             let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
 
             if(item.nftType === "nft" && itemCreated == principal) {
-                item.imageBuffer = item.image;
-                item.image = new Uint8Array(item.image);
-                item.image = URL.createObjectURL(new Blob([item.image]));
                 item.price = Number(item.price);
 
                 return item;
@@ -138,9 +144,7 @@ export const NFT = {
         let { principal } = usePlug();
 
         let res = await hero.getTokenInfo(id);
-
-        res.image = new Uint8Array(res.image);
-        res.image = URL.createObjectURL(new Blob([res.image]));
+        
         res.price = Number(res.price);
 
         res.gifts = res.gifts.map(item => {

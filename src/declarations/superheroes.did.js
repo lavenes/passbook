@@ -13,7 +13,7 @@ export const idlFactory = ({ IDL }) => {
     'name' : IDL.Text,
     'createdBy' : IDL.Principal,
     'description' : IDL.Text,
-    'image' : IDL.Vec(IDL.Nat8),
+    'image' : IDL.Text,
     'price' : IDL.Nat,
   });
   const TokenInfoExt = IDL.Record({
@@ -29,7 +29,7 @@ export const idlFactory = ({ IDL }) => {
     'nftType' : IDL.Text,
     'details' : IDL.Text,
     'category' : IDL.Text,
-    'image' : IDL.Vec(IDL.Nat8),
+    'image' : IDL.Text,
     'place' : IDL.Text,
     'price' : IDL.Nat,
   });

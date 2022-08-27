@@ -75,7 +75,8 @@ export const ItemInformation = ({ title, id }) => {
                     </ActionsGroup.Group>
                     <SectionDivider/>
 
-                    { !isOwned && <Button onClick={handlePurchase}>Buy</Button> }
+                    { !isOwned && 
+                        <Button style={{}} onClick={handlePurchase}>Buy</Button> }
 
                     <SectionTitle title="Description" style={{ marginTop: 40 }}/>
 
@@ -139,6 +140,22 @@ export const ItemInformation = ({ title, id }) => {
                         order={ ticketMeta?.order }
                         qrValue={ qrValue }
                     /> } 
+                    <div
+						style={{
+							backgroundColor: '#000',
+							color: '#FFF',
+							borderRadius: 12,
+							width: '100%',
+							display: 'flex',
+							alignItems: 'center',
+							justifyContent: 'center',
+							height: 48,
+							marginTop: 24,
+						}}>
+						<Link style={{ color: '#FFF' }} to='/'>
+							Cancel
+						</Link>
+					</div>
                 </motion.div>
             </motion.div>
         </View>

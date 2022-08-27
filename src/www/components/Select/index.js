@@ -10,7 +10,7 @@ export const SelectBox = ({ options, placeholder, onChange }) => {
                 {
                     options.map((item, index) => {
                         return (
-                            <option className="select-box__box__option" value={item.value} key={`${item.value}-${index}`}>{ item.label }</option>
+                            <option id="optionBox" className="select-box__box__option" value={item.value} key={`${item.value}-${index}`}>{ item.label }</option>
                         )
                     })
                 }

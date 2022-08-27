@@ -30,7 +30,7 @@ module {
         description: Text;
         price: Nat;
         createdBy: Principal;
-        image: [Nat8];
+        image: Text;
     };
 
     public type TokenInfo = {
@@ -40,7 +40,7 @@ module {
         var description: Text;
         var details: Text;
         var gifts: [TokenGiftInfo];
-        var image: [Nat8];
+        var image: Text;
         var name: Text;
         var owner: Principal;
         var place: Text;
@@ -59,7 +59,7 @@ module {
         description: Text;
         details: Text;
         gifts: [TokenGiftInfo];
-        image: [Nat8];
+        image: Text;
         name: Text;
         owner: Principal;
         place: Text;

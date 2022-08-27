@@ -25,7 +25,7 @@ export interface TokenGiftInfo {
   'name' : string,
   'createdBy' : Principal,
   'description' : string,
-  'image' : Array<number>,
+  'image' : string,
   'price' : bigint,
 }
 export interface TokenInfoExt {
@@ -41,7 +41,7 @@ export interface TokenInfoExt {
   'nftType' : string,
   'details' : string,
   'category' : string,
-  'image' : Array<number>,
+  'image' : string,
   'place' : string,
   'price' : bigint,
 }

@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
-import { View } from '@components';
+import React, { useEffect, useState } from 'react';
+import { View, SelectBox, TextInput, Button, TextArea } from '@components';
 import { usePlug } from '@hooks';
+
+import "./styles.scss";
 
 export const SettingsScreen = () => {
     const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
+
+    const {path, setPath} = useState("");
 
     useEffect(() => {
       fetch();
@@ -26,10 +30,24 @@ export const SettingsScreen = () => {
     }
 
     return(
-        <View>
-            <button onClick={connect}>Connect Handle</button>
-            <br/>
-            <button onClick={addUser}>Add User</button>
+        <View className="setting-view">
+          <div className="setting-view__user-info-container">
+              <div className="setting-view__user-info-container__background">
+
+              </div>
+              <div className="setting-view__user-info-container__user-info">
+                  <div className="setting-view__user-info-container__user-info__avatar"></div>
+              </div>
+          </div>
+
+          <TextInput placeholder="Họ tên"/>
+
+          <TextInput placeholder="Email"/>
+
+          <TextArea  placeholder="Bio"/>
+          <Button style={{ marginTop: 32 }} onClick={connect}>Connect Plug</Button>
+          <Button style={{ marginTop: 32 }}>Lưu</Button>
+          <Button style={{ marginTop: 32 }}>Quản lý phân quyền</Button>
         </View>
     )
 }

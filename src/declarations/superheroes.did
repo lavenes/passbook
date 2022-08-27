@@ -18,7 +18,7 @@ type TokenInfoExt =
    details: text;
    gifts: vec TokenGiftInfo;
    id: text;
-   image: vec nat8;
+   image: text;
    name: text;
    nftType: text;
    owner: principal;
@@ -31,7 +31,7 @@ type TokenGiftInfo =
    createdBy: principal;
    description: text;
    id: text;
-   image: vec nat8;
+   image: text;
    name: text;
    price: nat;
  };

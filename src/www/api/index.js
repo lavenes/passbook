@@ -1,9 +1,11 @@
 import { IPFS } from './IPFS';
 import { NFT } from './NFT';
+import { User } from './User';
 
 const API = {
     IPFS,
-    NFT
+    NFT,
+    User
 }
 
 export default API;

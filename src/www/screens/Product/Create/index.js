@@ -13,7 +13,7 @@ export const NFTCreateScreen = () => {
     const navigate = useNavigate();
 
     const [imagePreview, setImagePreview] = useState(null);
-    const [imageBuffer, setImageBuffer] = useState([]);
+    const [imageUrl, setImageUrl] = useState([]);
 
     const [name, setName] = useState("");
     const [place, setPlace] = useState("");
@@ -26,6 +26,8 @@ export const NFTCreateScreen = () => {
     const [category, setCategory] = useState(Config.VARIABLES.TICKET_CATEGORIES[0].value);
     const [details, setDetails] = useState("");
     const [NFTs, setNFTs] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchData();
@@ -45,13 +47,16 @@ export const NFTCreateScreen = () => {
         let imageBuffer = [...new Uint8Array(await file.arrayBuffer())];
 
         setImagePreview(fileBlob);
-        setImageBuffer(imageBuffer);
+
+        let uploadRes = await API.IPFS.uploadImage(file);
+
+        setImageUrl(uploadRes);
     }
 
     const handleSubmit = async () => {
         await API.NFT.mint(
             name,
-            imageBuffer,
+            imageUrl,
             place,
             date,
             time,
@@ -94,9 +99,10 @@ export const NFTCreateScreen = () => {
             />
 
             <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${ imagePreview })` }}>
-                <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={ handleUploadImage }/>
-                <label className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">Upload image</label>
+                <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={handleUploadImage}/>
+                <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{ !imagePreview && 'Upload image' }</label>
             </div>
+            
             
             <SelectBox onChange={e => setType(e.target.value)} options={Config.VARIABLES.TICKET_TYPES}/>
 
@@ -123,7 +129,7 @@ export const NFTCreateScreen = () => {
 
             <TextArea  onChange={e => setDetails(e.target.value)} placeholder="Details"/>
 
-            <Button style={{ marginTop: 32 }} onClick={ handleSubmit }>Save</Button>
+            {isLoading ? <Button style={{ marginTop: 32 }} onClick={ handleSubmit }>Loading ...</Button> : <Button style={{ marginTop: 32 }} onClick={ handleSubmit }>Save</Button>}
         </View>
     )
 }

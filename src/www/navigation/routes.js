@@ -13,5 +13,6 @@ export const routes = {
             OWNED: '/products/categories/owned/:categoryId',
             LIST: '/products/categories/:categoryId',
         }
-    }
+    },
+    PROFILE: '/users/:principalId'
 };

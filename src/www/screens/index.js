@@ -9,6 +9,8 @@ import { NFTCreateScreen } from './Product/Create';
 
 import { QRScanScreen } from './QRScan';
 
+import { ProfileScreen } from './Profile';
+
 const Screens =  {
     Home: HomeScreen,
     Settings: SettingsScreen,
@@ -26,6 +28,7 @@ const Screens =  {
         }
     },
     QRScan: QRScanScreen,
+    Profile: ProfileScreen
 }
 
 export default Screens;

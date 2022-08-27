@@ -77,7 +77,7 @@ shared(msg) actor class NFTSale(
             var description = "";
             var details = "";
             var gifts = [];
-            var image = [];
+            var image = "";
             var name = "";
             var price = 0;
             var place = "";
