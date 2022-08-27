@@ -15,5 +15,5 @@ export const routes = {
         }
     },
     PROFILE: '/users/:principalId',
-    PERMISSTION: '/permisstion'
+    PERMISSION: '/permission'
 };

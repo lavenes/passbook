@@ -33,6 +33,8 @@ export const NFT = {
         
 		const res = await hero.mintNFT(metadata);
 
+        console.log(res);
+
         return res;
     },
     getAll: async() => {
@@ -144,7 +146,7 @@ export const NFT = {
         let { principal } = usePlug();
 
         let res = await hero.getTokenInfo(id);
-        
+
         res.price = Number(res.price);
 
         res.gifts = res.gifts.map(item => {

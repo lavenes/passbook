@@ -1,11 +1,11 @@
 import { HomeScreen } from './Home';
 import { SettingsScreen } from './Settings';
-import { Permisstion } from './Permisstion';
 import { ProductMarket } from './Product';
 import { TicketInformation } from './Product/Information/Ticket';
 import { ItemInformation } from './Product/Information/Item';
 import { ProductCategoryList } from './Product/Category/List';
 import { NFTCreateScreen } from './Product/Create';
+import { Permission } from "./Permission";
 
 import { QRScanScreen } from './QRScan';
 
@@ -29,7 +29,7 @@ const Screens =  {
     },
     QRScan: QRScanScreen,
     Profile: ProfileScreen,
-    Permisstion: Permisstion
+    Permission: Permission
 }
 
 export default Screens;

@@ -1,5 +1,5 @@
 // Version: 1.0.0
-type TokenGiftInfo =
+type TokenGiftInfo__1 =
   {
     createdBy : Principal;
     description : Text;
@@ -8,7 +8,7 @@ type TokenGiftInfo =
     name : Text;
     price : Nat
   };
-type TokenInfo =
+type TokenInfo__1 =
   {
     var category : Text;
     var checkin : Bool;
@@ -17,7 +17,7 @@ type TokenInfo =
     var dateCreated : Text;
     var description : Text;
     var details : Text;
-    var gifts : [TokenGiftInfo];
+    var gifts : [TokenGiftInfo__1];
     var id : Text;
     var image : Text;
     var name : Text;
@@ -27,8 +27,8 @@ type TokenInfo =
     var price : Nat;
     var time : Text
   };
-type TokenInfo__2 = TokenInfo;
-type UserInfo =
+type TokenInfo__3 = TokenInfo__1;
+type UserInfo__1 =
   {
     var dateOfBirth : Text;
     var firstName : Text;
@@ -38,10 +38,10 @@ type UserInfo =
     var phone : Text;
     var sex : Nat
   };
-type UserInfo__1 = UserInfo;
+type UserInfo__2 = UserInfo__1;
 actor {
   stable var blackhole : Principal;
   stable var owner_ : Principal;
-  stable var tokensEntries : [(Text, TokenInfo__2)];
-  stable var usersEntries : [(Principal, UserInfo__1)]
+  stable var tokensEntries : [(Text, TokenInfo__3)];
+  stable var usersEntries : [(Principal, UserInfo__2)]
 };

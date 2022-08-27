@@ -89,3 +89,16 @@ export const CreatorCard = ({ style, onClick, to="#", name }) => {
         </div>
     )
 }
+
+export const UserCard = ({ style, onClick, id, to="#", title, overlay, image, permission }) => {
+    return (
+        <motion.div className="card--user" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
+            <Link to={to}>
+                <motion.div style={{ backgroundImage: `url(${image})` }} className={`card--user-image ${ overlay ? "overlay" : "" }`} layoutId={id && `card-image-container-${id}`}>
+                    <motion.span className="card--user__title">{ title }</motion.span>
+                    <motion.span className="card--user__permission">{ permission }</motion.span>
+                </motion.div>
+            </Link>
+        </motion.div>
+    )
+}

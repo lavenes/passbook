@@ -30,6 +30,8 @@ import Types "./types";
 import Option "mo:base/Option";
 import List "mo:base/List";
 import DIP20Token "./token";
+import NFT "./nft";
+import Blob "mo:base/Blob";
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
@@ -85,17 +87,23 @@ shared(msg) actor class NFTSale(
     public shared({ caller }) func transferToken(to: Principal, value: Nat) : async TxReceipt {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
-        await dipToken.transfer(to, value);
+        return await dipToken.transfer(to, value);
     };
 
     public shared({ caller }) func transferTokenFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
-        await dipToken.transferFrom(from, to, value);
+        return await dipToken.transferFrom(from, to, value);
+    };
+
+    public shared(msg) func approveToken(spender: Principal, value: Nat) : async TxReceipt {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        return await dipToken.approve(spender, value);
     };
 
     //*Queries
-    public shared({ caller }) func balanceOf(who: Principal) : async Nat {
+    public shared({ caller }) func balanceTokenOf(who: Principal) : async Nat {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
         return await dipToken.balanceOf(who);
@@ -113,6 +121,25 @@ shared(msg) actor class NFTSale(
     public query func symbolToken() : async Text {
         return tokenConfig.symbol;
     };
+
+    public query func decimalsToken() : async Nat8 {
+        return tokenConfig.decimals;
+    };
+
+    public query func totalSupply() : async Nat {
+        return tokenConfig.totalSupply;
+    };
+
+    public query func getTokenFee() : async Nat {
+        return tokenConfig.fee;
+    };
+
+    public shared({caller}) func allowance(owner: Principal, spender: Principal) : async Nat {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        return await dipToken.allowance(owner, spender);
+    };
+    
 
     //*=======================================*//
     //*                NFT API                *//
@@ -171,31 +198,27 @@ shared(msg) actor class NFTSale(
     };
 
     //*Mintning
-    public shared({ caller }) func mintNFT(metadata: TokenInfoExt): async TokenInfoExt {
-        // if(msg.caller != owner_) {
-        //     return #Err(#Unauthorized);
-        // };
+    public shared({ caller }) func mintNFT(metadata: TokenInfoExt): async Types.MintReceipt {
+        let nft = await NFT.Dip721NFT(caller, {
+            logo = {
+                logo_type = "image/png";
+                data = "";
+            };
+            name = "My DPI 212";
+            symbol = "DFXB";
+            maxLimit = 10;
+        });
 
-        let token = _newToken(caller);
-        
-        token.id := metadata.id;
-        token.date := metadata.date;
-        token.description := metadata.description;
-        token.details := metadata.details;
-        token.gifts := metadata.gifts;
-        token.image := metadata.image;
-        token.name := metadata.name;
-        token.price := metadata.price;
-        token.place := metadata.place;
-        token.time := metadata.time;
-        token.category := metadata.category;
-        token.nftType := metadata.nftType;
-        token.createdBy := metadata.createdBy;
-        token.dateCreated := metadata.dateCreated;
+        Cycles.add(10_000_000_000_000);
 
-        tokens.put(token.id, token);
-
-        return _tokenInfotoExt(token);
+        return await nft.mintDip721(caller, [{
+            purpose = #Rendered;
+            key_val_data = [{
+                key = "description";
+                val = #TextContent("The NFT metadata can hold arbitrary metadata");
+            }];
+            data = "hello";
+        }])
     };
 
     //*Mint Clone

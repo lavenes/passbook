@@ -8,6 +8,22 @@ type UserInfoExt =
    phone: text;
    sex: nat;
  };
+type TxReceipt = 
+ variant {
+   Err:
+    variant {
+      AmountTooSmall;
+      BlockUsed;
+      ErrorOperationStyle;
+      ErrorTo;
+      InsufficientAllowance;
+      InsufficientBalance;
+      LedgerTrap;
+      Other: text;
+      Unauthorized;
+    };
+   Ok: nat;
+ };
 type TokenInfoExt = 
  record {
    category: text;
@@ -26,6 +42,7 @@ type TokenInfoExt =
    price: nat;
    time: text;
  };
+type TokenId = nat64;
 type TokenGiftInfo = 
  record {
    createdBy: principal;
@@ -35,17 +52,47 @@ type TokenGiftInfo =
    name: text;
    price: nat;
  };
+type MintReceiptPart = 
+ record {
+   id: nat;
+   token_id: TokenId;
+ };
+type MintReceipt = 
+ variant {
+   Err: ApiError;
+   Ok: MintReceiptPart;
+ };
+type ApiError = 
+ variant {
+   InvalidTokenId;
+   Other;
+   Unauthorized;
+   ZeroAddress;
+ };
 service : {
+  allowance: (principal, principal) -> (nat);
+  approveToken: (principal, nat) -> (TxReceipt);
+  balanceTokenOf: (principal) -> (nat);
+  burnToken: (nat) -> (TxReceipt);
   checkinTicket: (text, principal) -> (text);
   clearAllTokens: () -> () oneway;
   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
+  decimalsToken: () -> (nat8) query;
   deleteAccount: (principal) -> (bool);
   getAllTokens: () -> (vec TokenInfoExt) query;
+  getTokenFee: () -> (nat) query;
   getTokenInfo: (text) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
+  logoToken: () -> (text) query;
   mintCloneNFT: (text, text) -> (TokenInfoExt);
-  mintNFT: (TokenInfoExt) -> (TokenInfoExt);
+  mintNFT: (TokenInfoExt) -> (MintReceipt);
+  mintToken: (principal, nat) -> (TxReceipt);
+  nameToken: () -> (text) query;
   readAccount: () -> (vec UserInfoExt) query;
+  symbolToken: () -> (text) query;
+  totalSupply: () -> (nat) query;
+  transferToken: (principal, nat) -> (TxReceipt);
+  transferTokenFrom: (principal, principal, nat) -> (TxReceipt);
   updateAccount: (principal, text, text, nat, text, text, text) ->
    (UserInfoExt);
 }

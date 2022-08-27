@@ -47,8 +47,19 @@ export const idlFactory = ({ IDL }) => {
     'place' : IDL.Text,
     'price' : IDL.Nat,
   });
+  const TokenId = IDL.Nat64;
+  const MintReceiptPart = IDL.Record({ 'id' : IDL.Nat, 'token_id' : TokenId });
+  const ApiError = IDL.Variant({
+    'ZeroAddress' : IDL.Null,
+    'InvalidTokenId' : IDL.Null,
+    'Unauthorized' : IDL.Null,
+    'Other' : IDL.Null,
+  });
+  const MintReceipt = IDL.Variant({ 'Ok' : MintReceiptPart, 'Err' : ApiError });
   const NFTSale = IDL.Service({
-    'balanceOf' : IDL.Func([IDL.Principal], [IDL.Nat], []),
+    'allowance' : IDL.Func([IDL.Principal, IDL.Principal], [IDL.Nat], []),
+    'approveToken' : IDL.Func([IDL.Principal, IDL.Nat], [TxReceipt], []),
+    'balanceTokenOf' : IDL.Func([IDL.Principal], [IDL.Nat], []),
     'burnToken' : IDL.Func([IDL.Nat], [TxReceipt], []),
     'checkinTicket' : IDL.Func([IDL.Text, IDL.Principal], [IDL.Text], []),
     'clearAllTokens' : IDL.Func([], [], ['oneway']),
@@ -57,8 +68,10 @@ export const idlFactory = ({ IDL }) => {
         [UserInfoExt],
         [],
       ),
+    'decimalsToken' : IDL.Func([], [IDL.Nat8], ['query']),
     'deleteAccount' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllTokens' : IDL.Func([], [IDL.Vec(TokenInfoExt)], ['query']),
+    'getTokenFee' : IDL.Func([], [IDL.Nat], ['query']),
     'getTokenInfo' : IDL.Func([IDL.Text], [TokenInfoExt], ['query']),
     'getUserInfo' : IDL.Func(
         [IDL.Principal],
@@ -67,11 +80,12 @@ export const idlFactory = ({ IDL }) => {
       ),
     'logoToken' : IDL.Func([], [IDL.Text], ['query']),
     'mintCloneNFT' : IDL.Func([IDL.Text, IDL.Text], [TokenInfoExt], []),
-    'mintNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),
+    'mintNFT' : IDL.Func([TokenInfoExt], [MintReceipt], []),
     'mintToken' : IDL.Func([IDL.Principal, IDL.Nat], [TxReceipt], []),
     'nameToken' : IDL.Func([], [IDL.Text], ['query']),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
     'symbolToken' : IDL.Func([], [IDL.Text], ['query']),
+    'totalSupply' : IDL.Func([], [IDL.Nat], ['query']),
     'transferToken' : IDL.Func([IDL.Principal, IDL.Nat], [TxReceipt], []),
     'transferTokenFrom' : IDL.Func(
         [IDL.Principal, IDL.Principal, IDL.Nat],

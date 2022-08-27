@@ -1,7 +1,7 @@
 import * as AppBar from './AppBar';
 import { View } from './View';
 import { Title, SectionTitle, PriceTitle } from './Title';
-import { FeatureCard, SquareCard, ProductCard, CollectionCard, BalanceCard, CreatorCard } from './Card';
+import { FeatureCard, SquareCard, ProductCard, CollectionCard, BalanceCard, CreatorCard, UserCard } from './Card';
 import { GridView, InformationGroup } from './Group';
 import { ScrollView } from './Scroll';
 import * as ListView from './List';
@@ -28,7 +28,8 @@ export {
     CollectionCard,
     BalanceCard,
     CreatorCard,
-
+    UserCard,
+    
     GridView,
     ListView,
     ScrollView,

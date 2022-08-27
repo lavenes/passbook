@@ -46,7 +46,7 @@ export const SettingsScreen = () => {
           <TextArea  placeholder="Bio"/>
           <Button style={{ marginTop: 32 }} onClick={connect}>Connect Plug</Button>
           <Button style={{ marginTop: 32 }}>Lưu</Button>
-          <Button style={{ marginTop: 32 }} to={"/permisstion"}>Quản lý phân quyền</Button>
+          <Button style={{ marginTop: 32 }} to={"/permission"}>Quản lý phân quyền</Button>
         </View>
     )
 }
