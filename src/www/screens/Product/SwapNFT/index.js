@@ -23,7 +23,6 @@ export const SwapNFT = () => {
 
         console.log({
             other,
-            
         });
     }
 
