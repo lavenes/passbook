@@ -13,6 +13,7 @@ export const ItemInformation = ({ title, id }) => {
     const [isOwned, setIsOwned] = useState(false);
     const [isTicket, setIsTicket] = useState(false);
     const [qrValue, setQRValue] = useState(null);
+    const [amount, setAmount] = useState(1);
 
     const actions = [
         {
@@ -51,7 +52,7 @@ export const ItemInformation = ({ title, id }) => {
 
     const handlePurchase = async () => {
         console.log("PURCHASING...");
-        await API.NFT.purchase(id).then(e => {
+        await API.NFT.purchase(id, amount).then(e => {
             Swal.fire(
                 'Đã mua thành công!',
                 'Vé đã nằm trong ví của bạn',
@@ -111,7 +112,7 @@ export const ItemInformation = ({ title, id }) => {
                     </ActionsGroup.Group>
                     <SectionDivider/>
                     <h4>Amount</h4>
-                    <input placeholder="1" type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px"}}/>
+                    <input defaultValue={1} onChange={e => setAmount(e.target.value)} type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px"}}/>
 
                     { !isOwned && 
                         <Button style={{marginTop: "20px"}} onClick={handlePurchase}>Buy</Button> }

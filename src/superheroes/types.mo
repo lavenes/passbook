@@ -78,15 +78,19 @@ module {
         image: Text;
     };
 
-    public type TokenPrivacy = {
-        #Public;
-        #NoPublic;
-        #Private
-    };
-
     public type TokenPreorder = {
         preorder: Bool;
-        end: Text
+        end: Text;
+        endTime: Text;
+        cashback: Float;
+        gifts: [TokenGiftInfo]
+    };
+
+    public type TokenPreorderList = {
+        var id: Text;
+        var owner: Principal;
+        var nftId: Text;
+        var supplies: Nat;
     };
 
     public type TokenInfo = {
@@ -106,8 +110,9 @@ module {
         var category: Text; //TokenCategory.id
         var dateCreated: Text;
         var checkin: Bool;
-        var privacy: TokenPrivacy;
+        var privacy: Text;
         var preorder: TokenPreorder;
+        var supplies: Nat;
     };
 
     public type TokenInfoExt = {
@@ -126,8 +131,9 @@ module {
         nftType: Text; //item | ticket
         category: Text; //TokenCategory.id
         dateCreated: Text;
-        privacy: TokenPrivacy;
+        privacy: Text;
         preorder: TokenPreorder;
+        supplies: Nat;
     };
     
     //*=======================================*//

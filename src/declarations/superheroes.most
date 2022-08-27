@@ -1,6 +1,17 @@
 // Version: 1.0.0
-type PBCToken = {var balance : Nat; var user : Principal};
+type PBCToken = {var balance : Float; var user : Principal};
 type PBCToken__1 = PBCToken;
+type SaleEvent =
+  {
+    var end : Text;
+    var id : Text;
+    var nftId : Text;
+    var owner : Principal;
+    var priceSale : Nat;
+    var start : Text;
+    var supplies : Nat
+  };
+type SaleEvent__1 = SaleEvent;
 type TokenGiftInfo =
   {
     createdBy : Principal;
@@ -26,10 +37,29 @@ type TokenInfo =
     var nftType : Text;
     var owner : Principal;
     var place : Text;
-    var price : Nat;
+    var preorder : TokenPreorder;
+    var price : Float;
+    var privacy : Text;
+    var supplies : Nat;
     var time : Text
   };
 type TokenInfo__1 = TokenInfo;
+type TokenPreorder =
+  {
+    cashback : Float;
+    end : Text;
+    endTime : Text;
+    gifts : [TokenGiftInfo];
+    preorder : Bool
+  };
+type TokenPreorderList =
+  {
+    var id : Text;
+    var nftId : Text;
+    var owner : Principal;
+    var supplies : Nat
+  };
+type TokenPreorderList__1 = TokenPreorderList;
 type UserInfo =
   {
     var dateOfBirth : Text;
@@ -46,6 +76,8 @@ actor {
   stable var blackhole : Principal;
   stable var owner_ : Principal;
   stable var pbcTokenEntries : [(Principal, PBCToken__1)];
+  stable var saleEventEntries : [(Text, SaleEvent__1)];
+  stable var tokenPreordersEntries : [(Text, TokenPreorderList__1)];
   stable var tokensEntries : [(Text, TokenInfo__1)];
   stable var usersEntries : [(Principal, UserInfo__1)]
 };

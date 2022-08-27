@@ -41,7 +41,7 @@ export const ProfileScreen = () => {
                         <div style={{ position: "relative", width: "100%" }} className="profile-view__user-info-container__user-info__detail">
                             <span className="profile-view__user-info-container__user-info__detail__name">USER NAME</span>
                             <span className="profile-view__user-info-container__user-info__detail__principal">0x91928381279581</span>
-                            <Button style={{ marginTop: 12 }}>SWAP NFT</Button>
+                            <Button to={`/swap/${principalId}`} style={{ marginTop: 12 }}>SWAP NFT</Button>
                         </div>
                     </div>
                 </div>

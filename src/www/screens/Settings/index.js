@@ -15,36 +15,19 @@ export const SettingsScreen = () => {
     const [liveIn, setLiveIn] = useState("");
     const [sex, setSex] = useState(1);
 
-    useEffect(() => {
-      fetch();
-    }, []);
+    const handleSubmit = async () => {
 
-    const fetch = async() => {
-      let b = await actor;
-      let a = await b.readAccount();
-      let balance = await getBalance();
-
-      console.log(a);
-      console.log(balance);
-    }
-
-    const addUser = async() => {
-      let b = await actor;
-      const a = await b.createAccount("David", "Tran", 0, "20-01-2003", "123451231", "Ben Nghe");
-
-      console.log(a);
-    }
-
-    const handleSubmit = () => {
-      console.log({
+      const user = {
         firstName,
         lastName,
-        date,
+        dateOfBirth: date,
         liveIn,
         sex,
-      })
+        phone,
+      };
 
-
+      const response = await API.User.createUser(user);
+      console.log(response);
 
     }
 

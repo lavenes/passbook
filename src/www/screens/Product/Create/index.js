@@ -28,6 +28,14 @@ export const NFTCreateScreen = () => {
     const [category, setCategory] = useState(Config.VARIABLES.TICKET_CATEGORIES[0].value);
     const [details, setDetails] = useState("");
     const [NFTs, setNFTs] = useState([]);
+    const [preorder, setPreorder] = useState({
+        preorder: false,
+        cashback: 0,
+        end: "",
+        gifts: []
+    });
+    const [privacy, setPrivacy] = useState("public");
+    const [supplies, setSupplies] = useState(0);
 
     const [isLoading, setIsLoading] = useState(false);
 
@@ -68,6 +76,9 @@ export const NFTCreateScreen = () => {
             details,
             type,
             category,
+            privacy,
+            preorder,
+            supplies
         );
 
         Swal.fire(
@@ -113,7 +124,7 @@ export const NFTCreateScreen = () => {
 
             <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${imagePreview})` }}>
                 <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={handleUploadImage} />
-                <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{!imagePreview && 'Upload image'}</label>
+                <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{!imagePreview && 'Upload ảnh'}</label>
             </div>
 
 
@@ -121,17 +132,19 @@ export const NFTCreateScreen = () => {
 
             <SelectBox onChange={e => setCategory(e.target.value)} options={Config.VARIABLES.TICKET_CATEGORIES} />
 
-            <TextInput onChange={e => setName(e.target.value)} placeholder="Name" />
+            <TextInput onChange={e => setName(e.target.value)} placeholder="Tên" />
 
-            {type == "ticket" && <TextInput onChange={e => setPlace(e.target.value)} placeholder="Place" />}
+            {type == "ticket" && <TextInput onChange={e => setPlace(e.target.value)} placeholder="Địa chỉ" />}
 
-            {type == "ticket" && <TextInput onChange={e => setDate(e.target.value)} placeholder="Date" type="date" />}
+            {type == "ticket" && <TextInput onChange={e => setDate(e.target.value)} placeholder="Ngày diễn ra" type="date" />}
 
-            {type == "ticket" && <TextInput onChange={e => setTime(e.target.value)} placeholder="Time" type="time" />}
+            {type == "ticket" && <TextInput onChange={e => setTime(e.target.value)} placeholder="Thời gian" type="time" />}
 
-            <TextInput onChange={e => setPrice(e.target.value)} placeholder="Price" type="number" />
+            <TextInput onChange={e => setPrice(e.target.value)} placeholder="Giá" type="number" />
 
-            <TextInput onChange={e => setPrice(e.target.value)} placeholder="Amount" type="number" />
+            <TextInput onChange={e => setSupplies(Number(e.target.value))} placeholder="Số lượng" type="number" />
+
+            <SelectBox options={[{value: "public", label: "Công khai"}, {value: "private", label: "Ẩn"}]} onChange={e => setPrivacy(e.target.value)}/>
 
             <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {
                 return {
@@ -148,19 +161,39 @@ export const NFTCreateScreen = () => {
             </div>
 
             {display && <div>
-                <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {
+                <TextInput onChange={e => setPreorder({
+                    ...preorder,
+                    preorder: true,
+                    end: e.target.value
+                })} placeholder="Ngày publish" type="date" />
+
+                <TextInput onChange={e => setPreorder({
+                    ...preorder,
+                    preorder: true,
+                    endTime: e.target.value
+                })} placeholder="Thời gian publish" type="time" />
+                
+                <SelectBox onChange={e => setPreorder({
+                    ...preorder,
+                    preorder: true,
+                    gifts: [e.target.value]
+                })} placeholder="Gift" options={NFTs.map(item => {
                     return {
                         label: item.name,
                         value: item.id
                     }
                 })} />
 
-                <TextInput onChange={e => setPrice(e.target.value)} placeholder="Cashback" type="text" />
+                <TextInput onChange={e => setPreorder({
+                    ...preorder,
+                    preorder: true,
+                    cashback: Number(e.target.value)
+                })} placeholder="Hoàn tiền" type="number" />
             </div>}
 
-            <TextArea onChange={e => setDescription(e.target.value)} placeholder="Description" />
+            <TextArea onChange={e => setDescription(e.target.value)} placeholder="Mô tả" />
 
-            <TextArea onChange={e => setDetails(e.target.value)} placeholder="Details" />
+            <TextArea onChange={e => setDetails(e.target.value)} placeholder="Chi tiết" />
 
             {isLoading ? <Button style={{ marginTop: 32 }} onClick={handleSubmit}>Loading ...</Button> : <Button style={{ marginTop: 32 }} onClick={handleSubmit}>Save</Button>}
         </View>

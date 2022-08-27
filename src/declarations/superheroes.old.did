@@ -9,6 +9,19 @@ type UserInfoExt =
    phone: text;
    sex: nat;
  };
+type TokenPrivacy = 
+ variant {
+   Private;
+   Public;
+ };
+type TokenPreorder = 
+ record {
+   cashback: float64;
+   end: text;
+   endTime: text;
+   gifts: vec TokenGiftInfo;
+   preorder: bool;
+ };
 type TokenInfoExt = 
  record {
    category: text;
@@ -24,7 +37,10 @@ type TokenInfoExt =
    nftType: text;
    owner: principal;
    place: text;
-   price: nat;
+   preorder: TokenPreorder;
+   price: float64;
+   privacy: TokenPrivacy;
+   supplies: nat;
    time: text;
  };
 type TokenGiftInfo = 
@@ -36,26 +52,44 @@ type TokenGiftInfo =
    name: text;
    price: nat;
  };
+type SaleEventExt = 
+ record {
+   end: text;
+   id: text;
+   nftId: text;
+   owner: principal;
+   priceSale: nat;
+   start: text;
+   supplies: nat;
+ };
 type PBCTokenExt = 
  record {
-   balance: nat;
+   balance: float64;
    user: principal;
  };
 service : {
-  balanceOf: (principal) -> (nat);
-  burnToken: (principal, nat) -> (nat);
+  balanceOf: (principal) -> (float64);
+  burnNFT: (text) -> (text);
+  burnToken: (principal, float64) -> (float64);
   checkinTicket: (text, principal) -> (text);
   clearAllTokens: () -> () oneway;
   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
+  createSaleEvent: (SaleEventExt) -> (SaleEventExt);
   deleteAccount: (principal) -> (bool);
+  getAllSaleEvents: () -> (vec SaleEventExt);
   getAllTokens: () -> (vec TokenInfoExt) query;
+  getSaleEvent: (text) -> (SaleEventExt);
   getTokenInfo: (text) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
   mintCloneNFT: (text, text) -> (TokenInfoExt);
   mintNFT: (TokenInfoExt) -> (TokenInfoExt);
-  mintToken: (principal, nat) -> (PBCTokenExt);
+  mintToken: (principal, float64) -> (PBCTokenExt);
+  purchaseNFT: (text, nat, text) -> (text);
   readAccount: () -> (vec UserInfoExt) query;
-  transferTokenFrom: (principal, principal, nat) -> (text);
+  swapNFT: (text, text) -> (text);
+  transferNFT: (principal, principal, text, nat) -> (text);
+  transferTokenFrom: (principal, principal, float64) -> (text);
   updateAccount: (principal, text, text, nat, text, text, text, nat) ->
    (UserInfoExt);
+  updateNFT: (TokenInfoExt) -> (TokenInfoExt);
 }

@@ -227,10 +227,15 @@ shared(msg) actor class NFTSale(
     type TokenCategory = Types.TokenCategory;
     type TokenGiftInfo = Types.TokenGiftInfo;
     type TokenPreorder = Types.TokenPreorder;
+    type TokenPreorderList = Types.TokenPreorderList;
 
     private stable var owner_: Principal = _owner;
+
     private stable var tokensEntries : [(Text, TokenInfo)] = [];
     private var tokens = HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
+
+    private stable var tokenPreordersEntries : [(Text, TokenPreorderList)] = [];
+    private var tokenPreorders = HashMap.HashMap<Text, TokenPreorderList>(1, Text.equal, Text.hash);
 
     private var transactionFeePercent = 1.1;
 
@@ -254,6 +259,7 @@ shared(msg) actor class NFTSale(
             dateCreated = info.dateCreated;
             privacy = info.privacy;
             preorder = info.preorder;
+            supplies = info.supplies;
         };
     };
 
@@ -276,11 +282,15 @@ shared(msg) actor class NFTSale(
             var owner = caller;
             var dateCreated = "";
             var checkin = false;
-            var privacy = #Public;
+            var privacy = "public";
             var preorder = {
               preorder = false;
               end = "";
-            }
+              endTime="";
+              gifts = [];
+              cashback = 0;
+            };
+            var supplies = 0;
         }
     };
 
@@ -307,6 +317,8 @@ shared(msg) actor class NFTSale(
         token.createdBy := metadata.createdBy;
         token.dateCreated := metadata.dateCreated;
         token.privacy := metadata.privacy;
+        token.preorder := metadata.preorder;
+        token.supplies := metadata.supplies;
 
         tokens.put(token.id, token);
 
@@ -346,7 +358,7 @@ shared(msg) actor class NFTSale(
     };
 
     //*Purchase Token
-    public shared({ caller }) func purchaseNFT(tokenId: Text) : async TokenInfoExt {
+    public shared({ caller }) func purchaseNFT(tokenId: Text, supplies: Nat, randomId: Text) : async Text {
       var nft = _newToken(caller);
       
       switch(tokens.get(tokenId)) {
@@ -376,7 +388,26 @@ shared(msg) actor class NFTSale(
 
       //*Mint process
       //Check if is preorder
+      if(nft.preorder.preorder) {
+        let preorder : TokenPreorderList = {
+          var id = nft.id # "-" # randomId # Principal.toText(caller);
+          var owner = caller;
+          var nftId = nft.id;
+          var supplies = supplies;
+        };
 
+        tokenPreorders.put(preorder.id, preorder);
+
+        return "SUCCESS";
+      }else{
+        let iter = Iter.range(1, supplies);
+
+        for(x in iter) {
+          let a = await mintCloneNFT(nft.id, nft.id # "-" # randomId # Nat.toText(x));
+        };
+
+        return "SUCCESS";
+      }
     };
 
     //*Transfer Token

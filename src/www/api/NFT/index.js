@@ -8,7 +8,7 @@ import { Principal } from '@dfinity/principal';
 const { actor } = usePlug();
 
 export const NFT = {
-    mint: async (name, imageUrl, place, date, time, price, description, gifts, details, type, category) => {
+    mint: async (name, imageUrl, place, date, time, price, description, gifts, details, type, category, privacy, preorder, supplies) => {
         //*Upload metadata
         let metadata = {
             id: stringToSlug(name + '-' + randomStr(5)),
@@ -23,10 +23,15 @@ export const NFT = {
             details,
             nftType: type,
             category,
+            privacy,
+            preorder,
+            supplies,
             owner: Principal.anonymous(),
             createdBy: Principal.fromText(window.ic?.plug?.sessionManager?.sessionData?.principalId),
             dateCreated: new Date().toISOString()
         }
+
+        console.log(metadata);
 
         //*Upload
         let hero = await actor;
@@ -170,7 +175,7 @@ export const NFT = {
 
         return res;
     },
-    purchase: async(tokenId) => {
+    purchase: async(tokenId, supplies) => {
         const { requestTransfer } = usePlug();
         let hero = await actor;
 
@@ -182,7 +187,9 @@ export const NFT = {
         //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * 10000);
         //await requestTransfer(tokenData.createdBy.toString(), Number(tokenData.price) * Config.MOTOKO.PRICE_E8S);
         
-        const res = await hero.mintCloneNFT(tokenId, randomStr(5));
+        // const res = await hero.mintCloneNFT(tokenId, randomStr(5));
+
+        const res = await hero.purchaseNFT(tokenId, supplies, randomStr(5));
 
         return res;
     },

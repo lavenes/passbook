@@ -12,10 +12,10 @@ export const User = {
         let hero = await actor;
         return await hero.getUserInfo(Principal.fromText(principalId));
     },
-//     createUser: async (user) => {
-//         let hero = await actor;
-//         return await hero.createAccount(user.firstName, user.lastName, user.sex, user.dateOfBirth, user.phone, user.liveIn);
-//     },
+    createUser: async (user) => {
+        let hero = await actor;
+        return await hero.createAccount(user.firstName, user.lastName, user.sex, user.dateOfBirth, user.phone, user.liveIn);
+    },
 //     updateAccount: async (user) => {
 //         let hero = await actor;
 //         return await hero.updateAccount(user.firstName, user.lastName, user.sex, user.dateOfBirth, user.phone, user.liveIn, user.permission);
