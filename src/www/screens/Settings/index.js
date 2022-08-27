@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, SelectBox, TextInput, Button, TextArea } from '@components';
 import { usePlug } from '@hooks';
+import { Link } from 'react-router-dom';
 
 import "./styles.scss";
 
 export const SettingsScreen = () => {
     const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
-
-    const {path, setPath} = useState("");
 
     useEffect(() => {
       fetch();
@@ -47,7 +46,7 @@ export const SettingsScreen = () => {
           <TextArea  placeholder="Bio"/>
           <Button style={{ marginTop: 32 }} onClick={connect}>Connect Plug</Button>
           <Button style={{ marginTop: 32 }}>Lưu</Button>
-          <Button style={{ marginTop: 32 }}>Quản lý phân quyền</Button>
+          <Button style={{ marginTop: 32 }} to={"/permisstion"}>Quản lý phân quyền</Button>
         </View>
     )
 }

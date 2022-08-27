@@ -8,6 +8,22 @@ type UserInfoExt =
    phone: text;
    sex: nat;
  };
+type TxReceipt = 
+ variant {
+   Err:
+    variant {
+      AmountTooSmall;
+      BlockUsed;
+      ErrorOperationStyle;
+      ErrorTo;
+      InsufficientAllowance;
+      InsufficientBalance;
+      LedgerTrap;
+      Other: text;
+      Unauthorized;
+    };
+   Ok: nat;
+ };
 type TokenInfoExt = 
  record {
    category: text;
@@ -37,6 +53,8 @@ type TokenGiftInfo =
  };
 type NFTSale = 
  service {
+   balanceOf: (principal) -> (nat);
+   burnToken: (nat) -> (TxReceipt);
    checkinTicket: (text, principal) -> (text);
    clearAllTokens: () -> () oneway;
    createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
@@ -44,9 +62,15 @@ type NFTSale =
    getAllTokens: () -> (vec TokenInfoExt) query;
    getTokenInfo: (text) -> (TokenInfoExt) query;
    getUserInfo: (principal) -> (opt UserInfoExt) query;
+   logoToken: () -> (text) query;
    mintCloneNFT: (text, text) -> (TokenInfoExt);
    mintNFT: (TokenInfoExt) -> (TokenInfoExt);
+   mintToken: (principal, nat) -> (TxReceipt);
+   nameToken: () -> (text) query;
    readAccount: () -> (vec UserInfoExt) query;
+   symbolToken: () -> (text) query;
+   transferToken: (principal, nat) -> (TxReceipt);
+   transferTokenFrom: (principal, principal, nat) -> (TxReceipt);
    updateAccount: (principal, text, text, nat, text, text, text) ->
     (UserInfoExt);
  };

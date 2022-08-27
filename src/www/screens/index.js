@@ -1,6 +1,6 @@
 import { HomeScreen } from './Home';
 import { SettingsScreen } from './Settings';
-
+import { Permisstion } from './Permisstion';
 import { ProductMarket } from './Product';
 import { TicketInformation } from './Product/Information/Ticket';
 import { ItemInformation } from './Product/Information/Item';
@@ -28,7 +28,8 @@ const Screens =  {
         }
     },
     QRScan: QRScanScreen,
-    Profile: ProfileScreen
+    Profile: ProfileScreen,
+    Permisstion: Permisstion
 }
 
 export default Screens;

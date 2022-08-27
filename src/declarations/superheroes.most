@@ -27,7 +27,7 @@ type TokenInfo =
     var price : Nat;
     var time : Text
   };
-type TokenInfo__1 = TokenInfo;
+type TokenInfo__2 = TokenInfo;
 type UserInfo =
   {
     var dateOfBirth : Text;
@@ -42,6 +42,6 @@ type UserInfo__1 = UserInfo;
 actor {
   stable var blackhole : Principal;
   stable var owner_ : Principal;
-  stable var tokensEntries : [(Text, TokenInfo__1)];
+  stable var tokensEntries : [(Text, TokenInfo__2)];
   stable var usersEntries : [(Principal, UserInfo__1)]
 };

@@ -14,5 +14,6 @@ export const routes = {
             LIST: '/products/categories/:categoryId',
         }
     },
-    PROFILE: '/users/:principalId'
+    PROFILE: '/users/:principalId',
+    PERMISSTION: '/permisstion'
 };

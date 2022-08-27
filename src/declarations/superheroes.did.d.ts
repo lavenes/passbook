@@ -2,6 +2,8 @@ import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
 export interface NFTSale {
+  'balanceOf' : ActorMethod<[Principal], bigint>,
+  'burnToken' : ActorMethod<[bigint], TxReceipt>,
   'checkinTicket' : ActorMethod<[string, Principal], string>,
   'clearAllTokens' : ActorMethod<[], undefined>,
   'createAccount' : ActorMethod<
@@ -12,9 +14,15 @@ export interface NFTSale {
   'getAllTokens' : ActorMethod<[], Array<TokenInfoExt>>,
   'getTokenInfo' : ActorMethod<[string], TokenInfoExt>,
   'getUserInfo' : ActorMethod<[Principal], [] | [UserInfoExt]>,
+  'logoToken' : ActorMethod<[], string>,
   'mintCloneNFT' : ActorMethod<[string, string], TokenInfoExt>,
   'mintNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
+  'mintToken' : ActorMethod<[Principal, bigint], TxReceipt>,
+  'nameToken' : ActorMethod<[], string>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
+  'symbolToken' : ActorMethod<[], string>,
+  'transferToken' : ActorMethod<[Principal, bigint], TxReceipt>,
+  'transferTokenFrom' : ActorMethod<[Principal, Principal, bigint], TxReceipt>,
   'updateAccount' : ActorMethod<
     [Principal, string, string, bigint, string, string, string],
     UserInfoExt,
@@ -45,6 +53,18 @@ export interface TokenInfoExt {
   'place' : string,
   'price' : bigint,
 }
+export type TxReceipt = { 'Ok' : bigint } |
+  {
+    'Err' : { 'InsufficientAllowance' : null } |
+      { 'InsufficientBalance' : null } |
+      { 'ErrorOperationStyle' : null } |
+      { 'Unauthorized' : null } |
+      { 'LedgerTrap' : null } |
+      { 'ErrorTo' : null } |
+      { 'Other' : string } |
+      { 'BlockUsed' : null } |
+      { 'AmountTooSmall' : null }
+  };
 export interface UserInfoExt {
   'id' : Principal,
   'sex' : bigint,

@@ -4,7 +4,7 @@ type TokenGiftInfo =
     createdBy : Principal;
     description : Text;
     id : Text;
-    image : [Nat8];
+    image : Text;
     name : Text;
     price : Nat
   };
@@ -19,7 +19,7 @@ type TokenInfo =
     var details : Text;
     var gifts : [TokenGiftInfo];
     var id : Text;
-    var image : [Nat8];
+    var image : Text;
     var name : Text;
     var nftType : Text;
     var owner : Principal;

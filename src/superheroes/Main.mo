@@ -29,11 +29,90 @@ import Buffer "mo:base/Buffer";
 import Types "./types";
 import Option "mo:base/Option";
 import List "mo:base/List";
+import DIP20Token "./token";
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
     ) = this {
     private stable var blackhole: Principal = Principal.fromText("aaaaa-aa");
+
+    //*=======================================*//
+    //*            DIP20 TOKEN API            *//
+    //*=======================================*//
+    type Operation = Types.Operation;
+    type TransactionStatus = Types.TransactionStatus;
+    type TxRecord = Types.TxRecord;
+    public type TxReceipt = {
+        #Ok: Nat;
+        #Err: {
+            #InsufficientAllowance;
+            #InsufficientBalance;
+            #ErrorOperationStyle;
+            #Unauthorized;
+            #LedgerTrap;
+            #ErrorTo;
+            #Other: Text;
+            #BlockUsed;
+            #AmountTooSmall;
+        };
+    };
+    let tokenConfig = {
+        logo = "";
+        name = "PassBook Coin";
+        symbol = "PBC";
+        decimals : Nat8 = 0;
+        totalSupply = 2000000;
+        owner = _owner;
+        fee = 0;
+    };
+
+    //*MINT & BURN
+    //*Mint
+    public shared({ caller }) func mintToken(to: Principal, value: Nat) : async TxReceipt {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        return await dipToken.mint(to, value);
+    };
+
+    //*Burn
+    public shared({ caller }) func burnToken(value: Nat) : async TxReceipt {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        return await dipToken.burn(value);
+    };
+
+    //*Transfer
+    public shared({ caller }) func transferToken(to: Principal, value: Nat) : async TxReceipt {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        await dipToken.transfer(to, value);
+    };
+
+    public shared({ caller }) func transferTokenFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        await dipToken.transferFrom(from, to, value);
+    };
+
+    //*Queries
+    public shared({ caller }) func balanceOf(who: Principal) : async Nat {
+        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+
+        return await dipToken.balanceOf(who);
+    };
+
+    //*Query token info
+    public query func logoToken() : async Text {
+        return tokenConfig.logo;
+    };
+
+    public query func nameToken() : async Text {
+        return tokenConfig.name;
+    };
+
+    public query func symbolToken() : async Text {
+        return tokenConfig.symbol;
+    };
 
     //*=======================================*//
     //*                NFT API                *//
