@@ -102,3 +102,32 @@ export const UserCard = ({ style, onClick, id, to="#", title, overlay, image, pe
         </motion.div>
     )
 }
+
+export const UserCardDetail = ({ style, onClick, id, to="#", title, overlay, image, permission }) => {
+    return (
+        <motion.div className="card--detail" style={ style } onClick={onClick} layoutId={id && `card-container-${id}`}>
+            <Link to={to}>
+                <motion.div style={{ backgroundImage: `url(${image})` }} className={`card--detail-image ${ overlay ? "overlay" : "" }`} layoutId={id && `card-image-container-${id}`}>
+                <motion.span className="card--detail__title">{ title }</motion.span>
+                </motion.div>
+                <motion.div style={{ 
+                    bottom: '100px',
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                    flexDirection: "column",
+                    alignItems: 'center',
+                    marginTop : "1rem"
+
+                }}>
+                    <motion.select className="card--detail__permission">
+                        <motion.option>Admin</motion.option>
+                        <motion.option>User</motion.option>
+                    </motion.select>
+                    <motion.button className="card--detail-button">Save</motion.button>
+                </motion.div>
+            </Link>
+            
+        </motion.div>
+    )
+}

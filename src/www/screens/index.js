@@ -6,6 +6,7 @@ import { ItemInformation } from './Product/Information/Item';
 import { ProductCategoryList } from './Product/Category/List';
 import { NFTCreateScreen } from './Product/Create';
 import { Permission } from "./Permission";
+import { UserDetail } from "./Permission/UserDetail"
 
 import { QRScanScreen } from './QRScan';
 
@@ -29,7 +30,10 @@ const Screens =  {
     },
     QRScan: QRScanScreen,
     Profile: ProfileScreen,
-    Permission: Permission
+    Permission: {
+        Permission: Permission,
+        UserDetail: UserDetail
+    }
 }
 
 export default Screens;

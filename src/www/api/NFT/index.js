@@ -30,9 +30,27 @@ export const NFT = {
 
         //*Upload
         let hero = await actor;
-        
-		const res = await hero.mintNFT(metadata);
 
+        const { principal } = usePlug();
+
+        console.log(hero);
+        console.log(principal);
+
+        // dwnme-emfnk-cvnqx-rwld3-nl2ho-34f2n-ag2k6-qmcql-6fy6t-bp43n-lae
+        
+		const res = await hero.mintDip721(Principal.fromText(principal), [{
+            purpose: 'Rendered',
+            key_val_data: [
+                {
+                    key : "description",
+                    val : {
+                        TextContent : "A",
+                    }
+                }
+            ],
+            data: [0]
+        }]); 
+        
         console.log(res);
 
         return res;

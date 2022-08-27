@@ -1,34 +1,23 @@
 // Version: 1.0.0
-type TokenGiftInfo__1 =
+type List<T> = ?(T, List<T>);
+type MetadataDesc = [MetadataPart];
+type MetadataKeyVal = {key : Text; val : MetadataVal};
+type MetadataPart =
+  {data : Blob; key_val_data : [MetadataKeyVal]; purpose : MetadataPurpose};
+type MetadataPurpose = {#Preview; #Rendered};
+type MetadataVal =
   {
-    createdBy : Principal;
-    description : Text;
-    id : Text;
-    image : Text;
-    name : Text;
-    price : Nat
+    #BlobContent : Blob;
+    #Nat16Content : Nat16;
+    #Nat32Content : Nat32;
+    #Nat64Content : Nat64;
+    #Nat8Content : Nat8;
+    #NatContent : Nat;
+    #TextContent : Text
   };
-type TokenInfo__1 =
-  {
-    var category : Text;
-    var checkin : Bool;
-    var createdBy : Principal;
-    var date : Text;
-    var dateCreated : Text;
-    var description : Text;
-    var details : Text;
-    var gifts : [TokenGiftInfo__1];
-    var id : Text;
-    var image : Text;
-    var name : Text;
-    var nftType : Text;
-    var owner : Principal;
-    var place : Text;
-    var price : Nat;
-    var time : Text
-  };
-type TokenInfo__3 = TokenInfo__1;
-type UserInfo__1 =
+type Nft = {id : TokenId; metadata : MetadataDesc; owner : Principal};
+type TokenId = Nat64;
+type UserInfo =
   {
     var dateOfBirth : Text;
     var firstName : Text;
@@ -38,10 +27,15 @@ type UserInfo__1 =
     var phone : Text;
     var sex : Nat
   };
-type UserInfo__2 = UserInfo__1;
+type UserInfo__1 = UserInfo;
 actor {
   stable var blackhole : Principal;
-  stable var owner_ : Principal;
-  stable var tokensEntries : [(Text, TokenInfo__3)];
-  stable var usersEntries : [(Principal, UserInfo__2)]
+  stable var custodians : ?(Principal, List<Principal>);
+  stable var logo : {data : Text; logo_type : Text};
+  stable var maxLimit : Nat16;
+  stable var name : Text;
+  stable var nfts : ?(Nft, List<Nft>);
+  stable var symbol : Text;
+  stable var transactionId : Nat;
+  stable var usersEntries : [(Principal, UserInfo__1)]
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { AnimatePresence } from "framer-motion";
 import { NavBar } from './NavBar';
@@ -10,9 +10,10 @@ import Screens from '@screens';
 //*Routes
 import { routes } from './routes';
 
+
 //*Stack
 const RootStack = () => {
-    return (
+  return (
       <>
         <NavBar/>
         <Routes>
@@ -25,7 +26,8 @@ const RootStack = () => {
           <Route exact path={routes.QR_SCAN} element={<Screens.QRScan />}/>
 
           <Route exact path={routes.SETTINGS} element={<Screens.Settings />}/>
-          <Route exact path={routes.PERMISSION} element={<Screens.Permission />}/>
+          <Route exact path={routes.PERMISSION.PERMISSION} element={<Screens.Permission.Permission />}/>
+          <Route exact path={routes.PERMISSION.USERDETAIL} element={<Screens.Permission.UserDetail />}/>
 
           <Route exact path={routes.PRODUCT.CATEGORY.OWNED} element={<Screens.Product.Category.List />}/>
           <Route exact path={routes.PRODUCT.CATEGORY.LIST} element={<Screens.Product.Category.List />}/>

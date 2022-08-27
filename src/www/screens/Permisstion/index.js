@@ -5,73 +5,61 @@ export const Permission = ({ match, navigation }) => {
 
     const users = [
         {
-            id: 1,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "yasuo",
             permission: "pro"
         },
         {
-            id: 2,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/50e23920-bfbb-4404-b5c1-0e3279b0010b/original.png?d=sm-cover",
             name: "yi",
             permission: "nood"
         },
         {
-            id: 3,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "vi",
             permission: "pro"
         },
         {
-            id: 4,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "garen",
             permission: "nood"
         },
         {
-            id: 5,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "darius",
             permission: "pro"
         },
         {
-            id: 6,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "kayle",
             permission: "pro"
         },
         {
-            id: 7,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "pyke",
             permission: "pro"
         },
         {
-            id: 8,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "vi",
             permission: "pro"
         },
         {
-            id: 9,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "garen",
             permission: "nood"
         },
         {
-            id: 10,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "darius",
             permission: "pro"
         },
         {
-            id: 11,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "kayle",
             permission: "pro"
         },
         {
-            id: 12,
             image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
             name: "pyke",
             permission: "pro"
@@ -92,22 +80,26 @@ export const Permission = ({ match, navigation }) => {
     //     )
     // }
 
+
+    const redirectDetailUser = () => {
+        console.log("Redirect");
+    }
+
     // style, onClick, id, to="#", title, overlay, image
     const array = users.reduce((result, user) => {
-        const Item = <UserCard overlay title={user.name} key={user.id} to={`/user-detail/${user.id}`} permission={user.permission} image={user.image} style={{ marginTop: 0, marginRight: 0, width: 160 }}/>
+        const Item = <UserCard overlay title={user.name} onClick={redirectDetailUser} permission={user.permission} image={user.image} style={{ marginTop: 0, marginRight: 0, width: 160 }} key={"sp-b"}/>
         return result.push(Item) && result;
-    }, []);
+    }, [])
 
     return (
-       <>   
-            <div style={{marginLeft: "10px"}}>
-                <Title
+       <>
+            <Title
+                style = {{marginLeft : "10px"}}
                     subtitle=""
-                    title="PERMISSION"
+                    title="PERMISSTION"
                 />
-            </div>
 
-            <ScrollView style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", marginBottom: "50px" }} horizontal>
+            <ScrollView style={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }} horizontal>
                 
 
                 {/* <GridView
@@ -122,11 +114,13 @@ export const Permission = ({ match, navigation }) => {
                         />
                         })}
                 /> */}
-                <GridView
-                    items={array}
-                />
+
+            <GridView
+                items={array}
+            />
 
             </ScrollView>
+            
         </>
     )
 }  
