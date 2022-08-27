@@ -30,15 +30,36 @@ import Types "./types";
 import Option "mo:base/Option";
 import List "mo:base/List";
 import DIP20Token "./token";
-import Nat8 "mo:base/Nat8";
-import Nat16 "mo:base/Nat16";
-import Nat32 "mo:base/Nat32";
+import NFT "./erc721";
+import ExtNonFungible "./ext/NonFungible";
+import ExtCore "./ext/Core";
+import Debug "mo:base/Debug";
 import Nat64 "mo:base/Nat64";
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
     ) = this {
     private stable var blackhole: Principal = Principal.fromText("aaaaa-aa");
+    private var capacity : Nat = 360000000000;
+    var balance = 0;
+
+    // Return the current cycle balance
+    public shared(msg) func wallet_balance() : async Nat {
+      return balance;
+    };
+
+    // Return the cycles received up to the capacity allowed
+    public func wallet_receive() : async { accepted: Nat64 } {
+      let amount = Cycles.available();
+      let limit : Nat = capacity - balance;
+      let accepted =
+        if (amount <= limit) amount
+        else limit;
+      let deposit = Cycles.accept(accepted);
+      assert (deposit == accepted);
+      balance += accepted;
+      { accepted = Nat64.fromNat(accepted) };
+    };
 
     //*=======================================*//
     //*            DIP20 TOKEN API            *//
@@ -72,36 +93,30 @@ shared(msg) actor class NFTSale(
 
     //*MINT & BURN
     //*Mint
-    public shared({ caller }) func mint(to: Principal, value: Nat) : async TxReceipt {
+    public shared({ caller }) func mintToken(to: Principal, value: Nat) : async TxReceipt {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
         return await dipToken.mint(to, value);
     };
 
     //*Burn
-    public shared({ caller }) func burn(value: Nat) : async TxReceipt {
+    public shared({ caller }) func burnToken(value: Nat) : async TxReceipt {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
         return await dipToken.burn(value);
     };
 
     //*Transfer
-    public shared({ caller }) func transfer(to: Principal, value: Nat) : async TxReceipt {
+    public shared({ caller }) func transferToken(to: Principal, value: Nat) : async TxReceipt {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
-        return await dipToken.transfer(to, value);
+        await dipToken.transfer(to, value);
     };
 
-    // public shared({ caller }) func transferFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
-    //     let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
-
-    //     return await dipToken.transferFrom(from, to, value);
-    // };
-
-    public shared(msg) func approve(spender: Principal, value: Nat) : async TxReceipt {
+    public shared({ caller }) func transferTokenFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
         let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
 
-        return await dipToken.approve(spender, value);
+        await dipToken.transferFrom(from, to, value);
     };
 
     //*Queries
@@ -124,190 +139,159 @@ shared(msg) actor class NFTSale(
         return tokenConfig.symbol;
     };
 
-    public query func decimals() : async Nat8 {
-        return tokenConfig.decimals;
-    };
-
-    public query func totalSupply() : async Nat {
-        return tokenConfig.totalSupply;
-    };
-
-    public query func getTokenFee() : async Nat {
-        return tokenConfig.fee;
-    };
-
-    public shared({caller}) func allowance(owner: Principal, spender: Principal) : async Nat {
-        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
-
-        return await dipToken.allowance(owner, spender);
-    };
-    
-
     //*=======================================*//
     //*                NFT API                *//
     //*=======================================*//
     //#region
+    type TokenInfo = Types.TokenInfo;
+    type TokenInfoExt = Types.TokenInfoExt;
+    type TokenCategory = Types.TokenCategory;
+    type TokenGiftInfo = Types.TokenGiftInfo;
+    type MintRequest  = ExtNonFungible.MintRequest ;
+  type TokenIndex  = ExtCore.TokenIndex ;
 
-  stable var transactionId: Types.TransactionId = 0;
-  stable var nfts = List.nil<Types.Nft>();
-  stable var custodians = List.make<Principal>(_owner);
-  stable var logo : Types.LogoResult = {
-    logo_type = "image/png";
-    data = ""
-  };
-  stable var name : Text = "MYDI";
-  stable var symbol : Text = "ADP";
-  stable var maxLimit : Nat16 = 100;
+    private stable var owner_: Principal = _owner;
+    private stable var tokensEntries : [(Text, TokenInfo)] = [];
+    private var tokens = HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
 
-  // https://forum.dfinity.org/t/is-there-any-address-0-equivalent-at-dfinity-motoko/5445/3
-  let null_address : Principal = Principal.fromText("aaaaa-aa");
-
-  public query func balanceOfDip721(user: Principal) : async Nat64 {
-    return Nat64.fromNat(
-      List.size(
-        List.filter(nfts, func(token: Types.Nft) : Bool { token.owner == user })
-      )
-    );
-  };
-
-  public query func ownerOfDip721(token_id: Types.TokenId) : async Types.OwnerResult {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (item) {
-      case (null) {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        return #Ok(token.owner);
-      };
-    };
-  };
-
-  public shared({ caller }) func safeTransferFromDip721(from: Principal, to: Principal, token_id: Types.TokenId) : async Types.TxReceipt {  
-    if (to == null_address) {
-      return #Err(#ZeroAddress);
-    } else {
-      return transferFrom(from, to, token_id, caller);
-    };
-  };
-
-  public shared({ caller }) func transferFromDip721(from: Principal, to: Principal, token_id: Types.TokenId) : async Types.TxReceipt {
-    return transferFrom(from, to, token_id, caller);
-  };
-
-  func transferFrom(from: Principal, to: Principal, token_id: Types.TokenId, caller: Principal) : Types.TxReceipt {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        if (
-          caller != token.owner and
-          not List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })
-        ) {
-          return #Err(#Unauthorized);
-        } else if (Principal.notEqual(from, token.owner)) {
-          return #Err(#Other);
-        } else {
-          nfts := List.map(nfts, func (item : Types.Nft) : Types.Nft {
-            if (item.id == token.id) {
-              let update : Types.Nft = {
-                owner = to;
-                id = item.id;
-                metadata = token.metadata;
-              };
-              return update;
-            } else {
-              return item;
-            };
-          });
-          transactionId += 1;
-          return #Ok(transactionId);   
+    //*Priv Info to Ext
+    private func _tokenInfotoExt(info: TokenInfo) : TokenInfoExt {
+        return {
+            id = info.id;
+            createdBy = info.createdBy;
+            date = info.date;
+            description = info.description;
+            details = info.details;
+            gifts = info.gifts;
+            image = info.image;
+            name = info.name;
+            owner = info.owner;
+            place = info.place;
+            price = info.price;
+            time = info.time;
+            nftType = info.nftType; //item | ticket
+            category = info.category; //TokenCategory.id
+            dateCreated = info.dateCreated;
         };
-      };
-    };
-  };
-
-  public query func supportedInterfacesDip721() : async [Types.InterfaceId] {
-    return [#TransferNotification, #Burn, #Mint];
-  };
-
-  public query func logoDip721() : async Types.LogoResult {
-    return logo;
-  };
-
-  public query func nameDip721() : async Text {
-    return name;
-  };
-
-  public query func symbolDip721() : async Text {
-    return symbol;
-  };
-
-  public query func totalSupplyDip721() : async Nat64 {
-    return Nat64.fromNat(
-      List.size(nfts)
-    );
-  };
-
-  public query func getMetadataDip721(token_id: Types.TokenId) : async Types.MetadataResult {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.id == token_id });
-    switch (item) {
-      case null {
-        return #Err(#InvalidTokenId);
-      };
-      case (?token) {
-        return #Ok(token.metadata);
-      }
-    };
-  };
-
-  public query func getMaxLimitDip721() : async Nat16 {
-    return maxLimit;
-  };
-
-  public func getMetadataForUserDip721(user: Principal) : async Types.ExtendedMetadataResult {
-    let item = List.find(nfts, func(token: Types.Nft) : Bool { token.owner == user });
-    switch (item) {
-      case null {
-        return #Err(#Other);
-      };
-      case (?token) {
-        return #Ok({
-          metadata_desc = token.metadata;
-          token_id = token.id;
-        });
-      }
-    };
-  };
-
-  public query func getTokenIdsForUserDip721(user: Principal) : async [Types.TokenId] {
-    let items = List.filter(nfts, func(token: Types.Nft) : Bool { token.owner == user });
-    let tokenIds = List.map(items, func (item : Types.Nft) : Types.TokenId { item.id });
-    return List.toArray(tokenIds);
-  };
-
-  public shared({ caller }) func mintDip721(to: Principal, metadata: Types.MetadataDesc) : async Types.MintReceipt {
-    if (not List.some(custodians, func (custodian : Principal) : Bool { custodian == caller })) {
-      return #Err(#Unauthorized);
     };
 
-    let newId = Nat64.fromNat(List.size(nfts));
-    let nft : Types.Nft = {
-      owner = to;
-      id = newId;
-      metadata = metadata;
+    //*Create default token
+    private func _newToken(caller: Principal) : TokenInfo {
+        {
+            var id = "";
+            var date = "";
+            var description = "";
+            var details = "";
+            var gifts = [];
+            var image = "";
+            var name = "";
+            var price = 0;
+            var place = "";
+            var time = "";
+            var category = "";
+            var nftType = "";
+            var createdBy = caller;
+            var owner = caller;
+            var dateCreated = "";
+            var checkin = false;
+        }
     };
 
-    nfts := List.push(nft, nfts);
+    //*Mintning
+    public shared({ caller }) func mintNFT(metadata: MintRequest): async TokenIndex {
+        let token = await NFT.erc721_token(caller);
 
-    transactionId += 1;
+        await token.setMinter(caller);
 
-    return #Ok({
-      token_id = newId;
-      id = transactionId;
-    });
-  };
+        Debug.print("===== BEFORE =====");
+
+        Debug.print(Nat.toText(Cycles.balance()));
+        Debug.print(Nat.toText(Cycles.available()));
+
+        Cycles.add(10_000_000_000_000);
+
+        Debug.print("===== AFTER =====");
+
+        Debug.print(Nat.toText(Cycles.balance()));
+        Debug.print(Nat.toText(Cycles.available()));
+        return await token.mintNFT(metadata);
+    };
+
+    //*Mint Clone
+    public shared({ caller }) func mintCloneNFT(id: Text, randomId: Text) : async TokenInfoExt {
+        switch(tokens.get(id)) {
+            case(?token) {
+                var newNFT = _newToken(caller);
+        
+                newNFT.id := token.id # "-" # randomId;
+                newNFT.date := token.date;
+                newNFT.description := token.description;
+                newNFT.details := token.details;
+                newNFT.gifts := token.gifts;
+                newNFT.image := token.image;
+                newNFT.name := token.name;
+                newNFT.price := token.price;
+                newNFT.place := token.place;
+                newNFT.time := token.time;
+                newNFT.category := token.category;
+                newNFT.nftType := token.nftType;
+                newNFT.createdBy := token.createdBy;
+                newNFT.dateCreated := token.dateCreated;
+
+                tokens.put(newNFT.id, newNFT);
+
+                return _tokenInfotoExt(token);
+            };
+            case(_) {
+                throw Error.reject("token not exist");
+            }
+        }
+    };
+
+    //*Clear all NFT
+    public func clearAllTokens() {
+        if(msg.caller != owner_) {
+            return;
+        };
+        tokens := HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
+    };
+
+    //*Get single tokens
+    public query func getTokenInfo(tokenId: Text) : async TokenInfoExt {
+        switch(tokens.get(tokenId)){
+            case(?tokeninfo) {
+                return _tokenInfotoExt(tokeninfo);
+            };
+            case(_) {
+                throw Error.reject("token not exist");
+            };
+        };
+    };
+
+    //* Get all tokens
+    public query func getAllTokens() : async [TokenInfoExt] {
+        Iter.toArray(Iter.map(tokens.entries(), func (i: (Text, TokenInfo)): TokenInfoExt {_tokenInfotoExt(i.1)}))
+    };
+
+    //*Verify Ticket
+    public func checkinTicket(ticketId: Text, principalId: Principal) : async Text {
+        switch(tokens.get(ticketId)) {
+            case(?ticketInfo) {
+                if(ticketInfo.owner == principalId) {
+                    if(ticketInfo.checkin) {
+                        ticketInfo.checkin := true;
+
+                        return "TICKET_VALID"
+                    }
+                };
+
+                throw Error.reject("TICKET_INVALID");
+            };
+            case(_) {
+                throw Error.reject("TICKET_INVALID");
+            }
+        }
+    };
     
     //#endregion
 
@@ -342,6 +326,7 @@ shared(msg) actor class NFTSale(
             var liveIn = "";
             var phone = "";
             var id = principalId;
+            var permission = 0;
         }
     };
 
@@ -354,6 +339,7 @@ shared(msg) actor class NFTSale(
             liveIn = info.liveIn;
             phone = info.phone;
             id = info.id;
+            permission = info.permission;
         };
     };
 
@@ -368,6 +354,7 @@ shared(msg) actor class NFTSale(
                     liveIn = info.liveIn;
                     phone = info.phone;
                     id = info.id;
+                    permission = info.permission;
                 };
             };
             case _ {
@@ -398,7 +385,7 @@ shared(msg) actor class NFTSale(
     };
 
     //*UPDATE ACCOUNT
-    public func updateAccount(principalId : Principal, firstName : Text, lastName: Text, sex : Nat, dateOfBirth : Text, phone: Text, liveIn: Text) : async UserInfoExt {
+    public func updateAccount(principalId : Principal, firstName : Text, lastName: Text, sex : Nat, dateOfBirth : Text, phone: Text, liveIn: Text, permission: Nat) : async UserInfoExt {
         let user = _newUser(principalId);
 
         user.firstName := firstName;
@@ -407,6 +394,7 @@ shared(msg) actor class NFTSale(
         user.dateOfBirth := dateOfBirth;
         user.phone := phone;
         user.liveIn :=  liveIn;
+        user.permission := permission;
 
         switch (users.get(principalId)) {
             case _ {
@@ -440,15 +428,15 @@ shared(msg) actor class NFTSale(
     // upgrade functions
     system func preupgrade() {
         usersEntries := Iter.toArray(users.entries());
-        //tokensEntries := Iter.toArray(tokens.entries());
+        tokensEntries := Iter.toArray(tokens.entries());
     };
 
     system func postupgrade() {
         users := HashMap.fromIter<Principal, UserInfo>(usersEntries.vals(), 1, Principal.equal, Principal.hash);
         usersEntries := [];
 
-        //tokens := HashMap.fromIter<Text, TokenInfo>(tokensEntries.vals(), 1, Text.equal, Text.hash);
-       //tokensEntries := [];
+        tokens := HashMap.fromIter<Text, TokenInfo>(tokensEntries.vals(), 1, Text.equal, Text.hash);
+        tokensEntries := [];
     };
 
     //#enregion

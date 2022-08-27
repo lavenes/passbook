@@ -1,92 +1,64 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export type ApiError = { 'ZeroAddress' : null } |
-  { 'InvalidTokenId' : null } |
-  { 'Unauthorized' : null } |
-  { 'Other' : null };
-export type ExtendedMetadataResult = {
-    'Ok' : { 'token_id' : TokenId, 'metadata_desc' : MetadataDesc }
-  } |
-  { 'Err' : ApiError };
-export type InterfaceId = { 'Burn' : null } |
-  { 'Mint' : null } |
-  { 'Approval' : null } |
-  { 'TransactionHistory' : null } |
-  { 'TransferNotification' : null };
-export interface LogoResult { 'data' : string, 'logo_type' : string }
-export type MetadataDesc = Array<MetadataPart>;
-export interface MetadataKeyVal { 'key' : string, 'val' : MetadataVal }
-export interface MetadataPart {
-  'data' : Array<number>,
-  'key_val_data' : Array<MetadataKeyVal>,
-  'purpose' : MetadataPurpose,
-}
-export type MetadataPurpose = { 'Preview' : null } |
-  { 'Rendered' : null };
-export type MetadataResult = { 'Ok' : MetadataDesc } |
-  { 'Err' : ApiError };
-export type MetadataVal = { 'Nat64Content' : bigint } |
-  { 'Nat32Content' : number } |
-  { 'Nat8Content' : number } |
-  { 'NatContent' : bigint } |
-  { 'Nat16Content' : number } |
-  { 'BlobContent' : Array<number> } |
-  { 'TextContent' : string };
-export type MintReceipt = { 'Ok' : MintReceiptPart } |
-  { 'Err' : ApiError };
-export interface MintReceiptPart { 'id' : bigint, 'token_id' : TokenId }
+export type AccountIdentifier = string;
+export interface MintRequest { 'to' : User, 'metadata' : [] | [Array<number>] }
 export interface NFTSale {
-  'allowance' : ActorMethod<[Principal, Principal], bigint>,
-  'approve' : ActorMethod<[Principal, bigint], TxReceipt__1>,
   'balanceOf' : ActorMethod<[Principal], bigint>,
-  'balanceOfDip721' : ActorMethod<[Principal], bigint>,
-  'burn' : ActorMethod<[bigint], TxReceipt__1>,
+  'burnToken' : ActorMethod<[bigint], TxReceipt>,
+  'checkinTicket' : ActorMethod<[string, Principal], string>,
+  'clearAllTokens' : ActorMethod<[], undefined>,
   'createAccount' : ActorMethod<
     [string, string, bigint, string, string, string],
     UserInfoExt,
   >,
-  'decimals' : ActorMethod<[], number>,
   'deleteAccount' : ActorMethod<[Principal], boolean>,
-  'getMaxLimitDip721' : ActorMethod<[], number>,
-  'getMetadataDip721' : ActorMethod<[TokenId], MetadataResult>,
-  'getMetadataForUserDip721' : ActorMethod<[Principal], ExtendedMetadataResult>,
-  'getTokenFee' : ActorMethod<[], bigint>,
-  'getTokenIdsForUserDip721' : ActorMethod<[Principal], Array<TokenId>>,
+  'getAllTokens' : ActorMethod<[], Array<TokenInfoExt>>,
+  'getTokenInfo' : ActorMethod<[string], TokenInfoExt>,
   'getUserInfo' : ActorMethod<[Principal], [] | [UserInfoExt]>,
-  'logoDip721' : ActorMethod<[], LogoResult>,
   'logoToken' : ActorMethod<[], string>,
-  'mint' : ActorMethod<[Principal, bigint], TxReceipt__1>,
-  'mintDip721' : ActorMethod<[Principal, MetadataDesc], MintReceipt>,
-  'nameDip721' : ActorMethod<[], string>,
+  'mintCloneNFT' : ActorMethod<[string, string], TokenInfoExt>,
+  'mintNFT' : ActorMethod<[MintRequest], TokenIndex>,
+  'mintToken' : ActorMethod<[Principal, bigint], TxReceipt>,
   'nameToken' : ActorMethod<[], string>,
-  'ownerOfDip721' : ActorMethod<[TokenId], OwnerResult>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
-  'safeTransferFromDip721' : ActorMethod<
-    [Principal, Principal, TokenId],
-    TxReceipt,
-  >,
-  'supportedInterfacesDip721' : ActorMethod<[], Array<InterfaceId>>,
-  'symbolDip721' : ActorMethod<[], string>,
   'symbolToken' : ActorMethod<[], string>,
-  'totalSupply' : ActorMethod<[], bigint>,
-  'totalSupplyDip721' : ActorMethod<[], bigint>,
-  'transfer' : ActorMethod<[Principal, bigint], TxReceipt__1>,
-  'transferFromDip721' : ActorMethod<
-    [Principal, Principal, TokenId],
-    TxReceipt,
-  >,
+  'transferToken' : ActorMethod<[Principal, bigint], TxReceipt>,
+  'transferTokenFrom' : ActorMethod<[Principal, Principal, bigint], TxReceipt>,
   'updateAccount' : ActorMethod<
-    [Principal, string, string, bigint, string, string, string],
+    [Principal, string, string, bigint, string, string, string, bigint],
     UserInfoExt,
   >,
+  'wallet_balance' : ActorMethod<[], bigint>,
+  'wallet_receive' : ActorMethod<[], { 'accepted' : bigint }>,
 }
-export type OwnerResult = { 'Ok' : Principal } |
-  { 'Err' : ApiError };
-export type TokenId = bigint;
+export interface TokenGiftInfo {
+  'id' : string,
+  'name' : string,
+  'createdBy' : Principal,
+  'description' : string,
+  'image' : string,
+  'price' : bigint,
+}
+export type TokenIndex = number;
+export interface TokenInfoExt {
+  'id' : string,
+  'dateCreated' : string,
+  'owner' : Principal,
+  'date' : string,
+  'name' : string,
+  'createdBy' : Principal,
+  'time' : string,
+  'description' : string,
+  'gifts' : Array<TokenGiftInfo>,
+  'nftType' : string,
+  'details' : string,
+  'category' : string,
+  'image' : string,
+  'place' : string,
+  'price' : bigint,
+}
 export type TxReceipt = { 'Ok' : bigint } |
-  { 'Err' : ApiError };
-export type TxReceipt__1 = { 'Ok' : bigint } |
   {
     'Err' : { 'InsufficientAllowance' : null } |
       { 'InsufficientBalance' : null } |
@@ -98,9 +70,12 @@ export type TxReceipt__1 = { 'Ok' : bigint } |
       { 'BlockUsed' : null } |
       { 'AmountTooSmall' : null }
   };
+export type User = { 'principal' : Principal } |
+  { 'address' : AccountIdentifier };
 export interface UserInfoExt {
   'id' : Principal,
   'sex' : bigint,
+  'permission' : bigint,
   'dateOfBirth' : string,
   'phone' : string,
   'lastName' : string,

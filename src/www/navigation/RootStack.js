@@ -28,6 +28,8 @@ const RootStack = () => {
           <Route exact path={routes.SETTINGS} element={<Screens.Settings />}/>
           <Route exact path={routes.PERMISSION.PERMISSION} element={<Screens.Permission.Permission />}/>
           <Route exact path={routes.PERMISSION.USERDETAIL} element={<Screens.Permission.UserDetail />}/>
+          <Route exact path={routes.PERMISSION.ADDUSER} element={<Screens.Permission.AddUser />}/>
+          <Route exact path={routes.PRODUCT.EXCHANGE} element={<Screens.Product.Exchange />}/>
 
           <Route exact path={routes.PRODUCT.CATEGORY.OWNED} element={<Screens.Product.Category.List />}/>
           <Route exact path={routes.PRODUCT.CATEGORY.LIST} element={<Screens.Product.Category.List />}/>

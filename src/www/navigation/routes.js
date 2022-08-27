@@ -12,11 +12,13 @@ export const routes = {
         CATEGORY: {
             OWNED: '/products/categories/owned/:categoryId',
             LIST: '/products/categories/:categoryId',
-        }
+        },
+        EXCHANGE: '/exchange'
     },
     PROFILE: '/users/:principalId',
     PERMISSION: {
         PERMISSION: '/permission',
-        USERDETAIL: '/user-detail/:userId'
+        USERDETAIL: '/user-detail/:userId',
+        ADDUSER: '/user/add-user',
     }
 };

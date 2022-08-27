@@ -92,6 +92,22 @@ export const NFTCreateScreen = () => {
         setGifts([giftData]);
     }
 
+    // Chua viet back nha
+    const check = (e) => {
+        if(e.target.checked){
+            setNFTs(prev=>{
+                return [...prev, "Cashback"]
+            });
+        }
+        else {
+            setNFTs(prev=>{
+                return prev.filter(item => {
+                    return item!== "Cashback"
+                })
+            });
+        }
+    }
+
     return(
         <View>
             <Title
@@ -117,6 +133,13 @@ export const NFTCreateScreen = () => {
             { type == "ticket" && <TextInput onChange={e => setTime(e.target.value)} placeholder="Time" type="time"/> }
 
             <TextInput onChange={e => setPrice(e.target.value)} placeholder="Price" type="number"/>
+
+            <div style={{marginTop: "10px", marginLeft: "10px"}}>
+                <label style={{
+                    fontSize: "12px",
+                }}>Preoder</label>
+                <input type="checkbox" style={{marginTop: "7px", marginLeft: "10px",}} onChange={check}></input>
+            </div>
 
             <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {
                 return {

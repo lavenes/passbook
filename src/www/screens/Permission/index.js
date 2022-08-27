@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Title, ScrollView, GridView, UserCard } from '@components';
+import { View, Title, ScrollView, GridView, UserCard, Button } from '@components';
 
 export const Permission = ({ match, navigation }) => {
 
@@ -107,7 +107,7 @@ export const Permission = ({ match, navigation }) => {
                 />
             </div>
 
-            <ScrollView style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", marginBottom: "50px" }} horizontal>
+            <ScrollView style={{ display: "flex", flexWrap: "wrap", justifyContent: "center"}} horizontal>
                 
 
                 {/* <GridView
@@ -127,6 +127,9 @@ export const Permission = ({ match, navigation }) => {
                 />
 
             </ScrollView>
+            <div style={{marginBottom: "70px", display: "flex", justifyContent: "center"}}>
+            <Button style = {{width: "95%"}}  to="/user/add-user">Add</Button>
+            </div>
         </>
     )
 }  
