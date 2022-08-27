@@ -21,5 +21,7 @@ export const routes = {
         PERMISSION: '/permission',
         USERDETAIL: '/user-detail/:userId',
         ADDUSER: '/user/add-user',
-    }
+    },
+    CONNECT: '/connect',
+    NOTIFICATIONS: '/Notifications'
 };

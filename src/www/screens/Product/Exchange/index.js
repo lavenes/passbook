@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components';
 import API from '@api';
+import { usePlug } from '@hooks';
 
 export const Exchange = () => {
     const { ticketIdParam } = useParams();
-
-    console.log(ticketIdParam);
+    const { principal, accountId, getBalance, actor } = usePlug();
 
     const [ticket, setTicket] = useState("");
     const [principalIdUserSend, setPrincipalIdUserSend] = useState("");
@@ -19,16 +19,21 @@ export const Exchange = () => {
     const fetchData = async () => {
         const ticket = await API.NFT.get(ticketIdParam);
         const tokens = await API.NFT.getAll();
+
+        let ownedNFT = await API.NFT.getOwned();
+
         setTicket(ticket);
-
-        console.log("GET ALL");
-
-        console.log(ticket);
+        
     }
 
-
     const handleExchange = () => {
-        // handle
+        const principalId = window.ic.plug.sessionManager.sessionData.principalId;
+        console.log({
+            principalId,
+            principalIdUserSend,
+            principalIdUserRecieve,
+            ticket
+        })
     }
 
     const image = "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover";
@@ -41,13 +46,11 @@ export const Exchange = () => {
 
             <TextInput onChange={(e) => setPrincipalIdUserRecieve(e.target.value)} placeholder="Enter id to user" type="text"/>
 
-            <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${ image })`, width: '100%', height: 300, marginTop: 12 }}>
-                <label id="" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">HELLO</label>
-            </div>
+            <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${ ticket.image })`, width: '100%', height: 300, marginTop: 12 }}></div>
 
             <TextInput disabled onChange={(e) => setPrincipalIdUserSend(e.target.value)} value={ticket.price} placeholder={ticket.price} type="number"/>
             
-            <Button style={{ marginTop: 32 }} onClick={() => {}}>Send</Button>
+            <Button style={{ marginTop: 32 }} onClick={handleExchange}>Send</Button>
         </View>
     )
 }

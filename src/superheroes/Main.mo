@@ -37,6 +37,79 @@ shared(msg) actor class NFTSale(
     private stable var blackhole: Principal = Principal.fromText("aaaaa-aa");
 
     //*=======================================*//
+    //*               EVENTS API              *//
+    //*=======================================*//
+    type SaleEvent = Types.SaleEvent;
+    type SaleEventExt = Types.SaleEventExt;
+
+    private stable var saleEventEntries : [(Text, SaleEvent)] = [];
+    private var saleEvents = HashMap.HashMap<Text, SaleEvent>(1, Text.equal, Text.hash);
+
+    private func _newSaleEvent(owner: Principal) : SaleEvent {
+      return {
+        var id = "";
+        var start = "";
+        var end = "";
+        var nftId = "";
+        var priceSale = 0;
+        var supplies = 0;
+        var owner = owner;
+      }
+    };
+
+    private func _saleEventToExt(event: SaleEvent) : SaleEventExt {
+      return {
+        id = event.id;
+        start = event.start;
+        end = event.end;
+        nftId = event.nftId;
+        priceSale = event.priceSale;
+        supplies = event.supplies;
+        owner = event.owner;
+      }
+    };
+
+    //*Create sale event
+    public shared({ caller }) func createSaleEvent(event : SaleEventExt) : async SaleEventExt {
+      var pEvent = _newSaleEvent(caller);
+
+      pEvent.id := event.id;
+      pEvent.start := event.start;
+      pEvent.end := event.end;
+      pEvent.nftId := event.nftId;
+      pEvent.priceSale := event.priceSale;
+      pEvent.supplies := event.supplies;
+
+      switch(saleEvents.get(event.id)) {
+        case(?event) {
+          let res = saleEvents.replace(event.id, pEvent);
+        };
+        case _ {
+          saleEvents.put(event.id, pEvent);
+        };
+      };
+
+      return event;
+    };
+
+    //*Get all sale event
+    public shared({ caller }) func getAllSaleEvents() : async [SaleEventExt] {
+      Iter.toArray(Iter.map(saleEvents.entries(), func (i: (Text, SaleEvent)): SaleEventExt {_saleEventToExt(i.1)}))
+    };
+
+    //*Get sale event by event id
+    public shared({ caller }) func getSaleEvent(eventId: Text) : async SaleEventExt {
+      switch(saleEvents.get(eventId)) {
+        case(?event) {
+          return _saleEventToExt(event);
+        };
+        case _ {
+          throw Error.reject("sale event not found");
+        };
+      };
+    };
+ 
+    //*=======================================*//
     //*            PBC TOKEN API              *//
     //*=======================================*//
     type PBCToken = Types.PBCToken;
@@ -276,6 +349,38 @@ shared(msg) actor class NFTSale(
           throw Error.reject("nft not exist")
         }
       }
+    };
+
+    //*Swap NFT
+    public shared({ caller }) func swapNFT(fromNFT: Text, toNFT: Text) : async Text {
+      var fromNft = tokens.get(fromNFT);
+      var toNft = tokens.get(toNFT);
+
+      switch(fromNft) {
+        case(?fromNft) {
+          switch(toNft) {
+            case(?toNft) {
+              var fromNftOwner = fromNft.owner;
+
+              fromNft.owner := toNft.owner;
+              toNft.owner := fromNftOwner;
+
+              let resFrom = tokens.replace(fromNft.id, fromNft);
+              let resTo = tokens.replace(toNft.id, toNft);
+
+              return "OK";
+            };
+            case _ {
+              throw Error.reject("nft not exist");
+            }
+          }
+        };
+        case _ {
+          throw Error.reject("nft not exist");
+        }
+      };
+
+      return "OK";
     };
 
     //*Burn Token

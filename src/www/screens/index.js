@@ -9,7 +9,9 @@ import { NFTCreateScreen } from './Product/Create';
 import { Permission } from "./Permission";
 import { UserDetail } from "./Permission/UserDetail";
 import { AddUser } from "./Permission/AddUser";
-import { CreateSaLeEvents } from "./Product/sale"
+import { CreateSaLeEvents } from "./Product/sale";
+import { Connect } from "./Connect";
+import { Notifications } from "./Notifications";
 
 import { QRScanScreen } from './QRScan';
 
@@ -39,7 +41,9 @@ const Screens =  {
         Permission: Permission,
         UserDetail: UserDetail,
         AddUser: AddUser
-    }
+    },
+    Connect: Connect,
+    Notifications: Notifications,
 }
 
 export default Screens;

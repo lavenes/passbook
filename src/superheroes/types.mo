@@ -25,6 +25,29 @@ import Principal "mo:base/Principal";
 
 module {
     //*=======================================*//
+    //*              EVENT TYPE               *//
+    //*=======================================*//
+    public type SaleEvent = {
+        var id: Text;
+        var start: Text;
+        var end: Text;
+        var nftId: Text;
+        var priceSale: Nat;
+        var supplies: Nat;
+        var owner: Principal;
+    };
+
+    public type SaleEventExt = {
+        id: Text;
+        start: Text;
+        end: Text;
+        nftId: Text;
+        priceSale: Nat;
+        supplies: Nat;
+        owner: Principal;
+    };
+
+    //*=======================================*//
     //*            PBC TOKEN TYPE            *//
     //*=======================================*//
     public type PBCToken = {

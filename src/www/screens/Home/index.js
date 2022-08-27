@@ -17,6 +17,7 @@ export const HomeScreen = ({ match, navigation }) => {
         fetchData();
     }, []);
 
+
     const fetchData = async () => {
         //*Fetch balance
         let balance = await getBalance();

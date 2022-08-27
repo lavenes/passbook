@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { View, SelectBox, TextInput, Button, TextArea } from '@components';
 import { usePlug } from '@hooks';
+import API from "@api";
 import { Link } from 'react-router-dom';
 
 import "./styles.scss";
 
 export const SettingsScreen = () => {
     const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [phone, setPhone] = useState("");
+    const [date, setDate] = useState("");
+    const [liveIn, setLiveIn] = useState("");
+    const [sex, setSex] = useState(1);
 
     useEffect(() => {
       fetch();
@@ -28,6 +35,16 @@ export const SettingsScreen = () => {
       console.log(a);
     }
 
+    const handleSubmit = () => {
+      console.log({
+        firstName,
+        lastName,
+        date,
+        liveIn,
+        sex,
+      })
+    }
+
     return(
         <View className="setting-view">
           <div className="setting-view__user-info-container">
@@ -39,14 +56,21 @@ export const SettingsScreen = () => {
               </div>
           </div>
 
-          <TextInput placeholder="Họ tên"/>
+          <TextInput onChange={(e) => setFirstName(e.target.value)} placeholder="Họ"/>
+          <TextInput onChange={(e) => setLastName(e.target.value)} placeholder="Tên"/>
+          <TextInput onChange={(e) => setPhone(e.target.value)} placeholder="Số điện thoại" type="number"/>
 
-          <TextInput placeholder="Email"/>
+          <SelectBox onChange={e => setSex(e.target.value)} options={[ { value: "1", label: "Nam" }, { value: "0", label: "Nữ"} ]}/>
 
-          <TextArea  placeholder="Bio"/>
+          <TextInput onChange={e => setDate(e.target.value)} placeholder="Date" type="date"/>
+
+
+          <TextArea onChange={(e) => setLiveIn(e.target.value)}  placeholder="Nơi sống"/>
+
           <Button style={{ marginTop: 32 }} onClick={connect}>Connect Plug</Button>
-          <Button style={{ marginTop: 32 }}>Lưu</Button>
-          <Button style={{ marginTop: 32 }} to={"/permission"}>Quản lý phân quyền</Button>
+          <Button onClick={handleSubmit} style={{ marginTop: 32 }}>Lưu</Button>
+          <Button style={{ marginTop: 32 }} to={"/permission"}>Permission</Button>
+          <Button style={{ marginTop: 32 }} to={"/connect"}>Login nhớ check connect ví</Button>
         </View>
     )
 }

@@ -62,11 +62,20 @@ export const ItemInformation = ({ title, id }) => {
         console.log("DONE");
     }
 
+
     const ticketMeta = itemData;
 
-    const ClickHanle = () => {
-
+    const handleClick = (action) => {
+        switch (action.name) {
+            case "Send":
+                console.log(itemData);
+                window.location.href = `#/exchange/${itemData.id}`;
+                break;
+            default:
+                break;
+        }
     }
+
 
     return (
         <View className="item-information-screen" overlay layoutId={`card-container-${id}`} backdropImage={ ticketMeta?.image } style={{backgroundColor: '#f5f5f5'}}>
@@ -92,7 +101,7 @@ export const ItemInformation = ({ title, id }) => {
                     <CreatorCard name={ "OWNER" }/>
                     <ActionsGroup.Group>
                         {actions.map((action, index) => {
-                            return <ActionsGroup.Button key={index} onClick={(action) => {console.log(action.name)}} name={action.name} icon={action.icon}/>
+                            return <ActionsGroup.Button key={index} onClick={() => handleClick(action)} name={action.name} icon={action.icon}/>
                         })}
 
                         {/* <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Send" icon={<Icon.IoSendOutline/>}/>
