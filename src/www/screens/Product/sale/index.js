@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components';
+import { TextInput, View, Title, Button, TextArea, SelectBox, Back } from '@components';
 
 import "./styles.scss";
 
@@ -24,6 +24,7 @@ export const CreateSaLeEvents = () => {
 
     return(
         <View>
+            <Back/>
             <Title
                 title="Create sale events"
             />

@@ -41,12 +41,13 @@ export const HomeScreen = ({ match, navigation }) => {
             <View>
                 <AppBar.AppBar 
                     leading={
-                        <AppBar.ActionButton icon={<IoScan/>} to="/qr_scan"/>
+                        <AppBar.ActionButton icon={<IoScan/>} to="/checkin"/>
                     }
                     actions={
                         <AppBar.AvatarImage />
                     }
                 />
+
                 <BalanceCard balance={balance}/>
 
                 <Title

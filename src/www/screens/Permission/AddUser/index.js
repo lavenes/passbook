@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import { View, Title, ScrollView, GridView, UserCard, Button, TextInput, View } from '@components';
+import { View, Title, ScrollView, GridView, UserCard, Button, TextInput, View, Back } from '@components';
 
-import "./css.scss";
+import "./styles.scss";
 
 export const AddUser = () => {
     const [imagePreview, setImagePreview] = useState(null);
@@ -20,20 +20,17 @@ export const AddUser = () => {
 
         setImageUrl(uploadRes);
     }
-    //     var firstName: Text;
-    //     var lastName: Text;
-    //     var sex: Nat;
-    //     var dateOfBirth: Text;
-    //     var phone: Text;
-    //     var liveIn: Text;
+    
     return (
         <>
             <View>
+                <Back/>
                 <Title
                     subtitle=""
                     title="Add User"
                 >
                 </Title>
+                
                 <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${imagePreview})` }}>
                     <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={handleUploadImage} />
                     <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{!imagePreview && 'Upload image'}</label>

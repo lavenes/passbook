@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from "framer-motion";
 import { Link } from 'react-router-dom';
+import { SelectBox  } from "@components";
 
 import "./styles.scss";
 
@@ -114,16 +115,10 @@ export const UserCardDetail = ({ style, onClick, id, to="#", title, overlay, ima
                     bottom: '100px',
                     width: "100%",
                     display: "flex",
-                    justifyContent: "center",
+                    alignItems: "center",
                     flexDirection: "column",
-                    alignItems: 'center',
-                    marginTop : "1rem"
-
                 }}>
-                    <motion.select className="card--detail__permission">
-                        <motion.option>Admin</motion.option>
-                        <motion.option>User</motion.option>
-                    </motion.select>
+                    <SelectBox style={{ width: "80%" }} className="card--detail__select-box" options={[ { value: "1", label: "Admin" }, { value: "0", label: "User"} ]}/>
                     <motion.button className="card--detail-button">Save</motion.button>
                 </motion.div>
             </Link>

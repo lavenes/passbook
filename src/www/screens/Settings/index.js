@@ -43,6 +43,9 @@ export const SettingsScreen = () => {
         liveIn,
         sex,
       })
+
+
+
     }
 
     return(

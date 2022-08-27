@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Ticket, ActionsGroup, CreatorCard, PriceTitle, SectionDivider, Button, SectionTitle, InformationGroup } from '@components';
+import { View, Ticket, ActionsGroup, CreatorCard, PriceTitle, SectionDivider, Button, SectionTitle, InformationGroup, TextInput } from '@components';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import * as Icon from 'react-icons/io5';
@@ -110,9 +110,11 @@ export const ItemInformation = ({ title, id }) => {
                         <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Share" icon={<Icon.IoShareOutline/>}/> */}
                     </ActionsGroup.Group>
                     <SectionDivider/>
+                    <h4>Amount</h4>
+                    <input placeholder="1" type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px"}}/>
 
                     { !isOwned && 
-                        <Button style={{}} onClick={handlePurchase}>Buy</Button> }
+                        <Button style={{marginTop: "20px"}} onClick={handlePurchase}>Buy</Button> }
 
                     <SectionTitle title="Description" style={{ marginTop: 40 }}/>
 
@@ -176,6 +178,7 @@ export const ItemInformation = ({ title, id }) => {
                         order={ ticketMeta?.order }
                         qrValue={ qrValue }
                     /> } 
+                    <Button style={{ marginTop: 32 }} to={'/checkin'}>Check in</Button>
                     <div
 						style={{
 							backgroundColor: '#000',

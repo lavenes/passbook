@@ -26,6 +26,7 @@ const RootStack = () => {
           <Route exact path={routes.QR_SCAN} element={<Screens.QRScan />}/>
 
           <Route exact path={routes.NOTIFICATIONS} element={<Screens.Notifications />}/>
+          <Route exact path={routes.CHECKIN} element={<Screens.Checkin />}/>
 
           <Route exact path={routes.CONNECT} element={<Screens.Connect />}/>
 

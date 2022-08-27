@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Title, ScrollView, GridView, UserCard, Button } from '@components';
+import { View, Title, ScrollView, GridView, UserCard, Button, Back } from '@components';
 
 export const Notifications = ({ match, navigation }) => {
 

@@ -1,15 +1,13 @@
 import React from "react";
-import { IoIosArrowBack } from 'react-icons/io5';
+import { IoIosArrowBack } from 'react-icons/io';
+import { Link } from "react-router-dom";
 
-import "./style.scss";
-
-export default function Back() {
-
-    
-
+export const Back = ({ to = "/" }) => {
     return (
-        <div className="button-back">
-            <IoIosArrowBack />
-        </div>
+        <Link to={to}>
+            <div className="button-back">
+                <IoIosArrowBack size={22} />
+            </div>
+        </Link>
     )
 }

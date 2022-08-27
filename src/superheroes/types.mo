@@ -52,12 +52,12 @@ module {
     //*=======================================*//
     public type PBCToken = {
         var user: Principal;
-        var balance: Nat
+        var balance: Float
     };
 
     public type PBCTokenExt = {
         user: Principal;
-        balance: Nat
+        balance: Float
     };
 
     //*=======================================*//
@@ -78,6 +78,17 @@ module {
         image: Text;
     };
 
+    public type TokenPrivacy = {
+        #Public;
+        #NoPublic;
+        #Private
+    };
+
+    public type TokenPreorder = {
+        preorder: Bool;
+        end: Text
+    };
+
     public type TokenInfo = {
         var id: Text;
         var createdBy: Principal;
@@ -89,12 +100,14 @@ module {
         var name: Text;
         var owner: Principal;
         var place: Text;
-        var price: Nat;
+        var price: Float;
         var time: Text;
         var nftType: Text; //item | ticket
         var category: Text; //TokenCategory.id
         var dateCreated: Text;
         var checkin: Bool;
+        var privacy: TokenPrivacy;
+        var preorder: TokenPreorder;
     };
 
     public type TokenInfoExt = {
@@ -108,11 +121,13 @@ module {
         name: Text;
         owner: Principal;
         place: Text;
-        price: Nat;
+        price: Float;
         time: Text;
         nftType: Text; //item | ticket
         category: Text; //TokenCategory.id
         dateCreated: Text;
+        privacy: TokenPrivacy;
+        preorder: TokenPreorder;
     };
     
     //*=======================================*//

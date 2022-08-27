@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, View, Title, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, GridView, ScrollView, ProductCard, TabBadge } from '@components';
+import { AppBar, View, Title, FeatureCard, SectionTitle, Button, SquareCard, GridView, ScrollView, GridView, ScrollView, ProductCard, TabBadge } from '@components';
 
 import "./styles.scss";
 import API from '../../api';
@@ -35,14 +35,13 @@ export const ProfileScreen = () => {
         <View>
             <div className="profile-view">
                 <div className="profile-view__user-info-container">
-                    <div className="profile-view__user-info-container__background">
-
-                    </div>
+                    <div className="profile-view__user-info-container__background"></div>
                     <div className="profile-view__user-info-container__user-info">
                         <div className="profile-view__user-info-container__user-info__avatar"></div>
-                        <div className="profile-view__user-info-container__user-info__detail">
+                        <div style={{ position: "relative", width: "100%" }} className="profile-view__user-info-container__user-info__detail">
                             <span className="profile-view__user-info-container__user-info__detail__name">USER NAME</span>
                             <span className="profile-view__user-info-container__user-info__detail__principal">0x91928381279581</span>
+                            <Button style={{ marginTop: 12 }}>SWAP NFT</Button>
                         </div>
                     </div>
                 </div>

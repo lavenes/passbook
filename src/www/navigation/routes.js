@@ -14,7 +14,8 @@ export const routes = {
             OWNED: '/products/categories/owned/:categoryId',
             LIST: '/products/categories/:categoryId',
         },
-        EXCHANGE: '/exchange/:ticketIdParam'
+        EXCHANGE: '/exchange/:ticketIdParam',
+        SWAP: '/swap/:pricipalId',
     },
     PROFILE: '/users/:principalId',
     PERMISSION: {
@@ -23,5 +24,6 @@ export const routes = {
         ADDUSER: '/user/add-user',
     },
     CONNECT: '/connect',
-    NOTIFICATIONS: '/Notifications'
+    NOTIFICATIONS: '/notifications',
+    CHECKIN: 'checkin'
 };

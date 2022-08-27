@@ -11,6 +11,8 @@ import { TextInput, TextArea } from './TextInput';
 import { SectionDivider } from './Section';
 import { Button } from './Button';
 import { SelectBox } from './Select';
+import { Notification } from './Notification';
+import { Back } from './Back';
 import * as TabBadge from './TabBadge';
 
 export {
@@ -48,5 +50,9 @@ export {
     
     SelectBox,
 
-    TabBadge
+    TabBadge,
+
+    Notification,
+
+    Back
 }

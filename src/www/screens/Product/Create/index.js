@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components';
+import { TextInput, View, Title, Button, TextArea, SelectBox, Notification, Back } from '@components';
 import { Config } from '@config';
 import { usePlug } from '@hooks';
 import API from '@api';
@@ -11,6 +11,8 @@ import "./styles.scss";
 export const NFTCreateScreen = () => {
     const { principal } = usePlug();
     const navigate = useNavigate();
+
+    const [ display, setDisplay ] = useState(false);
 
     const [imagePreview, setImagePreview] = useState(null);
     const [imageUrl, setImageUrl] = useState([]);
@@ -33,10 +35,10 @@ export const NFTCreateScreen = () => {
         fetchData();
     }, []);
 
-    const fetchData = async() => {
+    const fetchData = async () => {
         //*Fetch NFTs
         const NFTs = await API.NFT.getCreatedNFTs();
-        
+
         setNFTs(NFTs);
     }
 
@@ -67,7 +69,7 @@ export const NFTCreateScreen = () => {
             type,
             category,
         );
-        
+
         Swal.fire(
             'Tạo thành công!',
             '',
@@ -77,7 +79,7 @@ export const NFTCreateScreen = () => {
         });
     }
 
-    const handleSelectGift = async(id) => {
+    const handleSelectGift = async (id) => {
         let giftData = NFTs.find(item => item.id == id);
 
         giftData = {
@@ -94,65 +96,73 @@ export const NFTCreateScreen = () => {
 
     // Chua viet back nha
     const check = (e) => {
-        if(e.target.checked){
-            setNFTs(prev=>{
-                return [...prev, "Cashback"]
-            });
+        if (e.target.checked) {
+            setDisplay(true)
         }
         else {
-            setNFTs(prev=>{
-                return prev.filter(item => {
-                    return item!== "Cashback"
-                })
-            });
+            setDisplay(false)
         }
     }
 
-    return(
+    return (
         <View>
+            <Back to="/products"/>
             <Title
                 title="Create NFT"
             />
 
-            <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${ imagePreview })` }}>
-                <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={handleUploadImage}/>
-                <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{ !imagePreview && 'Upload image' }</label>
+            <div className="nft-create-screen__image-upload" style={{ backgroundImage: `url(${imagePreview})` }}>
+                <input type="file" id="image-upload" className="nft-create-screen__image-upload__image-upload-input" onChange={handleUploadImage} />
+                <label id="image_lb" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">{!imagePreview && 'Upload image'}</label>
             </div>
-            
-            
-            <SelectBox onChange={e => setType(e.target.value)} options={Config.VARIABLES.TICKET_TYPES}/>
 
-            <SelectBox onChange={e => setCategory(e.target.value)} options={Config.VARIABLES.TICKET_CATEGORIES}/>
 
-            <TextInput onChange={e => setName(e.target.value)} placeholder="Name"/>
+            <SelectBox onChange={e => setType(e.target.value)} options={Config.VARIABLES.TICKET_TYPES} />
 
-            { type == "ticket" && <TextInput onChange={e => setPlace(e.target.value)} placeholder="Place"/> }
+            <SelectBox onChange={e => setCategory(e.target.value)} options={Config.VARIABLES.TICKET_CATEGORIES} />
 
-            { type == "ticket" && <TextInput onChange={e => setDate(e.target.value)} placeholder="Date" type="date"/> }
+            <TextInput onChange={e => setName(e.target.value)} placeholder="Name" />
 
-            { type == "ticket" && <TextInput onChange={e => setTime(e.target.value)} placeholder="Time" type="time"/> }
+            {type == "ticket" && <TextInput onChange={e => setPlace(e.target.value)} placeholder="Place" />}
 
-            <TextInput onChange={e => setPrice(e.target.value)} placeholder="Price" type="number"/>
+            {type == "ticket" && <TextInput onChange={e => setDate(e.target.value)} placeholder="Date" type="date" />}
 
-            <div style={{marginTop: "10px", marginLeft: "10px"}}>
-                <label style={{
-                    fontSize: "12px",
-                }}>Preoder</label>
-                <input type="checkbox" style={{marginTop: "7px", marginLeft: "10px"}} onChange={check}></input>
-            </div>
+            {type == "ticket" && <TextInput onChange={e => setTime(e.target.value)} placeholder="Time" type="time" />}
+
+            <TextInput onChange={e => setPrice(e.target.value)} placeholder="Price" type="number" />
+
+            <TextInput onChange={e => setPrice(e.target.value)} placeholder="Amount" type="number" />
 
             <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {
                 return {
                     label: item.name,
                     value: item.id
                 }
-            })}/>
+            })} />
 
-            <TextArea  onChange={e => setDescription(e.target.value)} placeholder="Description"/>
+            <div style={{ marginTop: "10px", marginLeft: "10px" }}>
+                <label style={{
+                    fontSize: "14px",
+                }}>Preoder</label>
+                <input type="checkbox" style={{ marginTop: "7px", marginLeft: "10px" }} onChange={check}></input>
+            </div>
 
-            <TextArea  onChange={e => setDetails(e.target.value)} placeholder="Details"/>
+            {display && <div>
+                <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {
+                    return {
+                        label: item.name,
+                        value: item.id
+                    }
+                })} />
 
-            {isLoading ? <Button style={{ marginTop: 32 }} onClick={ handleSubmit }>Loading ...</Button> : <Button style={{ marginTop: 32 }} onClick={ handleSubmit }>Save</Button>}
+                <TextInput onChange={e => setPrice(e.target.value)} placeholder="Cashback" type="text" />
+            </div>}
+
+            <TextArea onChange={e => setDescription(e.target.value)} placeholder="Description" />
+
+            <TextArea onChange={e => setDetails(e.target.value)} placeholder="Details" />
+
+            {isLoading ? <Button style={{ marginTop: 32 }} onClick={handleSubmit}>Loading ...</Button> : <Button style={{ marginTop: 32 }} onClick={handleSubmit}>Save</Button>}
         </View>
     )
 }

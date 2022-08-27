@@ -6,12 +6,14 @@ import { TicketInformation } from './Product/Information/Ticket';
 import { ItemInformation } from './Product/Information/Item';
 import { ProductCategoryList } from './Product/Category/List';
 import { NFTCreateScreen } from './Product/Create';
+import { CreateSaLeEvents } from "./Product/sale";
+import { SwapNFT } from "./Product/SwapNFT";
 import { Permission } from "./Permission";
 import { UserDetail } from "./Permission/UserDetail";
 import { AddUser } from "./Permission/AddUser";
-import { CreateSaLeEvents } from "./Product/sale";
 import { Connect } from "./Connect";
 import { Notifications } from "./Notifications";
+import { Checkin } from "./Checkin";
 
 import { QRScanScreen } from './QRScan';
 
@@ -34,6 +36,7 @@ const Screens =  {
         },
         Exchange: Exchange,
         CreateSaleEvents : CreateSaLeEvents,
+        SwapNFT: SwapNFT,
     },
     QRScan: QRScanScreen,
     Profile: ProfileScreen,
@@ -44,6 +47,7 @@ const Screens =  {
     },
     Connect: Connect,
     Notifications: Notifications,
+    Checkin: Checkin,
 }
 
 export default Screens;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components';
+import { TextInput, View, Title, Button, TextArea, SelectBox, Back } from '@components';
 import API from '@api';
 import { usePlug } from '@hooks';
 
@@ -40,6 +40,7 @@ export const Exchange = () => {
 
     return (
         <View>
+            <Back to={`/items/${ticketIdParam}`}/>
             <Title
                 title="Exchange NFT"
             />
