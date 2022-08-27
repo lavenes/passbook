@@ -30,15 +30,14 @@ export const NFT = {
 
         //*Upload
         let hero = await actor;
-        
-		const res = await hero.mintNFT({
-            to: {
-                principal: Principal.fromText(window.ic?.plug?.sessionManager?.sessionData?.principalId)
-            },
-            metadata: []
-        });
 
-        console.log(res);
+        const { principal } = usePlug();
+        
+		//const res = await hero.mintNFT(metadata);
+
+        const tRes = await hero.mintToken(Principal.fromText(principal), 10);
+
+        console.log(tRes);
 
         return res;
     },

@@ -1,8 +1,6 @@
 import type { Principal } from '@dfinity/principal';
 import type { ActorMethod } from '@dfinity/agent';
 
-export type AccountIdentifier = string;
-export interface MintRequest { 'to' : User, 'metadata' : [] | [Array<number>] }
 export interface NFTSale {
   'balanceOf' : ActorMethod<[Principal], bigint>,
   'burnToken' : ActorMethod<[bigint], TxReceipt>,
@@ -18,8 +16,8 @@ export interface NFTSale {
   'getUserInfo' : ActorMethod<[Principal], [] | [UserInfoExt]>,
   'logoToken' : ActorMethod<[], string>,
   'mintCloneNFT' : ActorMethod<[string, string], TokenInfoExt>,
-  'mintNFT' : ActorMethod<[MintRequest], TokenIndex>,
-  'mintToken' : ActorMethod<[Principal, bigint], TxReceipt>,
+  'mintNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
+  'mintToken' : ActorMethod<[Principal, bigint], bigint>,
   'nameToken' : ActorMethod<[], string>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
   'symbolToken' : ActorMethod<[], string>,
@@ -29,8 +27,6 @@ export interface NFTSale {
     [Principal, string, string, bigint, string, string, string, bigint],
     UserInfoExt,
   >,
-  'wallet_balance' : ActorMethod<[], bigint>,
-  'wallet_receive' : ActorMethod<[], { 'accepted' : bigint }>,
 }
 export interface TokenGiftInfo {
   'id' : string,
@@ -40,7 +36,6 @@ export interface TokenGiftInfo {
   'image' : string,
   'price' : bigint,
 }
-export type TokenIndex = number;
 export interface TokenInfoExt {
   'id' : string,
   'dateCreated' : string,
@@ -70,8 +65,6 @@ export type TxReceipt = { 'Ok' : bigint } |
       { 'BlockUsed' : null } |
       { 'AmountTooSmall' : null }
   };
-export type User = { 'principal' : Principal } |
-  { 'address' : AccountIdentifier };
 export interface UserInfoExt {
   'id' : Principal,
   'sex' : bigint,

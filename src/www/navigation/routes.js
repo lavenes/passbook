@@ -13,7 +13,7 @@ export const routes = {
             OWNED: '/products/categories/owned/:categoryId',
             LIST: '/products/categories/:categoryId',
         },
-        EXCHANGE: '/exchange'
+        EXCHANGE: '/exchange/:ticketId'
     },
     PROFILE: '/users/:principalId',
     PERMISSION: {

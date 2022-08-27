@@ -48,16 +48,6 @@ export const idlFactory = ({ IDL }) => {
     'place' : IDL.Text,
     'price' : IDL.Nat,
   });
-  const AccountIdentifier = IDL.Text;
-  const User = IDL.Variant({
-    'principal' : IDL.Principal,
-    'address' : AccountIdentifier,
-  });
-  const MintRequest = IDL.Record({
-    'to' : User,
-    'metadata' : IDL.Opt(IDL.Vec(IDL.Nat8)),
-  });
-  const TokenIndex = IDL.Nat32;
   const NFTSale = IDL.Service({
     'balanceOf' : IDL.Func([IDL.Principal], [IDL.Nat], []),
     'burnToken' : IDL.Func([IDL.Nat], [TxReceipt], []),
@@ -78,8 +68,8 @@ export const idlFactory = ({ IDL }) => {
       ),
     'logoToken' : IDL.Func([], [IDL.Text], ['query']),
     'mintCloneNFT' : IDL.Func([IDL.Text, IDL.Text], [TokenInfoExt], []),
-    'mintNFT' : IDL.Func([MintRequest], [TokenIndex], []),
-    'mintToken' : IDL.Func([IDL.Principal, IDL.Nat], [TxReceipt], []),
+    'mintNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),
+    'mintToken' : IDL.Func([IDL.Principal, IDL.Nat], [IDL.Nat], []),
     'nameToken' : IDL.Func([], [IDL.Text], ['query']),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
     'symbolToken' : IDL.Func([], [IDL.Text], ['query']),
@@ -101,12 +91,6 @@ export const idlFactory = ({ IDL }) => {
           IDL.Nat,
         ],
         [UserInfoExt],
-        [],
-      ),
-    'wallet_balance' : IDL.Func([], [IDL.Nat], []),
-    'wallet_receive' : IDL.Func(
-        [],
-        [IDL.Record({ 'accepted' : IDL.Nat64 })],
         [],
       ),
   });

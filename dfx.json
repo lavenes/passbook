@@ -4,6 +4,10 @@
       "main": "src/superheroes/Main.mo",
       "type": "motoko"
     },
+    "erc721_token" : {
+      "main" : "src/superheroes/erc721_token.mo",
+      "type" : "motoko"
+    },
     "www": {
       "frontend": {
         "entrypoint": "src/www/index.html"

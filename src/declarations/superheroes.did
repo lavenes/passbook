@@ -9,11 +9,6 @@ type UserInfoExt =
    phone: text;
    sex: nat;
  };
-type User = 
- variant {
-   address: AccountIdentifier;
-   "principal": principal;
- };
 type TxReceipt = 
  variant {
    Err:
@@ -48,7 +43,6 @@ type TokenInfoExt =
    price: nat;
    time: text;
  };
-type TokenIndex = nat32;
 type TokenGiftInfo = 
  record {
    createdBy: principal;
@@ -71,8 +65,8 @@ type NFTSale =
    getUserInfo: (principal) -> (opt UserInfoExt) query;
    logoToken: () -> (text) query;
    mintCloneNFT: (text, text) -> (TokenInfoExt);
-   mintNFT: (MintRequest) -> (TokenIndex);
-   mintToken: (principal, nat) -> (TxReceipt);
+   mintNFT: (TokenInfoExt) -> (TokenInfoExt);
+   mintToken: (principal, nat) -> (nat);
    nameToken: () -> (text) query;
    readAccount: () -> (vec UserInfoExt) query;
    symbolToken: () -> (text) query;
@@ -80,13 +74,5 @@ type NFTSale =
    transferTokenFrom: (principal, principal, nat) -> (TxReceipt);
    updateAccount: (principal, text, text, nat, text, text, text, nat) ->
     (UserInfoExt);
-   wallet_balance: () -> (nat);
-   wallet_receive: () -> (record {accepted: nat64;});
  };
-type MintRequest = 
- record {
-   metadata: opt blob;
-   to: User;
- };
-type AccountIdentifier = text;
 service : (principal) -> NFTSale

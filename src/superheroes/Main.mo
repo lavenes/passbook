@@ -29,114 +29,94 @@ import Buffer "mo:base/Buffer";
 import Types "./types";
 import Option "mo:base/Option";
 import List "mo:base/List";
-import DIP20Token "./token";
-import NFT "./erc721";
-import ExtNonFungible "./ext/NonFungible";
-import ExtCore "./ext/Core";
-import Debug "mo:base/Debug";
 import Nat64 "mo:base/Nat64";
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
     ) = this {
     private stable var blackhole: Principal = Principal.fromText("aaaaa-aa");
-    private var capacity : Nat = 360000000000;
-    var balance = 0;
-
-    // Return the current cycle balance
-    public shared(msg) func wallet_balance() : async Nat {
-      return balance;
-    };
-
-    // Return the cycles received up to the capacity allowed
-    public func wallet_receive() : async { accepted: Nat64 } {
-      let amount = Cycles.available();
-      let limit : Nat = capacity - balance;
-      let accepted =
-        if (amount <= limit) amount
-        else limit;
-      let deposit = Cycles.accept(accepted);
-      assert (deposit == accepted);
-      balance += accepted;
-      { accepted = Nat64.fromNat(accepted) };
-    };
 
     //*=======================================*//
-    //*            DIP20 TOKEN API            *//
+    //*            PBC TOKEN API              *//
     //*=======================================*//
-    type Operation = Types.Operation;
-    type TransactionStatus = Types.TransactionStatus;
-    type TxRecord = Types.TxRecord;
-    public type TxReceipt = {
-        #Ok: Nat;
-        #Err: {
-            #InsufficientAllowance;
-            #InsufficientBalance;
-            #ErrorOperationStyle;
-            #Unauthorized;
-            #LedgerTrap;
-            #ErrorTo;
-            #Other: Text;
-            #BlockUsed;
-            #AmountTooSmall;
-        };
-    };
-    let tokenConfig = {
-        logo = "";
-        name = "PassBook Coin";
-        symbol = "PBC";
-        decimals : Nat8 = 0;
-        totalSupply = 2000000;
-        owner = _owner;
-        fee = 0;
-    };
+    type PBCToken = Types.PBCToken;
+
+    private stable var pbcTokenEntries : [(Principal, PBCToken)] = [];
+    private var pbcTokens = HashMap.HashMap<Principal, PBCToken>(1, Principal.equal, Principal.hash);
 
     //*MINT & BURN
     //*Mint
-    public shared({ caller }) func mintToken(to: Principal, value: Nat) : async TxReceipt {
-        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+    public shared({ caller }) func mintToken(to: Principal, value: Nat) : async Nat {
+      let userToken = pbcTokens.get(to);
 
-        return await dipToken.mint(to, value);
+      switch(userToken) {
+        case(?userToken) {
+          var newBalance : Nat = userToken.balance + value;
+
+          userToken.balance := newBalance;
+
+          return newBalance;
+        };
+        case _ {
+          return 0;
+        }
+      };
     };
 
     //*Burn
-    public shared({ caller }) func burnToken(value: Nat) : async TxReceipt {
-        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+    public shared({ caller }) func burnToken(to: Principal, value: Nat) : async Nat {
+      let userToken = pbcTokens.get(to);
 
-        return await dipToken.burn(value);
+      switch(userToken) {
+        case(?userToken) {
+          var newBalance : Nat = userToken.balance - value;
+
+          userToken.balance := newBalance;
+
+          return newBalance;
+        };
+        case _ {
+          return 0;
+        }
+      };
     };
 
-    //*Transfer
-    public shared({ caller }) func transferToken(to: Principal, value: Nat) : async TxReceipt {
-        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+    public shared({ caller }) func transferTokenFrom(from: Principal, to: Principal, value: Nat) : async Text {
+      let userToken = pbcTokens.get(from);
+      let userTakeToken = pbcTokens.get(to);
 
-        await dipToken.transfer(to, value);
-    };
+      switch(userToken) {
+        case(?userToken) {
+          switch(userTakeToken) {
+            case(?userTakeToken) {
+              userToken.balance := userToken.balance - value;
+              userTakeToken.balance := userTakeToken.balance + value;
+            };
+            case _ {
+              return "FAIL";
+            };
+          };
+        };
+        case _ {
+          return "FAIL";
+        }
+      };
 
-    public shared({ caller }) func transferTokenFrom(from: Principal, to: Principal, value: Nat) : async TxReceipt {
-        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
-
-        await dipToken.transferFrom(from, to, value);
+      return "OK";
     };
 
     //*Queries
     public shared({ caller }) func balanceOf(who: Principal) : async Nat {
-        let dipToken = await DIP20Token.Token(tokenConfig.logo, tokenConfig.name, tokenConfig.symbol, tokenConfig.decimals, tokenConfig.totalSupply, tokenConfig.owner, tokenConfig.fee);
+      let userToken = pbcTokens.get(who);
 
-        return await dipToken.balanceOf(who);
-    };
-
-    //*Query token info
-    public query func logoToken() : async Text {
-        return tokenConfig.logo;
-    };
-
-    public query func nameToken() : async Text {
-        return tokenConfig.name;
-    };
-
-    public query func symbolToken() : async Text {
-        return tokenConfig.symbol;
+      switch(userToken) {
+        case(?userToken) {
+          return userToken.balance;
+        };
+        case _ {
+          return 0;
+        }
+      };
     };
 
     //*=======================================*//
@@ -147,8 +127,6 @@ shared(msg) actor class NFTSale(
     type TokenInfoExt = Types.TokenInfoExt;
     type TokenCategory = Types.TokenCategory;
     type TokenGiftInfo = Types.TokenGiftInfo;
-    type MintRequest  = ExtNonFungible.MintRequest ;
-  type TokenIndex  = ExtCore.TokenIndex ;
 
     private stable var owner_: Principal = _owner;
     private stable var tokensEntries : [(Text, TokenInfo)] = [];
@@ -198,23 +176,31 @@ shared(msg) actor class NFTSale(
     };
 
     //*Mintning
-    public shared({ caller }) func mintNFT(metadata: MintRequest): async TokenIndex {
-        let token = await NFT.erc721_token(caller);
+    public shared({ caller }) func mintNFT(metadata: TokenInfoExt): async TokenInfoExt {
+        // if(msg.caller != owner_) {
+        //     return #Err(#Unauthorized);
+        // };
 
-        await token.setMinter(caller);
+        let token = _newToken(caller);
+        
+        token.id := metadata.id;
+        token.date := metadata.date;
+        token.description := metadata.description;
+        token.details := metadata.details;
+        token.gifts := metadata.gifts;
+        token.image := metadata.image;
+        token.name := metadata.name;
+        token.price := metadata.price;
+        token.place := metadata.place;
+        token.time := metadata.time;
+        token.category := metadata.category;
+        token.nftType := metadata.nftType;
+        token.createdBy := metadata.createdBy;
+        token.dateCreated := metadata.dateCreated;
 
-        Debug.print("===== BEFORE =====");
+        tokens.put(token.id, token);
 
-        Debug.print(Nat.toText(Cycles.balance()));
-        Debug.print(Nat.toText(Cycles.available()));
-
-        Cycles.add(10_000_000_000_000);
-
-        Debug.print("===== AFTER =====");
-
-        Debug.print(Nat.toText(Cycles.balance()));
-        Debug.print(Nat.toText(Cycles.available()));
-        return await token.mintNFT(metadata);
+        return _tokenInfotoExt(token);
     };
 
     //*Mint Clone
