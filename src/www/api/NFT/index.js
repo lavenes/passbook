@@ -57,11 +57,12 @@ export const NFT = {
     },
     getAllOfUser: async( principalId ) => {
         let hero = await actor;
-
+        const { principal } = usePlug();
+        const id = principalId || principal;
 		let res = await hero.getAllTokens();
 
         res = res.filter(item => {
-            if(item.createdBy.toString() == principalId && item.owner.toString() == principalId) {
+            if(item.createdBy.toString() == id && item.owner.toString() == id) {
                 item.price = Number(item.price);
 
                 return item;
@@ -179,7 +180,7 @@ export const NFT = {
         const { requestTransfer } = usePlug();
         let hero = await actor;
 
-        let tokenData = await hero.getTokenInfo(tokenId);
+        //let tokenData = await hero.getTokenInfo(tokenId);
 
         // console.log(tokenData.createdBy.toString());
         // console.log(window.ic.plug.sessionManager.sessionData.principalId);
@@ -201,5 +202,50 @@ export const NFT = {
         let principalId = Principal.fromText(ticketCode.split("#")[1]);
 
         return await hero.checkinTicket(ticketId, principalId);
+    },
+    checkPreorders: async () => {
+        let hero = await actor;
+        const { principal } = usePlug();
+
+        //Filter user
+        let orders = await hero.getAllTokenPreorders();
+
+        orders = orders.filter(item => {
+            return item.owner.toString() === principal;
+        });
+
+        let dateNow = `${new Date().toISOString().split("T")[0]}`;
+        let hourNow = new Date().getHours();
+        let minuteNow = new Date().getMinutes();
+
+        //Fetch token info
+        console.log("===== CHECK PRE ORDERS =====");
+        console.log(orders);
+
+        for(var item of orders) {
+            try {
+                let token = await hero.getTokenInfo(item.nftId);
+                console.log(token);
+                let preorder = token.preorder;
+                let endHour = Number(preorder.time.split(":")[0]);
+                let endMinute = Number(preorder.time.split(":")[1]);
+
+                console.log(preorder);
+                console.log(dateNow);
+                console.log(minuteNow);
+                console.log(endHour);
+                console.log(endMinute);
+
+                if(preorder.end == dateNow && endHour <= hourNow && endMinute <= minuteNow) {
+                    for(var i = 1; i <= item.supplies; i++) {
+                        await hero.mintCloneNFT(item.nftId, randomStr(5), Principal.fromText(principal));
+                    }
+
+                    await hero.removeTokenPreorder(item.id);
+                }
+            }catch(e) {
+                console.log(e);
+            };
+        }
     }
 }

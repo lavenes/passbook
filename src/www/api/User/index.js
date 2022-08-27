@@ -10,7 +10,8 @@ const { actor } = usePlug();
 export const User = {
     get: async (principalId) => {
         let hero = await actor;
-        return await hero.getUserInfo(Principal.fromText(principalId));
+        const { principal } = usePlug();
+        return await hero.getUserInfo(Principal.fromText(principalId || principal));
     },
     createUser: async (user) => {
         let hero = await actor;

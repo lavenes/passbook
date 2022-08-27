@@ -20,12 +20,13 @@ export const HomeScreen = ({ match, navigation }) => {
 
     const fetchData = async () => {
         //*Fetch balance
-        let balance = await getBalance();
+        let balance = await API.PCB.balance();
         setBalance(balance);
 
-        let ownedNFT = await API.NFT.getOwned();
+        //*Check preorder;
+        await API.NFT.checkPreorders();
 
-        console.log(ownedNFT);
+        let ownedNFT = await API.NFT.getOwned();
 
         setOwnedTickets(ownedNFT);
     }
@@ -41,7 +42,7 @@ export const HomeScreen = ({ match, navigation }) => {
             <View>
                 <AppBar.AppBar 
                     leading={
-                        <AppBar.ActionButton icon={<IoScan/>} to="/checkin"/>
+                        <AppBar.ActionButton icon={<IoScan/>} to="/qr_scan"/>
                     }
                     actions={
                         <AppBar.AvatarImage />

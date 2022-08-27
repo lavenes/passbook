@@ -14,6 +14,7 @@ import { SelectBox } from './Select';
 import { Notification } from './Notification';
 import { Back } from './Back';
 import * as TabBadge from './TabBadge';
+import { Modal } from "./Modal"
 
 export {
     AppBar,
@@ -54,5 +55,6 @@ export {
 
     Notification,
 
-    Back
+    Back,
+    Modal
 }

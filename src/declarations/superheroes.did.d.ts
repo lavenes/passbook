@@ -14,15 +14,17 @@ export interface NFTSale {
   'createSaleEvent' : ActorMethod<[SaleEventExt], SaleEventExt>,
   'deleteAccount' : ActorMethod<[Principal], boolean>,
   'getAllSaleEvents' : ActorMethod<[], Array<SaleEventExt>>,
+  'getAllTokenPreorders' : ActorMethod<[], Array<TokenPreorderListExt>>,
   'getAllTokens' : ActorMethod<[], Array<TokenInfoExt>>,
   'getSaleEvent' : ActorMethod<[string], SaleEventExt>,
   'getTokenInfo' : ActorMethod<[string], TokenInfoExt>,
   'getUserInfo' : ActorMethod<[Principal], [] | [UserInfoExt]>,
-  'mintCloneNFT' : ActorMethod<[string, string], TokenInfoExt>,
+  'mintCloneNFT' : ActorMethod<[string, string, Principal], TokenInfoExt>,
   'mintNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
   'mintToken' : ActorMethod<[Principal, number], PBCTokenExt>,
   'purchaseNFT' : ActorMethod<[string, bigint, string], string>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
+  'removeTokenPreorder' : ActorMethod<[string], string>,
   'swapNFT' : ActorMethod<[string, string], string>,
   'transferNFT' : ActorMethod<[Principal, Principal, string, bigint], string>,
   'transferTokenFrom' : ActorMethod<[Principal, Principal, number], string>,
@@ -76,6 +78,12 @@ export interface TokenPreorder {
   'endTime' : string,
   'gifts' : Array<TokenGiftInfo>,
   'cashback' : number,
+}
+export interface TokenPreorderListExt {
+  'id' : string,
+  'owner' : Principal,
+  'supplies' : bigint,
+  'nftId' : string,
 }
 export interface UserInfoExt {
   'id' : Principal,

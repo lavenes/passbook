@@ -9,10 +9,12 @@ type UserInfoExt =
    phone: text;
    sex: nat;
  };
-type TokenPrivacy = 
- variant {
-   Private;
-   Public;
+type TokenPreorderListExt = 
+ record {
+   id: text;
+   nftId: text;
+   owner: principal;
+   supplies: nat;
  };
 type TokenPreorder = 
  record {
@@ -39,7 +41,7 @@ type TokenInfoExt =
    place: text;
    preorder: TokenPreorder;
    price: float64;
-   privacy: TokenPrivacy;
+   privacy: text;
    supplies: nat;
    time: text;
  };
@@ -77,15 +79,17 @@ service : {
   createSaleEvent: (SaleEventExt) -> (SaleEventExt);
   deleteAccount: (principal) -> (bool);
   getAllSaleEvents: () -> (vec SaleEventExt);
+  getAllTokenPreorders: () -> (vec TokenPreorderListExt) query;
   getAllTokens: () -> (vec TokenInfoExt) query;
   getSaleEvent: (text) -> (SaleEventExt);
   getTokenInfo: (text) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
-  mintCloneNFT: (text, text) -> (TokenInfoExt);
+  mintCloneNFT: (text, text, principal) -> (TokenInfoExt);
   mintNFT: (TokenInfoExt) -> (TokenInfoExt);
   mintToken: (principal, float64) -> (PBCTokenExt);
   purchaseNFT: (text, nat, text) -> (text);
   readAccount: () -> (vec UserInfoExt) query;
+  removeTokenPreorder: (text) -> (text) query;
   swapNFT: (text, text) -> (text);
   transferNFT: (principal, principal, text, nat) -> (text);
   transferTokenFrom: (principal, principal, float64) -> (text);

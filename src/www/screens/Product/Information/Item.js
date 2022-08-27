@@ -99,7 +99,7 @@ export const ItemInformation = ({ title, id }) => {
                 <motion.div className="content-container" animate>
                     <motion.span className="title">{ ticketMeta?.name }</motion.span>
                     <PriceTitle price={ ticketMeta?.price } currency="ICP" />
-                    <CreatorCard name={ "OWNER" }/>
+                    <CreatorCard to={`/users/${ticketMeta?.createdBy}`} name={ "OWNER" }/>
                     <ActionsGroup.Group>
                         {actions.map((action, index) => {
                             return <ActionsGroup.Button key={index} onClick={() => handleClick(action)} name={action.name} icon={action.icon}/>
@@ -112,10 +112,10 @@ export const ItemInformation = ({ title, id }) => {
                     </ActionsGroup.Group>
                     <SectionDivider/>
                     <h4>Amount</h4>
-                    <input defaultValue={1} onChange={e => setAmount(e.target.value)} type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px"}}/>
+                    <input defaultValue={1} onChange={e => setAmount(Number(e.target.value))} type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px", marginBottom: "20px"}}/>
 
                     { !isOwned && 
-                        <Button style={{marginTop: "20px"}} onClick={handlePurchase}>Buy</Button> }
+                        <Button onClick={handlePurchase}>Buy</Button> }
 
                     <SectionTitle title="Description" style={{ marginTop: 40 }}/>
 

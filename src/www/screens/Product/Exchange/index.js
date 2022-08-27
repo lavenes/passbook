@@ -23,7 +23,6 @@ export const Exchange = () => {
         let ownedNFT = await API.NFT.getOwned();
 
         setTicket(ticket);
-        
     }
 
     const handleExchange = () => {

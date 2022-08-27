@@ -10,11 +10,15 @@ export default function usePlug() {
         try {
             console.log(window.ic.plug);
             const connected = await window.ic.plug.isConnected();
-            if(!connected) await window.ic.plug.requestConnect({
-                whitelist,
-                host,
-                timeout: 50000
-            });
+            if(!connected) {
+                await window.ic.plug.requestConnect({
+                    whitelist,
+                    host,
+                    timeout: 50000
+                });
+
+                window.location.reload();
+            }
         } catch (e) {
             alert(e);
         }

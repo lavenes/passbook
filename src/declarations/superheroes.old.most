@@ -39,7 +39,7 @@ type TokenInfo =
     var place : Text;
     var preorder : TokenPreorder;
     var price : Float;
-    var privacy : TokenPrivacy;
+    var privacy : Text;
     var supplies : Nat;
     var time : Text
   };
@@ -60,7 +60,6 @@ type TokenPreorderList =
     var supplies : Nat
   };
 type TokenPreorderList__1 = TokenPreorderList;
-type TokenPrivacy = {#Private; #Public};
 type UserInfo =
   {
     var dateOfBirth : Text;

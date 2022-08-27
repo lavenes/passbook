@@ -30,6 +30,7 @@ import Types "./types";
 import Option "mo:base/Option";
 import List "mo:base/List";
 import Nat64 "mo:base/Nat64";
+import Float "mo:base/Float";
 
 shared(msg) actor class NFTSale(
     _owner: Principal,
@@ -228,6 +229,7 @@ shared(msg) actor class NFTSale(
     type TokenGiftInfo = Types.TokenGiftInfo;
     type TokenPreorder = Types.TokenPreorder;
     type TokenPreorderList = Types.TokenPreorderList;
+    type TokenPreorderListExt = Types.TokenPreorderListExt;
 
     private stable var owner_: Principal = _owner;
 
@@ -238,6 +240,16 @@ shared(msg) actor class NFTSale(
     private var tokenPreorders = HashMap.HashMap<Text, TokenPreorderList>(1, Text.equal, Text.hash);
 
     private var transactionFeePercent = 1.1;
+
+    //*Preorder to ext
+    private func _preorderListToExt(info: TokenPreorderList) : TokenPreorderListExt {
+      return {
+        id = info.id;
+        owner = info.owner;
+        nftId = info.nftId;
+        supplies = info.supplies;
+      }
+    };
 
     //*Priv Info to Ext
     private func _tokenInfotoExt(info: TokenInfo) : TokenInfoExt {
@@ -326,7 +338,7 @@ shared(msg) actor class NFTSale(
     };
 
     //*Mint Clone
-    public shared({ caller }) func mintCloneNFT(id: Text, randomId: Text) : async TokenInfoExt {
+    public shared({ caller }) func mintCloneNFT(id: Text, randomId: Text, owner: Principal) : async TokenInfoExt {
         switch(tokens.get(id)) {
             case(?token) {
                 var newNFT = _newToken(caller);
@@ -346,6 +358,7 @@ shared(msg) actor class NFTSale(
                 newNFT.createdBy := token.createdBy;
                 newNFT.dateCreated := token.dateCreated;
                 newNFT.privacy := token.privacy;
+                newNFT.owner := owner;
 
                 tokens.put(newNFT.id, newNFT);
 
@@ -373,12 +386,23 @@ shared(msg) actor class NFTSale(
       //*Pay process
       switch(pbcTokens.get(caller)) {
         case(?userBalance) {
-          if(userBalance.balance >= nft.price) {
-            userBalance.balance := userBalance.balance - nft.price;
+          switch(pbcTokens.get(nft.createdBy)) {
+            case(?sellerBalance) {
+              let nftPrice = nft.price * Float.fromInt(supplies);
 
-            let res = pbcTokens.replace(caller, userBalance);
-          }else{
-            throw Error.reject("YOUR_PCB_IS_NOT_ENGOUGH");
+              if(userBalance.balance >= nftPrice) {
+                userBalance.balance := userBalance.balance - nftPrice;
+                sellerBalance.balance := sellerBalance.balance + nftPrice;
+
+                let res = pbcTokens.replace(caller, userBalance);
+                let sellRes = pbcTokens.replace(nft.createdBy, sellerBalance);
+              }else{
+                throw Error.reject("YOUR_PCB_IS_NOT_ENGOUGH");
+              }
+            };
+            case _ {  
+              throw Error.reject("SELLER_NOT_FOUND");
+            }
           }
         };
         case _ {
@@ -403,11 +427,30 @@ shared(msg) actor class NFTSale(
         let iter = Iter.range(1, supplies);
 
         for(x in iter) {
-          let a = await mintCloneNFT(nft.id, nft.id # "-" # randomId # Nat.toText(x));
+          let a = await mintCloneNFT(nft.id, nft.id # "-" # randomId # Nat.toText(x), caller);
         };
 
         return "SUCCESS";
       }
+    };
+
+    //*Remove token order
+    public query func removeTokenPreorder(orderId: Text) : async Text {
+      switch(tokenPreorders.get(orderId)) {
+        case(?order) {
+          let res = tokenPreorders.remove(orderId);
+
+          return "OK";
+        };
+        case _ {
+          throw Error.reject("NOT_FOUND")
+        };
+      }
+    };
+
+    //*Get all token ordered
+    public query func getAllTokenPreorders() : async [TokenPreorderListExt] {
+      Iter.toArray(Iter.map(tokenPreorders.entries(), func (i: (Text, TokenPreorderList)): TokenPreorderListExt {_preorderListToExt(i.1)}));
     };
 
     //*Transfer Token

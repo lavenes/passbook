@@ -93,6 +93,13 @@ module {
         var supplies: Nat;
     };
 
+    public type TokenPreorderListExt = {
+        id: Text;
+        owner: Principal;
+        nftId: Text;
+        supplies: Nat;
+    };
+
     public type TokenInfo = {
         var id: Text;
         var createdBy: Principal;

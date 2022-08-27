@@ -49,6 +49,8 @@ export const ProductMarket = () => {
 
                 <Button style={{marginTop: 32}} to="/product/create">Create</Button>
 
+                <Button style={{marginTop: 32}} onClick={() => API.PCB.mint(1000000)}>Mint Coin</Button>
+
                 <Button style={{marginTop: 32}} to="/product/sale">Create sale events</Button>
 
                 <Button style={{marginTop: 32}} onClick={API.NFT.clearAll}>Clear All NFT</Button>

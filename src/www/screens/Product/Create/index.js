@@ -32,6 +32,7 @@ export const NFTCreateScreen = () => {
         preorder: false,
         cashback: 0,
         end: "",
+        endTime: "",
         gifts: []
     });
     const [privacy, setPrivacy] = useState("public");

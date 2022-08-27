@@ -18,6 +18,12 @@ export const idlFactory = ({ IDL }) => {
     'nftId' : IDL.Text,
     'priceSale' : IDL.Nat,
   });
+  const TokenPreorderListExt = IDL.Record({
+    'id' : IDL.Text,
+    'owner' : IDL.Principal,
+    'supplies' : IDL.Nat,
+    'nftId' : IDL.Text,
+  });
   const TokenGiftInfo = IDL.Record({
     'id' : IDL.Text,
     'name' : IDL.Text,
@@ -71,6 +77,11 @@ export const idlFactory = ({ IDL }) => {
     'createSaleEvent' : IDL.Func([SaleEventExt], [SaleEventExt], []),
     'deleteAccount' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllSaleEvents' : IDL.Func([], [IDL.Vec(SaleEventExt)], []),
+    'getAllTokenPreorders' : IDL.Func(
+        [],
+        [IDL.Vec(TokenPreorderListExt)],
+        ['query'],
+      ),
     'getAllTokens' : IDL.Func([], [IDL.Vec(TokenInfoExt)], ['query']),
     'getSaleEvent' : IDL.Func([IDL.Text], [SaleEventExt], []),
     'getTokenInfo' : IDL.Func([IDL.Text], [TokenInfoExt], ['query']),
@@ -79,11 +90,16 @@ export const idlFactory = ({ IDL }) => {
         [IDL.Opt(UserInfoExt)],
         ['query'],
       ),
-    'mintCloneNFT' : IDL.Func([IDL.Text, IDL.Text], [TokenInfoExt], []),
+    'mintCloneNFT' : IDL.Func(
+        [IDL.Text, IDL.Text, IDL.Principal],
+        [TokenInfoExt],
+        [],
+      ),
     'mintNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),
     'mintToken' : IDL.Func([IDL.Principal, IDL.Float64], [PBCTokenExt], []),
     'purchaseNFT' : IDL.Func([IDL.Text, IDL.Nat, IDL.Text], [IDL.Text], []),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
+    'removeTokenPreorder' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
     'swapNFT' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'transferNFT' : IDL.Func(
         [IDL.Principal, IDL.Principal, IDL.Text, IDL.Nat],
