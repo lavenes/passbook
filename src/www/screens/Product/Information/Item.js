@@ -14,6 +14,25 @@ export const ItemInformation = ({ title, id }) => {
     const [isTicket, setIsTicket] = useState(false);
     const [qrValue, setQRValue] = useState(null);
 
+    const actions = [
+        {
+            name: "Send",
+            icon:  <Icon.IoSendOutline/>
+        },
+        {
+            name: "Save",
+            icon:  <Icon.IoBookmarkOutline/>
+        },
+        {
+            name: "Star",
+            icon:  <Icon.IoStarOutline/>
+        },
+        {
+            name: "Share",
+            icon:  <Icon.IoShareOutline/>
+        },
+    ]
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -45,6 +64,10 @@ export const ItemInformation = ({ title, id }) => {
 
     const ticketMeta = itemData;
 
+    const ClickHanle = () => {
+
+    }
+
     return (
         <View className="item-information-screen" overlay layoutId={`card-container-${id}`} backdropImage={ ticketMeta?.image } style={{backgroundColor: '#f5f5f5'}}>
             <motion.div className="card-content" style={{width: '100%'}} animate>
@@ -68,10 +91,14 @@ export const ItemInformation = ({ title, id }) => {
                     <PriceTitle price={ ticketMeta?.price } currency="ICP" />
                     <CreatorCard name={ "OWNER" }/>
                     <ActionsGroup.Group>
-                        <ActionsGroup.Button name="Send" icon={<Icon.IoSendOutline/>}/>
-                        <ActionsGroup.Button name="Save" icon={<Icon.IoBookmarkOutline/>}/>
-                        <ActionsGroup.Button name="Star" icon={<Icon.IoStarOutline/>}/>
-                        <ActionsGroup.Button name="Share" icon={<Icon.IoShareOutline/>}/>
+                        {actions.map((action, index) => {
+                            return <ActionsGroup.Button key={index} onClick={(action) => {console.log(action.name)}} name={action.name} icon={action.icon}/>
+                        })}
+
+                        {/* <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Send" icon={<Icon.IoSendOutline/>}/>
+                        <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Save" icon={<Icon.IoBookmarkOutline/>}/>
+                        <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Star" icon={<Icon.IoStarOutline/>}/>
+                        <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Share" icon={<Icon.IoShareOutline/>}/> */}
                     </ActionsGroup.Group>
                     <SectionDivider/>
 

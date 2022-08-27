@@ -9,22 +9,6 @@ type UserInfoExt =
    phone: text;
    sex: nat;
  };
-type TxReceipt = 
- variant {
-   Err:
-    variant {
-      AmountTooSmall;
-      BlockUsed;
-      ErrorOperationStyle;
-      ErrorTo;
-      InsufficientAllowance;
-      InsufficientBalance;
-      LedgerTrap;
-      Other: text;
-      Unauthorized;
-    };
-   Ok: nat;
- };
 type TokenInfoExt = 
  record {
    category: text;
@@ -52,9 +36,14 @@ type TokenGiftInfo =
    name: text;
    price: nat;
  };
+type PBCTokenExt = 
+ record {
+   balance: nat;
+   user: principal;
+ };
 service : {
   balanceOf: (principal) -> (nat);
-  burnToken: (nat) -> (TxReceipt);
+  burnToken: (principal, nat) -> (nat);
   checkinTicket: (text, principal) -> (text);
   clearAllTokens: () -> () oneway;
   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
@@ -62,17 +51,11 @@ service : {
   getAllTokens: () -> (vec TokenInfoExt) query;
   getTokenInfo: (text) -> (TokenInfoExt) query;
   getUserInfo: (principal) -> (opt UserInfoExt) query;
-  logoToken: () -> (text) query;
   mintCloneNFT: (text, text) -> (TokenInfoExt);
   mintNFT: (TokenInfoExt) -> (TokenInfoExt);
-  mintToken: (principal, nat) -> (nat);
-  nameToken: () -> (text) query;
+  mintToken: (principal, nat) -> (PBCTokenExt);
   readAccount: () -> (vec UserInfoExt) query;
-  symbolToken: () -> (text) query;
-  transferToken: (principal, nat) -> (TxReceipt);
-  transferTokenFrom: (principal, principal, nat) -> (TxReceipt);
+  transferTokenFrom: (principal, principal, nat) -> (text);
   updateAccount: (principal, text, text, nat, text, text, text, nat) ->
    (UserInfoExt);
-  wallet_balance: () -> (nat);
-  wallet_receive: () -> (record {accepted: nat64;});
 }

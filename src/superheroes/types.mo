@@ -32,6 +32,11 @@ module {
         var balance: Nat
     };
 
+    public type PBCTokenExt = {
+        user: Principal;
+        balance: Nat
+    };
+
     //*=======================================*//
     //*                NFT TYPE               *//
     //*=======================================*//

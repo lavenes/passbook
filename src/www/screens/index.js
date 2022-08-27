@@ -9,6 +9,7 @@ import { NFTCreateScreen } from './Product/Create';
 import { Permission } from "./Permission";
 import { UserDetail } from "./Permission/UserDetail";
 import { AddUser } from "./Permission/AddUser";
+import { CreateSaLeEvents } from "./Product/sale"
 
 import { QRScanScreen } from './QRScan';
 
@@ -29,7 +30,8 @@ const Screens =  {
         NFT: {
             Create: NFTCreateScreen
         },
-        Exchange: Exchange
+        Exchange: Exchange,
+        CreateSaleEvents : CreateSaLeEvents,
     },
     QRScan: QRScanScreen,
     Profile: ProfileScreen,

@@ -4,11 +4,12 @@ import { TextInput, View, Title, Button, TextArea, SelectBox } from '@components
 import API from '@api';
 
 export const Exchange = () => {
-    const { ticketId } = useParams();
+    const { ticketIdParam } = useParams();
 
-    console.log(ticketId);
-    const [ticketId, setIdTicket] = useState("");
-    // const [principalIdUserSend, setPrincipalIdUserSend] = useState("");
+    console.log(ticketIdParam);
+
+    const [ticket, setTicket] = useState("");
+    const [principalIdUserSend, setPrincipalIdUserSend] = useState("");
     const [principalIdUserRecieve, setPrincipalIdUserRecieve] = useState("");
 
     useEffect(() => {
@@ -16,8 +17,13 @@ export const Exchange = () => {
     }, []);
 
     const fetchData = async () => {
-        const id = await API.NFT.get(ticketId);
-        setIdTicket(id);
+        const ticket = await API.NFT.get(ticketIdParam);
+        const tokens = await API.NFT.getAll();
+        setTicket(ticket);
+
+        console.log("GET ALL");
+
+        console.log(ticket);
     }
 
 
@@ -39,9 +45,9 @@ export const Exchange = () => {
                 <label id="" className="nft-create-screen__image-upload__image-upload-area" htmlFor="image-upload">HELLO</label>
             </div>
 
-            <TextInput onChange={() => {}} placeholder="Price" type="number"/>
+            <TextInput disabled onChange={(e) => setPrincipalIdUserSend(e.target.value)} value={ticket.price} placeholder={ticket.price} type="number"/>
             
-            <Button style={{ marginTop: 32 }} onClick={handleExchange}>Send</Button>
+            <Button style={{ marginTop: 32 }} onClick={() => {}}>Send</Button>
         </View>
     )
 }

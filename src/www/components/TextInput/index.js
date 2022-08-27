@@ -2,14 +2,14 @@ import React from 'react';
 
 import "./styles.scss";
 
-export const TextInput = ({ icon, placeholder, type="text", onChange, ref }) => {
+export const TextInput = ({ icon, placeholder, type="text", onChange, ref, disabled = false }) => {
     return (
         <div className="text-input">
             {
                 icon && <div className="text-input__icon">{ icon }</div>
             }
 
-            <input className="text-input__input" type={ type } onChange={ onChange } ref={ ref } placeholder={ placeholder } />
+            <input className="text-input__input" type={ type } disabled={disabled} onChange={ onChange } ref={ ref } placeholder={ placeholder } />
         </div>
     )
 }

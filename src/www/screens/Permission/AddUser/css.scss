@@ -1,6 +1,7 @@
 @import "@styles/lavenes";
 
-.nft-create-screen__image-upload {
+.nft-create-screen {
+    &__image-upload {
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -25,4 +26,5 @@
             color: #000;
             font-weight: 600;
         }
+    }
 }

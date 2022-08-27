@@ -34,6 +34,7 @@ const RootStack = () => {
           <Route exact path={routes.PRODUCT.CATEGORY.OWNED} element={<Screens.Product.Category.List />}/>
           <Route exact path={routes.PRODUCT.CATEGORY.LIST} element={<Screens.Product.Category.List />}/>
           <Route exact path={routes.PRODUCT.CREATE} element={<Screens.Product.NFT.Create />}/>
+          <Route exact path={routes.PRODUCT.SALE} element={<Screens.Product.CreateSaleEvents />}/>
           <Route exact path={routes.PRODUCT.INFORMATION.ITEM} element={<Screens.Product.Market />}/>
           <Route exact path={routes.PRODUCT.MARKET} element={<Screens.Product.Market />}/>
 

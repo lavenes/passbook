@@ -138,7 +138,7 @@ export const NFTCreateScreen = () => {
                 <label style={{
                     fontSize: "12px",
                 }}>Preoder</label>
-                <input type="checkbox" style={{marginTop: "7px", marginLeft: "10px",}} onChange={check}></input>
+                <input type="checkbox" style={{marginTop: "7px", marginLeft: "10px"}} onChange={check}></input>
             </div>
 
             <SelectBox onChange={e => handleSelectGift(e.target.value)} placeholder="Gift" options={NFTs.map(item => {

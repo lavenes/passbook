@@ -5,7 +5,7 @@ import { superheroes, canisterId, idlFactory } from '@declarations';
 export default function usePlug() {
     const connect = async() => {
         const whitelist = [canisterId];
-        const host = 'http://192.168.91.69:8080';
+        const host = 'http://172.16.255.41:8080';
   
         try {
             console.log(window.ic.plug);

@@ -40,14 +40,29 @@ shared(msg) actor class NFTSale(
     //*            PBC TOKEN API              *//
     //*=======================================*//
     type PBCToken = Types.PBCToken;
+    type PBCTokenExt = Types.PBCTokenExt;
 
     private stable var pbcTokenEntries : [(Principal, PBCToken)] = [];
     private var pbcTokens = HashMap.HashMap<Principal, PBCToken>(1, Principal.equal, Principal.hash);
 
+    private func _newPBCToken(user: Principal) : PBCToken {
+      return {
+        var user = user;
+        var balance = 0;
+      }
+    };
+    
+    private func _pbcTokenToExt(info: PBCToken) : PBCTokenExt {
+        return {
+          user = info.user;
+          balance = info.balance;
+        };
+    };
+
     //*MINT & BURN
     //*Mint
-    public shared({ caller }) func mintToken(to: Principal, value: Nat) : async Nat {
-      let userToken = pbcTokens.get(to);
+    public shared({ caller }) func mintToken(to: Principal, value: Nat) : async PBCTokenExt {
+      var userToken = pbcTokens.get(to);
 
       switch(userToken) {
         case(?userToken) {
@@ -55,10 +70,17 @@ shared(msg) actor class NFTSale(
 
           userToken.balance := newBalance;
 
-          return newBalance;
+          let res = pbcTokens.replace(to, userToken);
+
+          return _pbcTokenToExt(userToken);
         };
         case _ {
-          return 0;
+          var newUserToken : PBCToken = _newPBCToken(to);
+          newUserToken.balance := value;
+
+          let res = pbcTokens.put(to, newUserToken);
+
+          return _pbcTokenToExt(newUserToken);
         }
       };
     };
@@ -72,6 +94,8 @@ shared(msg) actor class NFTSale(
           var newBalance : Nat = userToken.balance - value;
 
           userToken.balance := newBalance;
+
+          let res = pbcTokens.replace(to, userToken);
 
           return newBalance;
         };
@@ -91,6 +115,10 @@ shared(msg) actor class NFTSale(
             case(?userTakeToken) {
               userToken.balance := userToken.balance - value;
               userTakeToken.balance := userTakeToken.balance + value;
+
+              let res = pbcTokens.replace(to, userToken);
+
+              return "OK";
             };
             case _ {
               return "FAIL";
@@ -101,8 +129,6 @@ shared(msg) actor class NFTSale(
           return "FAIL";
         }
       };
-
-      return "OK";
     };
 
     //*Queries
@@ -234,6 +260,38 @@ shared(msg) actor class NFTSale(
         }
     };
 
+    //*Transfer Token
+    public shared({ caller }) func transferNFT(from: Principal, to: Principal, tokenId: Text, fee: Nat) : async Text {
+      var nft = tokens.get(tokenId);
+
+      switch(nft) {
+        case(?nft) {
+          nft.owner := to;
+
+          let res = tokens.replace(tokenId, nft);
+
+          return "OK";
+        };
+        case _ {
+          throw Error.reject("nft not exist")
+        }
+      }
+    };
+
+    //*Burn Token
+    public shared({ caller }) func burnNFT(tokenId: Text) : async Text {
+      switch(tokens.get(tokenId)) {
+        case(?nft) {
+          let res = tokens.remove(tokenId);
+
+          return "OK";
+        };
+        case _ {
+          throw Error.reject("nft not exist");
+        }
+      }
+    };
+
     //*Clear all NFT
     public func clearAllTokens() {
         if(msg.caller != owner_) {
@@ -252,6 +310,34 @@ shared(msg) actor class NFTSale(
                 throw Error.reject("token not exist");
             };
         };
+    };
+
+    //*Update Ticket
+    public shared({ caller }) func updateNFT(metadata: TokenInfoExt): async TokenInfoExt {
+        // if(msg.caller != owner_) {
+        //     return #Err(#Unauthorized);
+        // };
+
+        let token = _newToken(caller);
+        
+        token.id := metadata.id;
+        token.date := metadata.date;
+        token.description := metadata.description;
+        token.details := metadata.details;
+        token.gifts := metadata.gifts;
+        token.image := metadata.image;
+        token.name := metadata.name;
+        token.price := metadata.price;
+        token.place := metadata.place;
+        token.time := metadata.time;
+        token.category := metadata.category;
+        token.nftType := metadata.nftType;
+        token.createdBy := metadata.createdBy;
+        token.dateCreated := metadata.dateCreated;
+
+        let res = tokens.replace(token.id, token);
+
+        return _tokenInfotoExt(token);
     };
 
     //* Get all tokens
@@ -415,6 +501,7 @@ shared(msg) actor class NFTSale(
     system func preupgrade() {
         usersEntries := Iter.toArray(users.entries());
         tokensEntries := Iter.toArray(tokens.entries());
+        pbcTokenEntries := Iter.toArray(pbcTokens.entries());
     };
 
     system func postupgrade() {
@@ -423,6 +510,9 @@ shared(msg) actor class NFTSale(
 
         tokens := HashMap.fromIter<Text, TokenInfo>(tokensEntries.vals(), 1, Text.equal, Text.hash);
         tokensEntries := [];
+
+        pbcTokens := HashMap.fromIter<Principal, PBCToken>(pbcTokenEntries.vals(), 1, Principal.equal, Principal.hash);
+        pbcTokenEntries := [];
     };
 
     //#enregion

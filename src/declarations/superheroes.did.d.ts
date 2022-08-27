@@ -3,7 +3,7 @@ import type { ActorMethod } from '@dfinity/agent';
 
 export interface NFTSale {
   'balanceOf' : ActorMethod<[Principal], bigint>,
-  'burnToken' : ActorMethod<[bigint], TxReceipt>,
+  'burnToken' : ActorMethod<[Principal, bigint], bigint>,
   'checkinTicket' : ActorMethod<[string, Principal], string>,
   'clearAllTokens' : ActorMethod<[], undefined>,
   'createAccount' : ActorMethod<
@@ -14,20 +14,17 @@ export interface NFTSale {
   'getAllTokens' : ActorMethod<[], Array<TokenInfoExt>>,
   'getTokenInfo' : ActorMethod<[string], TokenInfoExt>,
   'getUserInfo' : ActorMethod<[Principal], [] | [UserInfoExt]>,
-  'logoToken' : ActorMethod<[], string>,
   'mintCloneNFT' : ActorMethod<[string, string], TokenInfoExt>,
   'mintNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
-  'mintToken' : ActorMethod<[Principal, bigint], bigint>,
-  'nameToken' : ActorMethod<[], string>,
+  'mintToken' : ActorMethod<[Principal, bigint], PBCTokenExt>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
-  'symbolToken' : ActorMethod<[], string>,
-  'transferToken' : ActorMethod<[Principal, bigint], TxReceipt>,
-  'transferTokenFrom' : ActorMethod<[Principal, Principal, bigint], TxReceipt>,
+  'transferTokenFrom' : ActorMethod<[Principal, Principal, bigint], string>,
   'updateAccount' : ActorMethod<
     [Principal, string, string, bigint, string, string, string, bigint],
     UserInfoExt,
   >,
 }
+export interface PBCTokenExt { 'balance' : bigint, 'user' : Principal }
 export interface TokenGiftInfo {
   'id' : string,
   'name' : string,
@@ -53,18 +50,6 @@ export interface TokenInfoExt {
   'place' : string,
   'price' : bigint,
 }
-export type TxReceipt = { 'Ok' : bigint } |
-  {
-    'Err' : { 'InsufficientAllowance' : null } |
-      { 'InsufficientBalance' : null } |
-      { 'ErrorOperationStyle' : null } |
-      { 'Unauthorized' : null } |
-      { 'LedgerTrap' : null } |
-      { 'ErrorTo' : null } |
-      { 'Other' : string } |
-      { 'BlockUsed' : null } |
-      { 'AmountTooSmall' : null }
-  };
 export interface UserInfoExt {
   'id' : Principal,
   'sex' : bigint,

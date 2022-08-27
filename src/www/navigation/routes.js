@@ -4,6 +4,7 @@ export const routes = {
     SETTINGS: '/settings',
     PRODUCT: {
         CREATE: '/product/create',
+        SALE: '/product/sale',
         MARKET: '/products',
         INFORMATION: {
             TICKET: '/tickets/:ticketId',
@@ -13,7 +14,7 @@ export const routes = {
             OWNED: '/products/categories/owned/:categoryId',
             LIST: '/products/categories/:categoryId',
         },
-        EXCHANGE: '/exchange/:ticketId'
+        EXCHANGE: '/exchange/:ticketIdParam'
     },
     PROFILE: '/users/:principalId',
     PERMISSION: {
