@@ -78,11 +78,11 @@ export const BalanceCard = ({ style, onClick, to="#", balance }) => {
     )
 }
 
-export const CreatorCard = ({ style, onClick, to="#", name }) => {
+export const CreatorCard = ({ style, onClick, to="#", name, image }) => {
     return (
         <div className="card--creator" style={ style } onClick={onClick}>
             <Link to={to} className="card--creator__container">
-                <div className="card--creator__container__avatar"></div>
+                <div className="card--creator__container__avatar" style={{backgroundImage: `url(${image})`}}></div>
                 <div className="card--creator__container__content">
                     <span className="card--creator__container__content__subtitle">Creator</span>
                     <span className="card--creator__container__content__title">{ name }</span>

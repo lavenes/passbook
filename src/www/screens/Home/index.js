@@ -13,6 +13,7 @@ export const HomeScreen = ({ match, navigation }) => {
     const [ balance, setBalance ] = useState(0);
     const [ ownedTickets, setOwnedTickets ] = useState([]);
     const { connect, isConnected, principal, accountId, getBalance, actor } = usePlug();
+    const [ userInfo, setUserInfo ] = useState({ });
 
     useEffect(() => {
         fetchData();
@@ -30,7 +31,12 @@ export const HomeScreen = ({ match, navigation }) => {
         let ownedNFT = await API.NFT.getOwned();
 
         setOwnedTickets(ownedNFT);
-    }
+
+        //*Fetch User
+        let user = await API.User.get();
+
+        setUserInfo(user[0]);
+    }   
 
     return (
         <>
@@ -46,7 +52,7 @@ export const HomeScreen = ({ match, navigation }) => {
                         <AppBar.ActionButton icon={<IoScan/>} to="/qr_scan"/>
                     }
                     actions={
-                        <AppBar.AvatarImage />
+                        <AppBar.AvatarImage image={userInfo?.avatar}/>
                     }
                 />
 

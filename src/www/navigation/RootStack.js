@@ -20,7 +20,7 @@ const RootStack = () => {
       let principal = window.ic?.plug?.sessionManager?.sessionData;
     
       if(principal) setAuthed(true);
-    }, 200);
+    }, 500);
   }, []);
 
   return (

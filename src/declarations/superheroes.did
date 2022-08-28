@@ -1,11 +1,12 @@
 type UserInfoExt = 
  record {
+   avatar: text;
+   background: text;
    dateOfBirth: text;
    firstName: text;
    id: principal;
    lastName: text;
    liveIn: text;
-   permission: nat;
    phone: text;
    sex: nat;
  };
@@ -28,6 +29,7 @@ type TokenPreorder =
 type TokenInfoExt = 
  record {
    category: text;
+   checkin: bool;
    createdBy: principal;
    date: text;
    dateCreated: text;
@@ -77,7 +79,7 @@ type NFTSale =
    burnToken: (principal, float64) -> (float64);
    checkinTicket: (text, principal) -> (text);
    clearAllTokens: () -> () oneway;
-   createAccount: (text, text, nat, text, text, text) -> (UserInfoExt);
+   createAccount: (UserInfoExt) -> (text);
    createSaleEvent: (SaleEventExt) -> (SaleEventExt);
    deleteAccount: (principal) -> (bool);
    getAllSaleEvents: () -> (vec SaleEventExt);
@@ -92,11 +94,10 @@ type NFTSale =
    purchaseNFT: (text, nat, text) -> (text);
    readAccount: () -> (vec UserInfoExt) query;
    removeTokenPreorder: (text) -> (text) query;
+   sendCashbacks: () -> ();
    swapNFT: (text, text) -> (text);
    transferNFT: (principal, principal, text, nat) -> (text);
    transferTokenFrom: (principal, principal, float64) -> (text);
-   updateAccount: (principal, text, text, nat, text, text, text, nat) ->
-    (UserInfoExt);
    updateNFT: (TokenInfoExt) -> (TokenInfoExt);
  };
 service : (principal) -> NFTSale

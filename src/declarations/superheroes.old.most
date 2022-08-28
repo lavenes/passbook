@@ -54,26 +54,31 @@ type TokenPreorder =
   };
 type TokenPreorderList =
   {
+    var available : Bool;
     var id : Text;
     var nftId : Text;
     var owner : Principal;
     var supplies : Nat
   };
 type TokenPreorderList__1 = TokenPreorderList;
+type UserCashback = {amount : Float; uid : Principal};
+type UserCashback__1 = UserCashback;
 type UserInfo =
   {
+    var avatar : Text;
+    var background : Text;
     var dateOfBirth : Text;
     var firstName : Text;
     var id : Principal;
     var lastName : Text;
     var liveIn : Text;
-    var permission : Nat;
     var phone : Text;
     var sex : Nat
   };
 type UserInfo__1 = UserInfo;
 actor {
   stable var blackhole : Principal;
+  stable var cashbacks : [UserCashback__1];
   stable var owner_ : Principal;
   stable var pbcTokenEntries : [(Principal, PBCToken__1)];
   stable var saleEventEntries : [(Text, SaleEvent__1)];

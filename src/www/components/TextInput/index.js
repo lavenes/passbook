@@ -14,12 +14,12 @@ export const TextInput = ({ icon, placeholder, type="text", onChange, ref, disab
     )
 }
 
-export const TextArea = ({ placeholder, children, style, onChange, ref }) => {
+export const TextArea = ({ placeholder, defaultValue, style, onChange, ref }) => {
     return (
         <textarea style={{
             ...style,
             height: 150,
             paddingTop: 12
-        }} className="text-input" placeholder={ placeholder } onChange={ onChange } ref={ ref }>{ children }</textarea>
+        }} className="text-input" placeholder={ placeholder } onChange={ onChange } ref={ ref }>{ defaultValue }</textarea>
     )
 }

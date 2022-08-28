@@ -6,7 +6,7 @@ import './styles.scss';
 
 export const Title = ({ title, subtitle, style }) => {
     return (
-        <div  style={style} className="title title-header">
+        <div style={style} className="title title-header">
             <span  className="title-header__sub">{ subtitle }</span>
             <h1 className="title-header__big">{ title }</h1>
         </div>

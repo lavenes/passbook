@@ -1,69 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, Title, ScrollView, GridView, UserCard, Button, Back } from '@components';
+import { View, Title, ScrollView, GridView, UserCard, Button, Back } from '@components'
+import { Link }  from "react-router-dom";
 
 export const Notifications = ({ match, navigation }) => {
 
     const notifications = [
         {
             id: 1,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
+            image: "https://d2vi0z68k5oxnr.cloudfront.net/b6ed8c16-cfe5-4c28-a23b-8bef0715972e/original.png?d=sm-cover",
+            decriptions: "Bạn đã được nhận 1 vé xem phim từ Min Kiên"
         },
-        {
-            id: 2,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 3,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 4,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 5,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 6,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 7,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 8,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 9,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 10,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 11,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        },
-        {
-            id: 12,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover",
-            decriptions: "Bạn đã thanh toán thành công!"
-        }
     ];
 
     return (
@@ -81,10 +27,12 @@ export const Notifications = ({ match, navigation }) => {
                         items={
                             notifications.map((item) => {
                                 return (
-                                    <div key={item.id} style={{position: "relative"}}>
-                                        <img src={item.image} style={{width: "20%", borderRadius: "10px" }}/>
-                                        <label style={{position: "absolute", top: "10px", left: "23%"}}>{item.decriptions}</label>
-                                    </div>
+                                    <Link to={`/notifications/${item.id}`}>
+                                        <div key={item.id} style={{position: "relative"}}>
+                                            <img src={item.image} style={{width: "20%", borderRadius: "10px" }}/>
+                                            <label style={{position: "absolute", top: "10px", left: "23%"}}>{item.decriptions}</label>
+                                        </div>
+                                    </Link>
                                 )
                             }
                         )}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Ticket, ActionsGroup, CreatorCard, PriceTitle, SectionDivider, Button, SectionTitle, InformationGroup, TextInput } from '@components';
+import { View, Ticket, ActionsGroup, CreatorCard, PriceTitle, SectionDivider, Button, SectionTitle, InformationGroup, TextInput, AppBar } from '@components';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
 import { Config } from "@config";
@@ -83,7 +83,14 @@ export const ItemInformation = ({ title, id }) => {
 
 
     return (
-        <View className="item-information-screen" overlay layoutId={`card-container-${id}`} backdropImage={ ticketMeta?.image } style={{backgroundColor: '#f5f5f5'}}>
+        <View className="item-information-screen" overlay layoutId={`card-container-${id}`} backdropImage={ ticketMeta?.image } style={{backgroundColor: '#f5f5f5', paddingTop: 86}}>
+            <AppBar.AppBar 
+                leading={
+                    <AppBar.ActionBack />
+                }
+                title={ `${ticketMeta?.name}` }
+                fixed
+            />
             <motion.div className="card-content" style={{width: '100%'}} animate>
                 <motion.div
                     className="card-image-container"
@@ -103,7 +110,7 @@ export const ItemInformation = ({ title, id }) => {
                 <motion.div className="content-container" animate>
                     <motion.span className="title">{ ticketMeta?.name }</motion.span>
                     <PriceTitle price={ ticketMeta?.price } currency={ Config.TOKEN.SYMBOL } />
-                    <CreatorCard to={`/users/${ticketMeta?.createdBy}`} name={ "OWNER" }/>
+                    <CreatorCard to={`/users/${ticketMeta?.createdBy}`} image={ticketMeta?.author?.avatar} name={ `${ticketMeta?.author?.firstName || ""} ${ticketMeta?.author?.lastName || ""}` }/>
                     <ActionsGroup.Group>
                         {actions.map((action, index) => {
                             return <ActionsGroup.Button key={index} onClick={() => handleClick(action)} name={action.name} icon={action.icon}/>
@@ -195,20 +202,7 @@ export const ItemInformation = ({ title, id }) => {
                         checkin={ ticketMeta?.checkin }
                         category={ category }
                     /> } 
-                    <Button style={{ marginTop: 32 }} to={'/checkin'}>Check in</Button>
-                    <div
-						style={{
-							backgroundColor: '#000',
-							color: '#FFF',
-							borderRadius: 12,
-							width: '100%',
-							display: 'flex',
-							alignItems: 'center',
-							justifyContent: 'center',
-							height: 48,
-							marginTop: 24,
-						}}>
-					</div>
+                    {/* <Button style={{ marginTop: 32 }} to={'/checkin'}>Check in</Button> */}
                 </motion.div>
             </motion.div>
         </View>

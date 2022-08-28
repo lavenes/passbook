@@ -7,10 +7,7 @@ export interface NFTSale {
   'burnToken' : ActorMethod<[Principal, number], number>,
   'checkinTicket' : ActorMethod<[string, Principal], string>,
   'clearAllTokens' : ActorMethod<[], undefined>,
-  'createAccount' : ActorMethod<
-    [string, string, bigint, string, string, string],
-    UserInfoExt,
-  >,
+  'createAccount' : ActorMethod<[UserInfoExt], string>,
   'createSaleEvent' : ActorMethod<[SaleEventExt], SaleEventExt>,
   'deleteAccount' : ActorMethod<[Principal], boolean>,
   'getAllSaleEvents' : ActorMethod<[], Array<SaleEventExt>>,
@@ -25,13 +22,10 @@ export interface NFTSale {
   'purchaseNFT' : ActorMethod<[string, bigint, string], string>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
   'removeTokenPreorder' : ActorMethod<[string], string>,
+  'sendCashbacks' : ActorMethod<[], undefined>,
   'swapNFT' : ActorMethod<[string, string], string>,
   'transferNFT' : ActorMethod<[Principal, Principal, string, bigint], string>,
   'transferTokenFrom' : ActorMethod<[Principal, Principal, number], string>,
-  'updateAccount' : ActorMethod<
-    [Principal, string, string, bigint, string, string, string, bigint],
-    UserInfoExt,
-  >,
   'updateNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
 }
 export interface PBCTokenExt { 'balance' : number, 'user' : Principal }
@@ -54,6 +48,7 @@ export interface TokenGiftInfo {
 }
 export interface TokenInfoExt {
   'id' : string,
+  'checkin' : boolean,
   'preorder' : TokenPreorder,
   'dateCreated' : string,
   'owner' : Principal,
@@ -89,11 +84,12 @@ export interface TokenPreorderListExt {
 export interface UserInfoExt {
   'id' : Principal,
   'sex' : bigint,
-  'permission' : bigint,
+  'background' : string,
   'dateOfBirth' : string,
   'phone' : string,
   'lastName' : string,
   'liveIn' : string,
+  'avatar' : string,
   'firstName' : string,
 }
 export interface _SERVICE extends NFTSale {}

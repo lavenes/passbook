@@ -2,11 +2,12 @@ export const idlFactory = ({ IDL }) => {
   const UserInfoExt = IDL.Record({
     'id' : IDL.Principal,
     'sex' : IDL.Nat,
-    'permission' : IDL.Nat,
+    'background' : IDL.Text,
     'dateOfBirth' : IDL.Text,
     'phone' : IDL.Text,
     'lastName' : IDL.Text,
     'liveIn' : IDL.Text,
+    'avatar' : IDL.Text,
     'firstName' : IDL.Text,
   });
   const SaleEventExt = IDL.Record({
@@ -42,6 +43,7 @@ export const idlFactory = ({ IDL }) => {
   });
   const TokenInfoExt = IDL.Record({
     'id' : IDL.Text,
+    'checkin' : IDL.Bool,
     'preorder' : TokenPreorder,
     'dateCreated' : IDL.Text,
     'owner' : IDL.Principal,
@@ -70,11 +72,7 @@ export const idlFactory = ({ IDL }) => {
     'burnToken' : IDL.Func([IDL.Principal, IDL.Float64], [IDL.Float64], []),
     'checkinTicket' : IDL.Func([IDL.Text, IDL.Principal], [IDL.Text], []),
     'clearAllTokens' : IDL.Func([], [], ['oneway']),
-    'createAccount' : IDL.Func(
-        [IDL.Text, IDL.Text, IDL.Nat, IDL.Text, IDL.Text, IDL.Text],
-        [UserInfoExt],
-        [],
-      ),
+    'createAccount' : IDL.Func([UserInfoExt], [IDL.Text], []),
     'createSaleEvent' : IDL.Func([SaleEventExt], [SaleEventExt], []),
     'deleteAccount' : IDL.Func([IDL.Principal], [IDL.Bool], []),
     'getAllSaleEvents' : IDL.Func([], [IDL.Vec(SaleEventExt)], []),
@@ -101,6 +99,7 @@ export const idlFactory = ({ IDL }) => {
     'purchaseNFT' : IDL.Func([IDL.Text, IDL.Nat, IDL.Text], [IDL.Text], []),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
     'removeTokenPreorder' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
+    'sendCashbacks' : IDL.Func([], [], []),
     'swapNFT' : IDL.Func([IDL.Text, IDL.Text], [IDL.Text], []),
     'transferNFT' : IDL.Func(
         [IDL.Principal, IDL.Principal, IDL.Text, IDL.Nat],
@@ -110,20 +109,6 @@ export const idlFactory = ({ IDL }) => {
     'transferTokenFrom' : IDL.Func(
         [IDL.Principal, IDL.Principal, IDL.Float64],
         [IDL.Text],
-        [],
-      ),
-    'updateAccount' : IDL.Func(
-        [
-          IDL.Principal,
-          IDL.Text,
-          IDL.Text,
-          IDL.Nat,
-          IDL.Text,
-          IDL.Text,
-          IDL.Text,
-          IDL.Nat,
-        ],
-        [UserInfoExt],
         [],
       ),
     'updateNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),

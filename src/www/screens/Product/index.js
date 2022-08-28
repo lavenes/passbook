@@ -53,7 +53,7 @@ export const ProductMarket = () => {
 
                 {/* <Button style={{marginTop: 32}} onClick={API.NFT.clearAll}>Clear All NFT</Button> */}
 
-                <SectionTitle
+                {/* <SectionTitle
                     title="Categories nổi bật"
                 />
                 <ScrollView
@@ -69,7 +69,7 @@ export const ProductMarket = () => {
                             <SquareCard overlay title="Art" to="/items/d" id={"ds"} style={{ marginTop: 0, width: 110 }} key={"sp-dd"}/>
                         ]}
                     />
-                </ScrollView>
+                </ScrollView> */}
 
                 <SectionTitle
                     title="Chương trình nổi bật"
@@ -91,7 +91,7 @@ export const ProductMarket = () => {
 
                                 return <ProductCard 
                                     title={ nft?.name } 
-                                    owner={ "OWNER" } 
+                                    owner={ `${nft?.author?.firstName || ""} ${nft?.author?.lastName || ""}` } 
                                     price={ nft?.price } 
                                     image={ nft?.image } 
                                     to={`/items/${item.id}`}
@@ -126,7 +126,7 @@ export const ProductMarket = () => {
                 </ScrollView>
 
                 <SectionTitle
-                    title="Collections"
+                    title="Categories nổi bật"
                 />
                 <ScrollView
                     horizontal

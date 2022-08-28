@@ -14,7 +14,7 @@ export const AppBar = ({ title, actions, leading, fixed }) => {
                 { leading }
             </div>
             <div className="appbar__title" onClick={() => navigate(-1)}>
-                <span className="title">{ title }</span>
+                <span className="appbar__title__title">{ title }</span>
             </div>
             <div className="appbar__actions">
                 { actions }
@@ -37,9 +37,9 @@ export const ActionBack = ({}) => {
     return <ActionButton icon={<IoChevronBack/>} onClick={() => navigate(-1)}/>
 }
 
-export const AvatarImage = () => {
+export const AvatarImage = ({ image }) => {
     return (
-        <button className="appbar__avatar-image">
+        <button className="appbar__avatar-image" style={{background: `url(${image}) no-repeat center center / cover`}}>
         
         </button>
     )

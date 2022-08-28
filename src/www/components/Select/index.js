@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import "./styles.scss";
 
-export const SelectBox = ({ options, placeholder, onChange }) => {
+export const SelectBox = ({ options, placeholder, onChange, defaultValue }) => {
     return (
         <div className="select-box">
             <select className="select-box__box" onChange={ onChange }>
@@ -10,7 +10,7 @@ export const SelectBox = ({ options, placeholder, onChange }) => {
                 {
                     options.map((item, index) => {
                         return (
-                            <option id="optionBox" className="select-box__box__option" value={item.value} key={`${item.value}-${index}`}>{ item.label }</option>
+                            <option id="optionBox" selected={defaultValue == item.value} className="select-box__box__option" value={item.value} key={`${item.value}-${index}`}>{ item.label }</option>
                         )
                     })
                 }

@@ -497,10 +497,10 @@ shared(msg) actor class NFTSale(
         case(?fromNft) {
           switch(toNft) {
             case(?toNft) {
-              var fromNftOwner = fromNft.owner;
+              var t = _newToken(fromNft.owner);
 
               fromNft.owner := toNft.owner;
-              toNft.owner := fromNftOwner;
+              toNft.owner := t.owner;
 
               let resFrom = tokens.replace(fromNft.id, fromNft);
               let resTo = tokens.replace(toNft.id, toNft);
@@ -641,6 +641,8 @@ shared(msg) actor class NFTSale(
             var phone = "";
             var id = principalId;
             var permission = 0;
+            var avatar = "";
+            var background = "";
         }
     };
 
@@ -653,7 +655,8 @@ shared(msg) actor class NFTSale(
             liveIn = info.liveIn;
             phone = info.phone;
             id = info.id;
-            permission = info.permission;
+            avatar = info.avatar;
+            background = info.background;
         };
     };
 
@@ -668,7 +671,8 @@ shared(msg) actor class NFTSale(
                     liveIn = info.liveIn;
                     phone = info.phone;
                     id = info.id;
-                    permission = info.permission;
+                    avatar = info.avatar;
+                    background = info.background
                 };
             };
             case _ {
@@ -683,42 +687,28 @@ shared(msg) actor class NFTSale(
 
 
     //*CREATE ACCOUNT
-    public shared({caller}) func createAccount(firstName : Text, lastName: Text, sex : Nat, dateOfBirth : Text, phone: Text, liveIn: Text) : async UserInfoExt {
+    public shared({caller}) func createAccount(userInfo: UserInfoExt) : async Text {
         let user = _newUser(caller);
 
-        user.firstName := firstName;
-        user.lastName := lastName;
-        user.sex := sex;
-        user.dateOfBirth := dateOfBirth;
-        user.phone := phone;
-        user.liveIn :=  liveIn;
+        user.firstName := userInfo.firstName;
+        user.lastName := userInfo.lastName;
+        user.sex := userInfo.sex;
+        user.dateOfBirth := userInfo.dateOfBirth;
+        user.phone := userInfo.phone;
+        user.liveIn :=  userInfo.liveIn;
+        user.avatar := userInfo.avatar;
+        user.background := userInfo.background;
 
-        users.put(caller, user);
+        switch(users.get(caller)) {
+          case(?userA) {
+            let res = users.replace(caller, user);
+          };
+          case _ {
+            users.put(caller, user);
+          }
+        };
         
-        return _userInfotoExt(user);
-    };
-
-    //*UPDATE ACCOUNT
-    public func updateAccount(principalId : Principal, firstName : Text, lastName: Text, sex : Nat, dateOfBirth : Text, phone: Text, liveIn: Text, permission: Nat) : async UserInfoExt {
-        let user = _newUser(principalId);
-
-        user.firstName := firstName;
-        user.lastName := lastName;
-        user.sex := sex;
-        user.dateOfBirth := dateOfBirth;
-        user.phone := phone;
-        user.liveIn :=  liveIn;
-        user.permission := permission;
-
-        switch (users.get(principalId)) {
-            case _ {
-                let a = users.replace(principalId, user);
-                return _userInfotoExt(user);
-            };
-            case null {
-                throw Error.reject("unauthorized");
-            };
-        };  
+        return "OK";
     };
 
     //*DELETE ACCOUNT

@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { TextInput, View, Title, Button, TextArea, SelectBox, Back } from '@components';
 import API from '@api';
 import { usePlug } from '@hooks';
+import Swal from "sweetalert2";
 
 export const Exchange = () => {
     const { ticketIdParam } = useParams();
@@ -21,12 +22,15 @@ export const Exchange = () => {
         const tokens = await API.NFT.getAll();
 
         let ownedNFT = await API.NFT.getOwned();
-
+        
         setTicket(ticket);
     }
 
-    const handleExchange = () => {
+    const handleExchange = async () => {
         const principalId = window.ic.plug.sessionManager.sessionData.principalId;
+
+        await API.NFT.transfer(principalIdUserSend, principalIdUserRecieve, ticket.price);
+
         console.log({
             principalId,
             principalIdUserSend,

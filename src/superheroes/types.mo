@@ -162,7 +162,8 @@ module {
         var phone: Text;
         var liveIn: Text;
         var id: Principal;
-        var permission: Nat;
+        var avatar: Text;
+        var background: Text;
     };
 
     public type UserInfoExt = {
@@ -173,6 +174,7 @@ module {
         phone: Text;
         liveIn: Text;
         id: Principal;
-        permission: Nat;
+        avatar: Text;
+        background: Text;
     };
 };

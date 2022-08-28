@@ -31,8 +31,6 @@ export const NFT = {
             dateCreated: new Date().toISOString()
         }
 
-        console.log(metadata);
-
         //*Upload
         let hero = await actor;
         
@@ -45,10 +43,14 @@ export const NFT = {
     getAll: async() => {
         let hero = await actor;
 
+        //*Fetch Users
+        let users = await hero.readAccount();
+
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
             item.price = Number(item.price);
+            item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
         });
@@ -59,7 +61,16 @@ export const NFT = {
         let hero = await actor;
         const { principal } = usePlug();
         const id = principalId || principal;
+        let users = await hero.readAccount();
+
 		let res = await hero.getAllTokens();
+
+        res = res.map(item => {
+            item.price = Number(item.price);
+            item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
+
+            return item;
+        });
 
         res = res.filter(item => {
             if(item.createdBy.toString() == id && item.owner.toString() == id) {
@@ -76,7 +87,16 @@ export const NFT = {
     getAllTickets: async() => {
         let hero = await actor;
 
+        let users = await hero.readAccount();
+
 		let res = await hero.getAllTokens();
+
+        res = res.map(item => {
+            item.price = Number(item.price);
+            item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
+
+            return item;
+        });
 
         res = res.filter(item => {
             if(item.type === "ticket") {
@@ -93,7 +113,16 @@ export const NFT = {
     getAllNFTs: async() => {
         let hero = await actor;
 
+        let users = await hero.readAccount();
+
 		let res = await hero.getAllTokens();
+
+        res = res.map(item => {
+            item.price = Number(item.price);
+            item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
+
+            return item;
+        });
 
         res = res.filter(item => {
             if(item.type === "nft") {
@@ -110,7 +139,16 @@ export const NFT = {
     getOwned: async() => {
         let hero = await actor;
 
+        let users = await hero.readAccount();
+
 		let res = await hero.getAllTokens();
+
+        res = res.map(item => {
+            item.price = Number(item.price);
+            item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
+
+            return item;
+        });
 
         res = res.filter(item => {
             let itemOwner = item.owner.toString();
@@ -130,7 +168,16 @@ export const NFT = {
     getCreatedNFTs: async() => {
         let hero = await actor;
 
+        let users = await hero.readAccount();
+
 		let res = await hero.getAllTokens();
+
+        res = res.map(item => {
+            item.price = Number(item.price);
+            item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
+
+            return item;
+        });
 
         res = res.filter(item => {
             let itemCreated = item.createdBy.toString();
@@ -153,7 +200,10 @@ export const NFT = {
 
         let res = await hero.getTokenInfo(id);
 
+        let userRes = await hero.getUserInfo(res.createdBy);
+
         res.price = Number(res.price);
+        res.author = userRes[0];
 
         res.gifts = res.gifts.map(item => {
             item.image = new Uint8Array(item.image);
@@ -224,5 +274,19 @@ export const NFT = {
                 console.log(e);
             };
         }
+    },
+    swap: async(from, to) => {
+        let hero = await actor;
+
+        let res = await hero.swapNFT(from, to);
+
+        return res;
+    },
+    transfer: async (from, to, tokenId) => {
+        let hero = await actor;
+
+        let res = await hero.transferNFT(from, to, tokenId, 0);
+
+        return res;
     }
 }

@@ -45,6 +45,11 @@
                 &__principal {
                     margin-top: 5px;
                     font-size: $body;
+                    white-space: nowrap;
+                    overflow: hidden !important;
+                    text-overflow: ellipsis;
+                    display: inline-block;
+                    width: 180px;
                 }
             }
         }
