@@ -21,7 +21,7 @@ import Nat32 "mo:base/Nat32";
 import Nat64 "mo:base/Nat64";
 import Blob "mo:base/Blob";
 import Principal "mo:base/Principal";
-
+import HashMap "mo:base/HashMap";
 
 module {
     //*=======================================*//
@@ -143,6 +143,7 @@ module {
         privacy: Text;
         preorder: TokenPreorder;
         supplies: Nat;
+        checkin: Bool;
     };
     
     //*=======================================*//

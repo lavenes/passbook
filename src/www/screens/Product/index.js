@@ -22,7 +22,7 @@ export const ProductMarket = () => {
         let nfts = await API.NFT.getAll();
 
         //Filter owned
-        nfts = nfts.filter(item => item.createdBy.toString() == item.owner.toString());
+        nfts = nfts.filter(item => item.createdBy.toString() == item.owner.toString() && item.privacy == "public");
 
         setTickets(nfts);
 
@@ -48,8 +48,6 @@ export const ProductMarket = () => {
                 <TextInput placeholder="Search" icon={<IoSearch/>}/>
 
                 <Button style={{marginTop: 32}} to="/product/create">Create</Button>
-
-                <Button style={{marginTop: 32}} onClick={() => API.PCB.mint(1000000)}>Mint Coin</Button>
 
                 <Button style={{marginTop: 32}} to="/product/sale">Create sale events</Button>
 

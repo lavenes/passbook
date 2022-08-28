@@ -100,7 +100,7 @@ export const NFTCreateScreen = () => {
             description: giftData.description,
             price: giftData.price,
             createdBy: giftData.createdBy,
-            image: giftData.imageBuffer
+            image: giftData.image
         }
 
         setGifts([giftData]);

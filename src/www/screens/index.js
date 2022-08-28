@@ -14,6 +14,7 @@ import { AddUser } from "./Permission/AddUser";
 import { Connect } from "./Connect";
 import { Notifications } from "./Notifications";
 import { Checkin } from "./Checkin";
+import { Notify } from "./Notify"
 
 import { QRScanScreen } from './QRScan';
 
@@ -46,7 +47,10 @@ const Screens =  {
         AddUser: AddUser
     },
     Connect: Connect,
-    Notifications: Notifications,
+    Notifications: {
+        Notifications: Notifications,
+        Notify: Notify,
+    },
     Checkin: Checkin,
 }
 

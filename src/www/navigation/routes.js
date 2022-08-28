@@ -24,6 +24,9 @@ export const routes = {
         ADDUSER: '/user/add-user',
     },
     CONNECT: '/connect',
-    NOTIFICATIONS: '/notifications',
+    NOTIFICATIONS: {
+        NOTIFICATIONS: '/notifications',
+        SHOWNOTIFY: '/notifications/:id',
+    },
     CHECKIN: 'checkin'
 };

@@ -32,5 +32,9 @@ export const Config = {
     MOTOKO: {
         PRICE_E8S: 1000 * 1000 * 100
     },
-    IMGUR_CLIENT_ID: "4f61d80726ad8f2"
+    IMGUR_CLIENT_ID: "4f61d80726ad8f2",
+    TOKEN: {
+        NAME: "PassBook Coin",
+        SYMBOL: "PCB"
+    }
 }

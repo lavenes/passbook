@@ -277,6 +277,7 @@ shared(msg) actor class NFTSale(
             privacy = info.privacy;
             preorder = info.preorder;
             supplies = info.supplies;
+            checkin = info.checkin;
         };
     };
 
@@ -755,7 +756,9 @@ shared(msg) actor class NFTSale(
 
           }
         }
-      }
+      };
+
+      cashbacks := [];
     };
 
     system func heartbeat() : async () {

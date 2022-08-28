@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Ticket, ActionsGroup, CreatorCard, PriceTitle, SectionDivider, Button, SectionTitle, InformationGroup, TextInput } from '@components';
 import { Link } from 'react-router-dom';
 import { motion } from "framer-motion";
+import { Config } from "@config";
 import * as Icon from 'react-icons/io5';
 import API from '@api';
 import Swal from 'sweetalert2';
@@ -14,6 +15,7 @@ export const ItemInformation = ({ title, id }) => {
     const [isTicket, setIsTicket] = useState(false);
     const [qrValue, setQRValue] = useState(null);
     const [amount, setAmount] = useState(1);
+    const [category, setCategory] = useState(null);
 
     const actions = [
         {
@@ -48,10 +50,14 @@ export const ItemInformation = ({ title, id }) => {
 
         //*Generate QR Ticket
         if(nft.nftType === "ticket" && nft.owned && ( nft.owner.toString() != nft.createdBy.toString() )) setQRValue(`${nft.id}#${nft.owner}`)
+    
+        //*Get category
+        let category = Config.VARIABLES.TICKET_CATEGORIES.find(item => item.value == nft.category)?.label;
+
+        setCategory(category);
     }
 
     const handlePurchase = async () => {
-        console.log("PURCHASING...");
         await API.NFT.purchase(id, amount).then(e => {
             Swal.fire(
                 'Đã mua thành công!',
@@ -59,8 +65,6 @@ export const ItemInformation = ({ title, id }) => {
                 'success'
             );
         });
-
-        console.log("DONE");
     }
 
 
@@ -98,7 +102,7 @@ export const ItemInformation = ({ title, id }) => {
                 </motion.div>
                 <motion.div className="content-container" animate>
                     <motion.span className="title">{ ticketMeta?.name }</motion.span>
-                    <PriceTitle price={ ticketMeta?.price } currency="ICP" />
+                    <PriceTitle price={ ticketMeta?.price } currency={ Config.TOKEN.SYMBOL } />
                     <CreatorCard to={`/users/${ticketMeta?.createdBy}`} name={ "OWNER" }/>
                     <ActionsGroup.Group>
                         {actions.map((action, index) => {
@@ -110,9 +114,16 @@ export const ItemInformation = ({ title, id }) => {
                         <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Star" icon={<Icon.IoStarOutline/>}/>
                         <ActionsGroup.Button onClick={() => {console.log("Click")}} name="Share" icon={<Icon.IoShareOutline/>}/> */}
                     </ActionsGroup.Group>
-                    <h4>Amount</h4>
-                    <input defaultValue={1} onChange={e => setAmount(Number(e.target.value))} type="number" style={{width:"9%", height: "30px", borderRadius: "6px", border: "none", paddingLeft: "20px"}}/>
+
+                    { !isOwned && <h4>Số lượng</h4> }
+
+                    {
+                        !isOwned && 
+                        <TextInput defaultValue={1} onChange={e => setAmount(Number(e.target.value))} type="number"/>
+                    }
+
                     <SectionDivider/>
+
                     { !isOwned && 
                         <Button onClick={handlePurchase}>Buy</Button> }
 
@@ -179,6 +190,10 @@ export const ItemInformation = ({ title, id }) => {
                         seat={ ticketMeta?.seat }
                         order={ ticketMeta?.order }
                         qrValue={ qrValue }
+                        preorder={`${(ticketMeta?.preorder.preorder || null) && `${ticketMeta?.preorder.end} ${ticketMeta?.preorder.endTime}`}`}
+                        supplies={ ticketMeta?.supplies.toString() }
+                        checkin={ ticketMeta?.checkin }
+                        category={ category }
                     /> } 
                     <Button style={{ marginTop: 32 }} to={'/checkin'}>Check in</Button>
                     <div
@@ -193,9 +208,6 @@ export const ItemInformation = ({ title, id }) => {
 							height: 48,
 							marginTop: 24,
 						}}>
-						<Link style={{ color: '#FFF' }} to='/'>
-							Cancel
-						</Link>
 					</div>
                 </motion.div>
             </motion.div>

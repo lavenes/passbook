@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
 import { useNavigationType, useParams } from 'react-router-dom';
 import { IoScan } from 'react-icons/io5';
-import { AppBar, View, Title, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, ListView, BalanceCard } from '@components';
+import { AppBar, View, Title, FeatureCard, SectionTitle, SquareCard, GridView, ScrollView, ListView, BalanceCard, Button } from '@components';
 import Screens from '@screens';
 import { usePlug } from '@hooks';
 import API from '@api';
+import { Config } from '@config';
 
 export const HomeScreen = ({ match, navigation }) => {
     let { ticketId } = useParams();
@@ -50,6 +51,13 @@ export const HomeScreen = ({ match, navigation }) => {
                 />
 
                 <BalanceCard balance={balance}/>
+
+                <Button style={{marginTop: 32}} onClick={() => {
+                    let value = 1000;
+
+                    API.PCB.mint(value);
+                    setBalance(balance + value);
+                }}>Mua Coin</Button>
 
                 <Title
                     subtitle="Xin chào Quang Nhat"
