@@ -4,8 +4,9 @@ import { superheroes, canisterId, idlFactory } from '@declarations';
 
 export default function usePlug() {
     const connect = async() => {
-        const whitelist = [canisterId];
-        const host = 'http://172.16.255.41:8080';
+        const whitelist = ["kvyhi-eyaaa-aaaag-qassa-cai"];
+        // const host = 'http://localhost:8080';
+        const host = window.location.host;
   
         try {
             console.log(window.ic.plug);
@@ -43,7 +44,7 @@ export default function usePlug() {
 
     const actor = (async() => {
         return await window.ic.plug.createActor({
-            canisterId: canisterId,
+            canisterId: "kvyhi-eyaaa-aaaag-qassa-cai",
             interfaceFactory: idlFactory,
         })
     })();

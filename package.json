@@ -53,6 +53,8 @@
     "last 2 edge version"
   ],
   "dependencies": {
+    "@connect2ic/core": "^0.0.9",
+    "@connect2ic/react": "^0.0.7",
     "axios": "^0.27.2",
     "crypto-js": "^4.0.0",
     "firebase": "^9.9.3",

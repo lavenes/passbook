@@ -6,7 +6,7 @@ const CopyPlugin = require("copy-webpack-plugin");
 
 let localCanisters, prodCanisters, canisters;
 
-const superheroes_IC = "fij5p-siaaa-aaaai-acata-cai"
+const superheroes_IC = "kvyhi-eyaaa-aaaag-qassa-cai"
 
 try {
     localCanisters = require(path.resolve(
@@ -118,7 +118,7 @@ module.exports = env => {
                 ...canisterEnvVariables
             } : {
                 NODE_ENV: "development",
-                SUPERHEROES_CANISTER_ID: superheroes_IC,
+                SUPERHEROES_CANISTER_ID: "kvyhi-eyaaa-aaaag-qassa-cai",
 
             }),
             new webpack.ProvidePlugin({
@@ -130,7 +130,7 @@ module.exports = env => {
         devServer: {
             proxy: {
                 "/api": {
-                    target: env.devM == "mo" ? "http://0.0.0.0:8000" : "https://ic0.app",
+                    target: "https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.ic0.app",
                     changeOrigin: true,
                     pathRewrite: {
                         "^/api": "/api",

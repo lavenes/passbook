@@ -18,9 +18,11 @@ const RootStack = () => {
   useEffect(() => {
     setTimeout(() => {
       let principal = window.ic?.plug?.sessionManager?.sessionData;
+
+      console.log(principal);
     
       if(principal) setAuthed(true);
-    }, 500);
+    }, 5000);
   }, []);
 
   return (
