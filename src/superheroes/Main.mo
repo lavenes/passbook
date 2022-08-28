@@ -33,9 +33,7 @@ import Nat64 "mo:base/Nat64";
 import Float "mo:base/Float";
 import Debug "mo:base/Debug";
 
-shared(msg) actor class NFTSale(
-    _owner: Principal,
-    ) = this {
+shared(msg) actor class NFTSale() = this {
     private stable var blackhole: Principal = Principal.fromText("aaaaa-aa");
 
     //*=======================================*//
@@ -232,8 +230,6 @@ shared(msg) actor class NFTSale(
     type TokenPreorderList = Types.TokenPreorderList;
     type TokenPreorderListExt = Types.TokenPreorderListExt;
     type UserCashback = Types.UserCashback;
-
-    private stable var owner_: Principal = _owner;
 
     private stable var tokensEntries : [(Text, TokenInfo)] = [];
     private var tokens = HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
@@ -536,9 +532,9 @@ shared(msg) actor class NFTSale(
 
     //*Clear all NFT
     public func clearAllTokens() {
-        if(msg.caller != owner_) {
-            return;
-        };
+        // if(msg.caller != owner_) {
+        //     return;
+        // };
         tokens := HashMap.HashMap<Text, TokenInfo>(1, Text.equal, Text.hash);
     };
 
@@ -592,17 +588,19 @@ shared(msg) actor class NFTSale(
         switch(tokens.get(ticketId)) {
             case(?ticketInfo) {
                 if(ticketInfo.owner == principalId) {
-                    if(ticketInfo.checkin) {
+                    if(ticketInfo.checkin == false) {
                         ticketInfo.checkin := true;
 
                         return "TICKET_VALID"
+                    }else{
+                      throw Error.reject("TICKET_INVALID");
                     }
-                };
-
-                throw Error.reject("TICKET_INVALID");
+                }else{
+                  throw Error.reject("TICKET_INVALID");
+                }
             };
             case(_) {
-                throw Error.reject("TICKET_INVALID");
+                throw Error.reject("TICKET_NOT_FOUND");
             }
         }
     };

@@ -242,6 +242,8 @@ export const NFT = {
         let ticketId = ticketCode.split("#")[0];
         let principalId = Principal.fromText(ticketCode.split("#")[1]);
 
+        console.log(ticketCode.split("#")[1]);
+
         return await hero.checkinTicket(ticketId, principalId);
     },
     checkPreorders: async () => {

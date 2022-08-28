@@ -115,4 +115,4 @@ export const idlFactory = ({ IDL }) => {
   });
   return NFTSale;
 };
-export const init = ({ IDL }) => { return [IDL.Principal]; };
+export const init = ({ IDL }) => { return []; };

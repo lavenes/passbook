@@ -24,6 +24,7 @@ export const QRScanScreen = () => {
                     'success'
                 ).then(e => setScanSuccess(false));
             }catch(e) {
+                console.log(e);
                 Swal.fire(
                     'Vé không hợp lệ!',
                     '',

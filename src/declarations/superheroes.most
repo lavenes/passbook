@@ -79,7 +79,6 @@ type UserInfo__1 = UserInfo;
 actor {
   stable var blackhole : Principal;
   stable var cashbacks : [UserCashback__1];
-  stable var owner_ : Principal;
   stable var pbcTokenEntries : [(Principal, PBCToken__1)];
   stable var saleEventEntries : [(Text, SaleEvent__1)];
   stable var tokenPreordersEntries : [(Text, TokenPreorderList__1)];
