@@ -124,7 +124,6 @@ export const SettingsScreen = () => {
 
           <TextArea defaultValue={ liveIn } onChange={(e) => setLiveIn(e.target.value)}  placeholder="Nơi sống"/>
           <Button onClick={handleSubmit} style={{ marginTop: 32 }}>Lưu</Button>
-          <Button style={{ marginTop: 32 }} to={"/permission"}>Permission</Button>
         </View>
     )
 }

@@ -10,7 +10,8 @@ const firebaseConfig = {
   storageBucket: "passbook-ad273.appspot.com",
   messagingSenderId: "559639084140",
   appId: "1:559639084140:web:48d43eae999a4c13c3ac49",
-  measurementId: "G-DXE5N2NH2P"
+  measurementId: "G-DXE5N2NH2P",
+  databaseURL: "https://passbook-ad273-default-rtdb.asia-southeast1.firebasedatabase.app/"
 };
 
 const app = initializeApp(firebaseConfig);

@@ -28,7 +28,8 @@ export const NFT = {
             supplies,
             owner: Principal.anonymous(),
             createdBy: Principal.fromText(window.ic?.plug?.sessionManager?.sessionData?.principalId),
-            dateCreated: new Date().toISOString()
+            dateCreated: new Date().toISOString(),
+            checkin: false
         }
 
         //*Upload

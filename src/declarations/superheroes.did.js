@@ -96,7 +96,7 @@ export const idlFactory = ({ IDL }) => {
       ),
     'mintNFT' : IDL.Func([TokenInfoExt], [TokenInfoExt], []),
     'mintToken' : IDL.Func([IDL.Principal, IDL.Float64], [PBCTokenExt], []),
-    'purchaseNFT' : IDL.Func([IDL.Text, IDL.Nat, IDL.Text], [IDL.Text], []),
+    'purchaseNFT' : IDL.Func([IDL.Text, IDL.Nat, IDL.Text], [TokenInfoExt], []),
     'readAccount' : IDL.Func([], [IDL.Vec(UserInfoExt)], ['query']),
     'removeTokenPreorder' : IDL.Func([IDL.Text], [IDL.Text], ['query']),
     'sendCashbacks' : IDL.Func([], [], []),

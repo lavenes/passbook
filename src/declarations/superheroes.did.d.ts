@@ -19,7 +19,7 @@ export interface NFTSale {
   'mintCloneNFT' : ActorMethod<[string, string, Principal], TokenInfoExt>,
   'mintNFT' : ActorMethod<[TokenInfoExt], TokenInfoExt>,
   'mintToken' : ActorMethod<[Principal, number], PBCTokenExt>,
-  'purchaseNFT' : ActorMethod<[string, bigint, string], string>,
+  'purchaseNFT' : ActorMethod<[string, bigint, string], TokenInfoExt>,
   'readAccount' : ActorMethod<[], Array<UserInfoExt>>,
   'removeTokenPreorder' : ActorMethod<[string], string>,
   'sendCashbacks' : ActorMethod<[], undefined>,

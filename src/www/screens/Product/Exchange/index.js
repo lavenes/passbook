@@ -4,6 +4,7 @@ import { TextInput, View, Title, Button, TextArea, SelectBox, Back } from '@comp
 import API from '@api';
 import { usePlug } from '@hooks';
 import Swal from "sweetalert2";
+import { Principal } from '@dfinity/principal';
 
 export const Exchange = () => {
     const { ticketIdParam } = useParams();
@@ -28,15 +29,26 @@ export const Exchange = () => {
 
     const handleExchange = async () => {
         const principalId = window.ic.plug.sessionManager.sessionData.principalId;
-
-        await API.NFT.transfer(principalIdUserSend, principalIdUserRecieve, ticket.price);
-
         console.log({
-            principalId,
             principalIdUserSend,
             principalIdUserRecieve,
-            ticket
-        })
+        });
+
+        try {
+
+            await API.NFT.transfer(Principal.fromText(principalId.trim()), Principal.fromText(principalIdUserRecieve.trim()), parseFloat(ticket.price));
+        } catch (error) {
+            
+        }
+
+
+        
+
+        Swal.fire(
+            'Cập nhật thành công!',
+            'Thông tin của bạn đã được cập nhật',
+            'success'
+        );
     }
 
     const image = "https://d2vi0z68k5oxnr.cloudfront.net/0fbce336-da96-4e61-a7ae-3872dd01bf93/original.png?d=sm-cover";

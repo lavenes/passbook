@@ -6,6 +6,8 @@ import { Config } from "@config";
 import * as Icon from 'react-icons/io5';
 import API from '@api';
 import Swal from 'sweetalert2';
+import { getDatabase, ref, set } from "firebase/database";
+import { randomStr } from '@utils';
 
 import "./styles.scss";
 
@@ -58,12 +60,23 @@ export const ItemInformation = ({ title, id }) => {
     }
 
     const handlePurchase = async () => {
-        await API.NFT.purchase(id, amount).then(e => {
+        const db = getDatabase();
+
+        await API.NFT.purchase(id, amount).then(async res => {
             Swal.fire(
                 'Đã mua thành công!',
                 'Vé đã nằm trong ví của bạn',
                 'success'
             );
+
+            let fromData = await API.User.get();
+
+            set(ref(db, 'notifications/' + randomStr(20)), {
+                from: window.ic.plug.sessionManager.sessionData.principalId,
+                to: res.createdBy.toString(),
+                content: "Hello From Nhats",
+                icon: fromData[0]?.avatar
+            });
         });
     }
 

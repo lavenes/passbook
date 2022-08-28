@@ -91,7 +91,7 @@ type NFTSale =
    mintCloneNFT: (text, text, principal) -> (TokenInfoExt);
    mintNFT: (TokenInfoExt) -> (TokenInfoExt);
    mintToken: (principal, float64) -> (PBCTokenExt);
-   purchaseNFT: (text, nat, text) -> (text);
+   purchaseNFT: (text, nat, text) -> (TokenInfoExt);
    readAccount: () -> (vec UserInfoExt) query;
    removeTokenPreorder: (text) -> (text) query;
    sendCashbacks: () -> ();

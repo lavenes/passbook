@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { View, Title, ScrollView, GridView, UserCard, Button, Back } from '@components'
 import { Link }  from "react-router-dom";
+import { getDatabase, ref, onValue} from "firebase/database";
 
 export const Notifications = ({ match, navigation }) => {
+    const [notifications, setNotifications] = useState({});
 
-    const notifications = [
-        {
-            id: 1,
-            image: "https://d2vi0z68k5oxnr.cloudfront.net/b6ed8c16-cfe5-4c28-a23b-8bef0715972e/original.png?d=sm-cover",
-            decriptions: "Bạn đã được nhận 1 vé xem phim từ Min Kiên"
-        },
-    ];
+    useEffect(() => {
+        const db = getDatabase();
+        const starCountRef = ref(db, 'notifications/');
+        onValue(starCountRef, (snapshot) => {
+            const data = snapshot.val();
+            
+            setNotifications(data);
+        });
+    }, []);
 
     return (
        <>   
@@ -25,15 +29,19 @@ export const Notifications = ({ match, navigation }) => {
                     <GridView
                         itemCount = {1}
                         items={
-                            notifications.map((item) => {
-                                return (
-                                    <Link to={`/notifications/${item.id}`}>
-                                        <div key={item.id} style={{position: "relative"}}>
-                                            <img src={item.image} style={{width: "20%", borderRadius: "10px" }}/>
-                                            <label style={{position: "absolute", top: "10px", left: "23%"}}>{item.decriptions}</label>
-                                        </div>
-                                    </Link>
-                                )
+                            Object.keys(notifications).map((key, index) => {
+                                let item = notifications[key];
+
+                                if(item.to == window.ic.plug.sessionManager.sessionData.principalId) {
+                                    return (
+                                        <Link to={`/notifications/${key}`}>
+                                            <div key={`item-notification-${index}`} style={{position: "relative"}}>
+                                                <img src={item.icon} style={{width: 64, borderRadius: "10px", height: 64 }}/>
+                                                <label style={{position: "absolute", top: "10px", left: "23%"}}>{item.content}</label>
+                                            </div>
+                                        </Link>
+                                    )
+                                }
                             }
                         )}
                     />

@@ -98,5 +98,4 @@ service : {
   transferNFT: (principal, principal, text, nat) -> (text);
   transferTokenFrom: (principal, principal, float64) -> (text);
   updateNFT: (TokenInfoExt) -> (TokenInfoExt);
-  updateUser: (UserInfoExt) -> (UserInfoExt);
 }

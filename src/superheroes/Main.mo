@@ -377,7 +377,7 @@ shared(msg) actor class NFTSale(
     };
 
     //*Purchase Token
-    public shared({ caller }) func purchaseNFT(tokenId: Text, supplies: Nat, randomId: Text) : async Text {
+    public shared({ caller }) func purchaseNFT(tokenId: Text, supplies: Nat, randomId: Text) : async TokenInfoExt {
       var nft = _newToken(caller);
       
       switch(tokens.get(tokenId)) {
@@ -438,7 +438,7 @@ shared(msg) actor class NFTSale(
 
         tokenPreorders.put(preorder.id, preorder);
 
-        return "SUCCESS";
+        return _tokenInfotoExt(nft);
       }else{
         let iter = Iter.range(1, supplies);
 
@@ -446,7 +446,7 @@ shared(msg) actor class NFTSale(
           let a = await mintCloneNFT(nft.id, nft.id # "-" # randomId # Nat.toText(x), caller);
         };
 
-        return "SUCCESS";
+        return _tokenInfotoExt(nft);
       }
     };
 
