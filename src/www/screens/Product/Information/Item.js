@@ -50,12 +50,14 @@ export const ItemInformation = ({ title, id }) => {
         setIsOwned(nft.owned);
         setIsTicket(nft.nftType === "ticket");
 
+        console.log("A");
+
         //*Generate QR Ticket
         if(nft.nftType === "ticket" && nft.owned && ( nft.owner.toString() != nft.createdBy.toString() )) setQRValue(`${nft.id}#${nft.owner}`)
     
         //*Get category
-        let category = Config.VARIABLES.TICKET_CATEGORIES.find(item => item.value == nft.category)?.label;
-
+        console.log(Config.VARIABLES.TICKET_CATEGORIES);
+        let category = Config.VARIABLES.TICKET_CATEGORIES.find(item => item?.value == nft.category)?.label;
         setCategory(category);
     }
 
@@ -156,8 +158,8 @@ export const ItemInformation = ({ title, id }) => {
                     <InformationGroup.Group>
                         {
                             ticketMeta?.details?.split("\n").map((item, index) => {
-                                let title = item.split(":")[0];
-                                let value = item.split(":")[1];
+                                let title = item?.split(":")[0];
+                                let value = item?.split(":")[1];
 
                                 return <InformationGroup.Item 
                                     title={ title } 
@@ -169,9 +171,9 @@ export const ItemInformation = ({ title, id }) => {
                         {
                             ticketMeta?.gifts?.map((item, index) => {
                                 return <InformationGroup.Item 
-                                    title= { item.name } 
-                                    subtitle={ item.description } 
-                                    image={ item.image }
+                                    title= { item?.name } 
+                                    subtitle={ item?.description } 
+                                    image={ item?.image }
                                     key={`information-group-gift-item-${index}`}
                                 />
                             })

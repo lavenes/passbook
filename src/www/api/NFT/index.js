@@ -203,12 +203,13 @@ export const NFT = {
 
         let userRes = await hero.getUserInfo(res.createdBy);
 
-        res.price = Math.round(Number(item.price) * 1000)/1000;
+        res.price = Math.round(Number(res?.price) * 1000)/1000;
         res.author = userRes[0];
 
+
         res.gifts = res.gifts.map(item => {
-            item.image = new Uint8Array(item.image);
-            item.image = URL.createObjectURL(new Blob([item.image]));
+            item.image = new Uint8Array(item?.image);
+            item.image = URL.createObjectURL(new Blob([item?.image]));
 
             return item;
         });
