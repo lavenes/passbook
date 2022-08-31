@@ -50,7 +50,7 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.price = Number(item.price);
+            item.price = Math.round(Number(item.price) * 1000)/1000;
             item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
@@ -67,7 +67,7 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.price = Number(item.price);
+            item.price = Math.round(Number(item.price) * 1000)/1000;
             item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
@@ -75,7 +75,7 @@ export const NFT = {
 
         res = res.filter(item => {
             if(item.createdBy.toString() == id && item.owner.toString() == id) {
-                item.price = Number(item.price);
+                item.price = Math.round(Number(item.price) * 1000)/1000;
 
                 return item;
             }
@@ -93,7 +93,7 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.price = Number(item.price);
+            item.price = Math.round(Number(item.price) * 1000)/1000;
             item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
@@ -101,7 +101,7 @@ export const NFT = {
 
         res = res.filter(item => {
             if(item.type === "ticket") {
-                item.price = Number(item.price);
+                item.price = Math.round(Number(item.price) * 1000)/1000;
 
                 return item;
             }
@@ -119,7 +119,7 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.price = Number(item.price);
+            item.price = Math.round(Number(item.price) * 1000)/1000;
             item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
@@ -127,7 +127,7 @@ export const NFT = {
 
         res = res.filter(item => {
             if(item.type === "nft") {
-                item.price = Number(item.price);
+                item.price = Math.round(Number(item.price) * 1000)/1000;
 
                 return item;
             }
@@ -145,7 +145,7 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.price = Number(item.price);
+            item.price = Math.round(Number(item.price) * 1000)/1000;
             item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
@@ -156,7 +156,7 @@ export const NFT = {
             let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
 
             if(itemOwner == principal) {
-                item.price = Number(item.price);
+                item.price = Math.round(Number(item.price) * 1000)/1000;
 
                 return item;
             }else{
@@ -174,7 +174,7 @@ export const NFT = {
 		let res = await hero.getAllTokens();
 
         res = res.map(item => {
-            item.price = Number(item.price);
+            item.price = Math.round(Number(item.price) * 1000)/1000;
             item.author = users.find(u => u.id?.toString() == item.createdBy?.toString());
 
             return item;
@@ -185,7 +185,7 @@ export const NFT = {
             let principal = window.ic?.plug?.sessionManager?.sessionData?.principalId;
 
             if(item.nftType === "nft" && itemCreated == principal) {
-                item.price = Number(item.price);
+                item.price = Math.round(Number(item.price) * 1000)/1000;
 
                 return item;
             }
@@ -203,7 +203,7 @@ export const NFT = {
 
         let userRes = await hero.getUserInfo(res.createdBy);
 
-        res.price = Number(res.price);
+        res.price = Math.round(Number(item.price) * 1000)/1000;
         res.author = userRes[0];
 
         res.gifts = res.gifts.map(item => {

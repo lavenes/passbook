@@ -5,8 +5,8 @@ import { superheroes, canisterId, idlFactory } from '@declarations';
 export default function usePlug() {
     const connect = async() => {
         const whitelist = ["kvyhi-eyaaa-aaaag-qassa-cai"];
-        // const host = 'http://localhost:8080';
-        const host = window.location.host;
+        const host = 'http://localhost:8080';
+        //const host = 'https://passbook.lavenes.com';
   
         try {
             console.log(window.ic.plug);

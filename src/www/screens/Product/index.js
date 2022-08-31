@@ -7,11 +7,30 @@ import { useParams } from 'react-router-dom';
 import { Config } from '@config';
 import API from '@api';
 
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex != 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+
 export const ProductMarket = () => {
     let { itemId } = useParams();
 
     const [tickets, setTickets] = useState([]);
     const [categories, setCategories] = useState({});
+    const [hotTickets, setHotTickets] = useState([]);
 
     useEffect(() => {
         fetchData();
@@ -25,9 +44,10 @@ export const ProductMarket = () => {
         nfts = nfts.filter(item => item.createdBy.toString() == item.owner.toString() && item.privacy == "public");
 
         setTickets(nfts);
+        setHotTickets(shuffle(nfts));
 
         //*Group by category
-        let categories = nfts.groupBy('category')
+        let categories = shuffle(nfts).groupBy('category')
 
         setCategories(categories);
     }
@@ -110,7 +130,7 @@ export const ProductMarket = () => {
                     <GridView
                         horizontal
                         items={
-                            tickets.map((item, index) => {
+                            hotTickets.map((item, index) => {
                                 let nft = item;
 
                                 return <ProductCard 

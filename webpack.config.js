@@ -130,7 +130,7 @@ module.exports = env => {
         devServer: {
             proxy: {
                 "/api": {
-                    target: "https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.ic0.app",
+                    target: "https://kvyhi-eyaaa-aaaag-qassa-cai.raw.ic0.app",
                     changeOrigin: true,
                     pathRewrite: {
                         "^/api": "/api",
